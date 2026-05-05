@@ -1,7 +1,7 @@
 # Implementation Plan — azurelocal-scom-mp
 
 > Last updated: May 2026  
-> Status: **Phase 0 complete** — research done, repo scaffolded, planning finalized.
+> Status: **Phase 1 complete** — repo scaffold, docs platform, and site live at https://azurelocal.cloud/azurelocal-scom-mp/
 
 ---
 
@@ -260,11 +260,11 @@ Both tracks use **worst-state** rollup as the default:
 - [x] Define repo structure
 - [x] Write README, PLAN, REFERENCES
 
-### Phase 1 — Documentation Scaffold
-- [ ] Initialize MkDocs Material site (`mkdocs.yml` + `docs/index.md`)
-- [ ] Create stub pages for all doc sections (both tracks)
-- [ ] Add MkDocs plugins: mermaid, superfences, navigation tabs, mike versioning
-- [ ] Publish skeleton site (GitHub Pages or Azure Static Web Apps)
+### Phase 1 — Documentation Scaffold ✅ COMPLETE
+- [x] Initialize MkDocs Material site (`mkdocs.yml` + `docs/index.md`)
+- [x] Create stub pages for all doc sections (both tracks)
+- [x] Add MkDocs plugins: mermaid, superfences, navigation tabs
+- [x] Publish skeleton site (GitHub Pages → azurelocal.cloud/azurelocal-scom-mp/)
 - [ ] Add draw.io diagram stubs to `diagrams/drawio/`
 - [ ] Implement all three Mermaid diagrams in `diagrams/mermaid/`
 
