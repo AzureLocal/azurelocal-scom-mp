@@ -265,8 +265,8 @@ Both tracks use **worst-state** rollup as the default:
 - [x] Create stub pages for all doc sections (both tracks)
 - [x] Add MkDocs plugins: mermaid, superfences, navigation tabs
 - [x] Publish skeleton site (GitHub Pages → azurelocal.cloud/azurelocal-scom-mp/)
-- [ ] Add draw.io diagram stubs to `diagrams/drawio/`
-- [ ] Implement all three Mermaid diagrams in `diagrams/mermaid/`
+- [x] Add draw.io diagram stubs to `diagrams/drawio/`
+- [x] Implement all three Mermaid diagrams in `diagrams/mermaid/`
 
 ### Phase 2 — Health Model Design
 - [ ] Define the full Azure Local health model inventory (all components + signals)

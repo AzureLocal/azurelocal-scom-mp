@@ -1,0 +1,41 @@
+<mxfile host="app.diagrams.net" modified="2026-05-05" agent="azurelocal-scom-mp" version="24.0.0">
+  <diagram id="azure-monitor-entity-graph" name="Azure Monitor Entity Graph">
+    <!--
+      STUB — Azure Local Azure Monitor Health Model Entity Graph
+      ===========================================================
+      Design intent (from PLAN.md):
+        Root Entity (Generic — Azure Local Workload)
+          → Cluster Entity (Generic)
+              → Node 1..N (Azure Resource)
+                  → VM 1..N (Azure Resource)
+              → Storage Pool (Azure Resource)
+                  → Volume 1..N (Azure Resource)
+              → Network Intent (Generic)
+                  → NIC / RDMA Adapter 1..N (Generic)
+              → Arc Agent (Azure Resource)
+
+      Entity types:
+        Root:            blue diamond  (#0078D4)
+        Generic entity:  blue rect     (#004B8D)
+        Azure resource:  grey rect     (#F0F0F0)
+
+      Signal types:
+        Azure Resource metrics (CPU, memory, disk, storage health)
+        Log Analytics KQL (Arc heartbeat, NIC RDMA state)
+
+      Health state colours:
+        Healthy:   #107C41
+        Degraded:  #FFB900
+        Unhealthy: #D13438
+        Unknown:   #8A8886
+
+      See diagrams/mermaid/azure-monitor-entity-graph.md for the Mermaid version.
+      Open this file in draw.io (app.diagrams.net) to build the full diagram.
+    -->
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="2" value="STUB: Build Azure Monitor entity graph here.&#xa;See PLAN.md → draw.io Diagrams for design spec." style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="80" y="80" width="560" height="80" as="geometry" />
+    </mxCell>
+  </diagram>
+</mxfile>

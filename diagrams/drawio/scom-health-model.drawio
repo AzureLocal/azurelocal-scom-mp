@@ -1,0 +1,41 @@
+<mxfile host="app.diagrams.net" modified="2026-05-05" agent="azurelocal-scom-mp" version="24.0.0">
+  <diagram id="scom-health-model" name="SCOM Health Model">
+    <!--
+      STUB — Azure Local SCOM Health Rollup Tree
+      ============================================
+      Design intent (from PLAN.md):
+        Azure Local Distributed App
+          → Cluster (Dependency Monitor)
+              → Availability Aggregate
+                  → Node 1..N Availability Unit Monitors
+                  → Storage Pool Availability Unit Monitor
+                  → Arc Agent Heartbeat Unit Monitor
+              → Performance Aggregate
+                  → CPU %, Memory %, NIC, Volume % Full Unit Monitors
+              → Configuration Aggregate
+                  → Quorum, Cluster Validation Unit Monitors
+          → Storage Pool (Dependency Monitor)
+              → Volume 1..N Availability Unit Monitors
+          → Node (Dependency Monitor)
+              → VM 1..N Availability Unit Monitors
+
+      See diagrams/mermaid/scom-health-rollup.md for the equivalent Mermaid version.
+      Open this file in draw.io (app.diagrams.net) to build the full diagram.
+
+      Colour palette:
+        Distributed App / root:  #0078D4 (Microsoft Blue)
+        Dependency Monitors:     #004B8D
+        Aggregate Monitors:      #107C41 (green)
+        Unit Monitors:           #F0F0F0 / #333 text
+        Health states:
+          Green  (Healthy):      #107C41
+          Yellow (Warning):      #FFB900
+          Red    (Critical):     #D13438
+    -->
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="2" value="STUB: Build SCOM health rollup tree here.&#xa;See PLAN.md → draw.io Diagrams for design spec." style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="80" y="80" width="560" height="80" as="geometry" />
+    </mxCell>
+  </diagram>
+</mxfile>

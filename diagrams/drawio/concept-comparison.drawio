@@ -1,0 +1,36 @@
+<mxfile host="app.diagrams.net" modified="2026-05-05" agent="azurelocal-scom-mp" version="24.0.0">
+  <diagram id="concept-comparison" name="SCOM vs Azure Monitor">
+    <!--
+      STUB — SCOM ↔ Azure Monitor Concept Comparison
+      ================================================
+      Design intent (from PLAN.md):
+        Dual-column layout.
+        Left column:  SCOM concepts
+        Right column: Azure Monitor equivalents
+        Dashed connecting lines between matched concepts.
+
+      SCOM (left)                        Azure Monitor (right)
+      ─────────────────────────────────────────────────────────
+      Management Pack                 ←→  DCR + Alert Rules + Workbook
+      Distributed Application         ←→  Service Group + Root Entity
+      Health Model (rollup tree)      ←→  Azure Monitor Health Model (preview)
+      Unit Monitor                    ←→  Signal on an Entity
+      Aggregate Monitor               ←→  Generic Entity (aggregating children)
+      Dependency Monitor              ←→  Relationship with health propagation
+      Green / Yellow / Red            ←→  Healthy / Degraded / Unhealthy
+      Discovery                       ←→  Azure Resource Graph auto-discovery
+      Override                        ←→  Signal threshold / Impact setting
+      Notification Subscription       ←→  Action Group
+      Data Warehouse                  ←→  Log Analytics Workspace
+      Operations Console              ←→  Azure Portal + Workbooks + Grafana
+
+      See docs/comparison/index.md for the rendered table version.
+      Open this file in draw.io (app.diagrams.net) to build the full diagram.
+    -->
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    <mxCell id="2" value="STUB: Build SCOM ↔ Azure Monitor comparison diagram here.&#xa;See PLAN.md → draw.io Diagrams for design spec." style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;" vertex="1" parent="1">
+      <mxGeometry x="80" y="80" width="560" height="80" as="geometry" />
+    </mxCell>
+  </diagram>
+</mxfile>
