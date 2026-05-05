@@ -330,6 +330,7 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
   - [ ] ADR 0007 — Naming convention (cross-track parity)
   - [ ] ADR 0008 — Customization strategy (sealed MP + override pack tiers; Bicep params + tiers)
   - [ ] ADR 0009 — Alert vs health-state separation policy
+  - [ ] ADR 0010 — Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking)
 - [ ] Build full structural inventory tables in PLAN.md / `design/`
   - [ ] Component inventory (~25 entities across 3 layers)
   - [ ] Signal inventory (~50–70 signals × dimensions × thresholds × source cmdlet)

@@ -43,13 +43,24 @@ All upstream sources used in designing and implementing this project. Organized 
 | Azure Service Groups overview | https://learn.microsoft.com/en-us/azure/governance/service-groups/overview | Foundation for health models. Logical grouping of Azure resources. |
 | Create a Service Group (portal) | https://learn.microsoft.com/en-us/azure/governance/service-groups/create-service-group-portal | |
 | Azure Service Health overview | https://learn.microsoft.com/en-us/azure/service-health/overview | Azure Status + Service Health + Resource Health. |
-| Resource Health overview | https://learn.microsoft.com/en-us/azure/service-health/resource-health-overview | Per-resource health state — closest platform equivalent to SCOM agent health. |
+| Resource Health overview | https://learn.microsoft.com/en-us/azure/service-health/resource-health-overview | Per-resource health state — closest platform equivalent to SCOM agent health. Free signal for every Azure resource in the model. |
 | Azure Monitor Workbooks | https://learn.microsoft.com/en-us/azure/azure-monitor/visualize/workbooks-overview | Primary mechanism for custom health dashboards. |
 | Azure Monitor Managed Service for Prometheus | https://learn.microsoft.com/en-us/azure/azure-monitor/metrics/prometheus-metrics-overview | Required backend for SLI/SLO tracking. |
 | Azure Monitor Insights overview | https://learn.microsoft.com/en-us/azure/azure-monitor/visualize/insights-overview | Curated monitoring experiences (replacement for legacy monitoring solutions). |
-| VM Insights | https://learn.microsoft.com/en-us/azure/azure-monitor/vm/monitor-vm | Per-VM performance and health. |
-| **Azure Local Insights** | (part of Azure Monitor Insights suite) | Health, performance, and usage for Azure Local clusters. |
+| VM Insights overview | https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-overview | Per-VM perf + processes/dependency map. Recommended for Arc Resource Bridge VM. |
+| Enable enhanced VM monitoring | https://learn.microsoft.com/en-us/azure/azure-monitor/vm/monitor-vm#enable-enhanced-monitoring | Walkthrough of VM Insights enable flow. |
+| Azure Monitor Agent overview | https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview | The `AzureMonitorWindowsAgent` extension installed by HCI Insights. |
+| AMA network / DCE settings | https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-data-collection-endpoint?tabs=PowerShellWindows | Endpoints AMA must reach; firewall + DCE config. |
+| Data Collection Rules overview | https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview | DCR concepts and authoring. |
+| Data Collection Rules best practices | https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-best-practices | |
 | Azure Monitor Alerts overview | https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-overview | |
+| Azure Monitor Activity Log | https://learn.microsoft.com/en-us/azure/azure-monitor/platform/activity-log | Free, automatic for every Azure resource. |
+| **Azure Local monitoring overview** | https://learn.microsoft.com/en-us/azure/azure-local/concepts/monitoring-overview?view=azloc-2604 | Canonical Azure Local monitoring concepts page. |
+| **Azure Local Insights — single cluster** | https://learn.microsoft.com/en-us/previous-versions/azure/azure-local/manage/monitor-hci-single?view=azloc-2604&tabs=22h2-and-later | The most authoritative HCI Insights enable + troubleshoot reference. |
+| **Azure Local Insights — feature workbooks** | https://learn.microsoft.com/en-us/azure/azure-local/manage/monitor-features?view=azloc-2604 | ReFS dedup, Dell APEX hardware events. |
+| Azure Local — firewall requirements | https://learn.microsoft.com/en-us/azure/azure-local/concepts/firewall-requirements?view=azloc-2604 | Outbound endpoints; HTTPS-inspection prohibited; Arc Private Link Scopes unsupported. |
+| Azure Local — required permissions | https://learn.microsoft.com/en-us/azure/azure-local/deploy/deployment-arc-register-server-permissions?view=azloc-2604 | Resource provider list + deployment RBAC matrix. |
+| Azure Arc-enabled servers overview | https://learn.microsoft.com/en-us/azure/azure-arc/servers/overview | Each Azure Local node is `Microsoft.HybridCompute/machines`. |
 
 ---
 

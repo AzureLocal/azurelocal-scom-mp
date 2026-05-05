@@ -115,6 +115,7 @@ nav:
       - Overview: scom-mp/index.md
   - Azure Monitor:
       - Overview: azure-monitor/index.md
+      - Prerequisites: azure-monitor/prerequisites.md
   - Comparison:
       - Overview: comparison/index.md
   - Project:
