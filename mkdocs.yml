@@ -117,3 +117,9 @@ nav:
       - Overview: azure-monitor/index.md
   - Comparison:
       - Overview: comparison/index.md
+  - Project:
+      - About: project/about.md
+      - Customization: project/customization.md
+      - Roadmap: project/roadmap.md
+      - Changelog: project/changelog.md
+      - License: project/license.md

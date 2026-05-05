@@ -225,28 +225,79 @@ stateDiagram-v2
 
 ## Azure Local Health Model Design
 
-### What "Healthy" Means for Azure Local
+> **Scope (locked in Phase 2A — ADR 0001):** This project monitors **Azure Local infrastructure only** —
+> everything that is deployed *as part of* an Azure Local deployment. Workloads running on top
+> (VMs, AKS Arc pods, applications) are out of scope and tracked as future companion MPs in
+> [Roadmap](docs/project/roadmap.md). Cluster-resident *platform* services (Arc Resource Bridge,
+> MOC, AKS Arc platform) are in scope because they're part of the Azure Local platform itself.
 
-The following signal areas drive health state in both tracks:
+### What "Healthy" Means for Azure Local Infrastructure
+
+Health is modeled across **three layers**:
+
+1. **On-prem layer** — physical and logical components of the cluster itself
+2. **Cluster-resident platform layer** — Microsoft-supplied platform services that run *on* the cluster
+3. **Azure-side layer** — every Azure resource provisioned as part of the Azure Local deployment
+
+#### Layer 1 — On-prem (the cluster box)
 
 | Component | Health Dimensions | Key Signals |
 |---|---|---|
-| **Cluster** | Availability, Configuration | Cluster service state, quorum status, cluster validation warnings |
-| **Node** | Availability, Performance, Configuration | OS uptime, CPU %, memory %, disk I/O, NIC status, BMC/IPMI alerts |
-| **Storage Pool** | Availability, Performance | Pool health status, pool operational status, storage job status |
-| **Volume (CSV)** | Availability, Performance | Volume health, volume operational status, volume % full, IOPS, latency |
+| **Cluster** | Availability, Configuration | Cluster service state, quorum status, cluster validation warnings, witness health |
+| **Node** | Availability, Performance, Configuration | OS uptime, CPU %, memory %, NIC link state, BMC/IPMI alerts, pending reboots |
+| **Storage Pool** | Availability, Performance | Pool health status, operational status, capacity, repair jobs |
+| **Volume (CSV)** | Availability, Performance | Volume health, operational status, % full, IOPS, latency, redirected I/O |
+| **Storage Tier (cache)** | Availability, Performance | Cache state, cache hit ratio, drive failures within tier |
+| **Physical Disk health (rolled into pool)** | Availability | Disk health attributes, predictive failure, disk job state — surfaced *via* the storage pool |
+| **Network ATC / Network Intent** | Availability, Performance, Configuration | Intent state, RDMA op status, vSwitch health, adapter state, MTU/VLAN drift |
 | **Storage Replica** | Availability | Replication status, RPO, replication lag |
-| **Virtual Machine** | Availability, Performance | VM uptime, integration services health, virtual disk health |
-| **Network (SDN / RoCE)** | Availability, Performance | Adapter state, RDMA operational status, virtual switch health |
-| **Arc Agent** | Availability | Agent heartbeat, connectivity to Azure |
+| **Update / LCM state** | Configuration | Available updates, last-update result, solution version drift |
+
+#### Layer 2 — Cluster-resident platform services
+
+| Component | Health Dimensions | Key Signals |
+|---|---|---|
+| **Arc Resource Bridge / MOC** | Availability, Configuration | Resource Bridge VM state, MOC service state, control plane health |
+| **AKS Arc platform** *(if deployed)* | Availability | AKS host pool state, control plane reachability — *not* workload pods |
+| **Azure Local agent (Cloud Agent / DCMA)** | Availability | Agent service state, last-heartbeat-to-Azure, telemetry pipeline |
+| **HCI registration state** | Configuration | Registration status, license tier, billing connectivity |
+
+#### Layer 3 — Azure-side infrastructure (provisioned as part of the deployment)
+
+| Component | Health Dimensions | Key Signals |
+|---|---|---|
+| **HCI Cluster resource** (`Microsoft.AzureStackHCI/clusters`) | Availability, Configuration | Resource provisioning state, connection status, last connected time |
+| **Arc-enabled Server (per node)** (`Microsoft.HybridCompute/machines`) | Availability | Agent connection status, heartbeat freshness |
+| **Custom Location** | Availability, Configuration | Custom Location provisioning state, namespace presence |
+| **Logical Networks** (`Microsoft.AzureStackHCI/logicalNetworks`) | Configuration | Provisioning state, IP pool exhaustion |
+| **Managed Identity** (system-assigned + user-assigned) | Configuration | Identity exists, role assignments still present |
+| **Service Principal (deployment SPN)** | Configuration | SPN exists, secret/cert not expiring, role assignments |
+| **Key Vault** | Availability, Configuration | Key Vault reachable, required secrets present, access policies / RBAC, secret expiry |
+| **Storage Account** | Availability, Configuration | Account reachable, redundancy tier as expected, network ACLs |
+| **Storage container / blob path** | Availability, Configuration | Container exists, blob path accessible, lifecycle policy |
+| **RBAC / role assignments** | Configuration | Required role assignments present (across cluster identity, deployment SPN, MI) |
+| **Update Manager / Azure Update Manager linkage** | Availability, Configuration | Linkage healthy, last-assessment age, pending updates |
+| **Azure Monitor data collection rule(s)** | Configuration | DCRs exist, associated, ingesting |
+| **Log Analytics Workspace linkage** | Availability | Workspace reachable, ingestion latency, table presence |
+| **Activity log / Resource Health stream** | Availability | Resource Health current state, recent activity log adverse events |
 
 ### Health Rollup Policy
 
 Both tracks use **worst-state** rollup as the default:
 
 - A cluster node going **Unhealthy** rolls up to the cluster as **Unhealthy**.
-- A volume going **Degraded** (e.g. 75% full) rolls up to the storage pool as **Degraded**, which propagates to the cluster as **Degraded**.
-- VMs that are stopped intentionally can be configured with **Suppressed** impact so they don't affect cluster health.
+- A volume going **Degraded** (e.g. 92% full) rolls up to the storage pool as **Degraded**, which propagates to the cluster as **Degraded**.
+- A missing role assignment on the deployment SPN rolls up to **Configuration: Unhealthy** at the Azure-side branch.
+- An expiring Key Vault secret rolls up to **Warning** at 30 days, **Critical** at 7 days.
+- VMs / workloads (out of scope here) that are stopped intentionally can be configured with **Suppressed** impact in workload-companion MPs.
+
+### Customization Strategy *(see [Customization](docs/project/customization.md))*
+
+Every threshold, alert severity, and behavior is **parameterized** so customers customize without forking:
+
+- **SCOM track** — sealed `AzureLocal.HealthModel.mp` + unsealed `AzureLocal.HealthModel.Overrides.xml` with three pre-built tiers (Lab / Standard / Strict). Customer-authored override packs reference our override pack, not the sealed MP. Upgrade-safe by SCOM design.
+- **Azure Monitor track** — every threshold is a Bicep `param` with a documented default. Three pre-built `*.bicepparam` files (lab / standard / strict). KQL signals are replaceable via named module inputs. Action group routing is parameter-driven.
+- **Cross-track parity** — same logical threshold has the same name across both tracks (`Volume.FreeSpace.WarnPercent` ↔ `volumeFreeSpaceWarningThresholdPct`).
 
 ---
 
@@ -269,12 +320,32 @@ Both tracks use **worst-state** rollup as the default:
 - [x] Implement all three Mermaid diagrams in `diagrams/mermaid/`
 
 ### Phase 2 — Health Model Design
-- [ ] Define the full Azure Local health model inventory (all components + signals)
-- [ ] Document SCOM class hierarchy for Azure Local
-- [ ] Document Azure Monitor entity graph for Azure Local
-- [ ] Complete draw.io diagrams (health rollup tree, entity graph, comparison)
-- [ ] Write `docs/scom-mp/health-model.md` and `docs/azure-monitor/concepts.md` with embedded diagrams
-- [ ] Write `docs/comparison/index.md` concept mapping table
+- [ ] Author ADRs in `decisions/` (matches `AzureLocal/platform` template)
+  - [ ] ADR 0001 — Scope & topology (infra only — 3 layers, ~25 entities)
+  - [ ] ADR 0002 — Primary signal source (Azure Local PowerShell APIs + ARM/Resource Graph for Azure-side)
+  - [ ] ADR 0003 — Health rollup policy (worst-state default + impact exceptions)
+  - [ ] ADR 0004 — SCOM discovery strategy (PowerShell Discovery, not WMI)
+  - [ ] ADR 0005 — SCOM class hierarchy + hosting relationships (3-layer model)
+  - [ ] ADR 0006 — Azure Monitor entity model alignment (mirrors SCOM 1:1; uses ARM resources where available)
+  - [ ] ADR 0007 — Naming convention (cross-track parity)
+  - [ ] ADR 0008 — Customization strategy (sealed MP + override pack tiers; Bicep params + tiers)
+  - [ ] ADR 0009 — Alert vs health-state separation policy
+- [ ] Build full structural inventory tables in PLAN.md / `design/`
+  - [ ] Component inventory (~25 entities across 3 layers)
+  - [ ] Signal inventory (~50–70 signals × dimensions × thresholds × source cmdlet)
+  - [ ] SCOM class hierarchy table
+  - [ ] Azure Monitor entity graph table
+  - [ ] SCOM ↔ Azure Monitor concept mapping table
+  - [ ] Threshold parameter catalog (cross-track parity table)
+- [ ] Complete draw.io diagrams (replace Phase 1 stubs with real visuals)
+  - [ ] `scom-health-model.drawio` — full 3-layer rollup tree
+  - [ ] `azure-monitor-entity-graph.drawio` — entity graph w/ relationships
+  - [ ] `concept-comparison.drawio` — side-by-side mapping
+- [ ] Refine Mermaid sources to match ADR 0005 / 0006 names
+- [ ] Write `docs/scom-mp/health-model.md` (embedded Mermaid + draw.io exports)
+- [ ] Write `docs/azure-monitor/concepts.md` (entities, signals, relationships)
+- [ ] Write `docs/comparison/index.md` (concept mapping table)
+- [ ] Phase 2 sign-off gate: ADRs Accepted, inventory reviewed, diagrams complete
 
 ### Phase 3 — Track 1: SCOM MP Authoring
 - [ ] Watch/review Brian Wren's SC 2012 R2 video series (23 modules) as primary authoring reference — see [Brian Wren Resources](#brian-wren--mpauthor-resources) below
