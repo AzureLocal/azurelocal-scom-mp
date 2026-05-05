@@ -10,7 +10,6 @@ description: SCOM Management Pack and Azure Monitor Health Models for Azure Loca
 > Health monitoring for Azure Local delivered two ways: a **SCOM Management Pack** and **Azure Monitor Health Models**.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/LICENSE)
-[![Phase](https://img.shields.io/badge/phase-2%20%E2%80%94%20health%20model-blue)](index.md)
 
 ---
 
