@@ -84,7 +84,7 @@ deployed *as part of* an Azure Local deployment, modeled across **three layers**
 - SQL MI / AVD / other workloads
 - Customer applications and their dependencies
 
-These are tracked in the [Roadmap](../docs/project/roadmap.md) as future companion MPs that
+These are tracked in the [Roadmap](../../project/roadmap.md) as future companion MPs that
 take a *dependency* on this health model.
 
 ## Consequences

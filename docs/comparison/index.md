@@ -1,29 +1,43 @@
 ---
-title: SCOM ↔ Azure Monitor Comparison
-description: Side-by-side concept mapping between SCOM and Azure Monitor Health Models.
+title: Migration — SCOM → Azure Monitor
+description: SCOM-to-Azure-Monitor migration guidance for Azure Local health monitoring.
 ---
 
-# SCOM ↔ Azure Monitor Comparison
+# Migration — SCOM → Azure Monitor
 
-> Side-by-side concept crosswalk between the two health monitoring tracks.
+> **Phase 5 deliverable.** End-to-end migration guidance for operators moving from the
+> SCOM track to the Azure Monitor track (or running both side by side).
 
-!!! info "Coming soon"
-    Full comparison docs are planned for Phase 2. The concept mapping table is available in [REFERENCES.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/REFERENCES.md).
+!!! info "Phase 5 — coming after Phase 3 + 4"
+    Migration walkthroughs land after both tracks are authored and validated.
+    See [PLAN.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
 
-## Concept mapping (quick reference)
+## Looking for the concept crosswalk?
 
-| SCOM | Azure Monitor |
+The side-by-side concept mapping (SCOM ↔ Azure Monitor) lives under Design now —
+it's a track-agnostic foundation, not migration content:
+
+→ **[Design / Concept Mapping (SCOM ↔ AzMon)](../design/concept-mapping.md)**
+
+## What this section will cover
+
+| Page (planned) | Content |
 |---|---|
-| Management Pack | DCR + Alert Rules + Workbook (ARM/Bicep bundle) |
-| Health Model (rollup tree) | Azure Monitor Health Model (preview) |
-| Unit Monitor | Signal on an entity (metric or log query) |
-| Aggregate Monitor | Generic entity aggregating child health |
-| Dependency Monitor | Relationship with health propagation |
-| Health State (Green/Yellow/Red) | Healthy / Degraded / Unhealthy |
-| Distributed Application | Service Group + Health Model root entity |
-| SLA Reporting | Azure Monitor SLI/SLO (public preview) |
-| Discovery | Azure Resource Graph / Service Group auto-discovery |
-| Override | Signal threshold / entity impact setting |
-| Notification Subscription | Action Group |
-| Data Warehouse | Log Analytics Workspace |
-| Operations Console | Azure Portal + Workbooks + Grafana |
+| Migration walkthrough | Step-by-step move from SCOM MP to Azure Monitor Health Model |
+| Migration tool output | Auto-migrated vs manual migration items via the Microsoft `MP2AzMon` tool |
+| Side-by-side operation | How to run both tracks against the same Azure Local during transition |
+| Cutover checklist | Pre-cutover, cutover day, post-cutover validation |
+| Lessons learned | Common gotchas operators hit during migration |
+
+## Why migrate (or not)?
+
+| Reason to stay on SCOM | Reason to move to Azure Monitor |
+|---|---|
+| Existing SCOM investment + skill set | No SCOM infrastructure to maintain |
+| Hybrid estate that includes non-Azure-Local servers | Azure-only / Arc-only estate |
+| Custom SCOM MPs already in production | Greenfield Azure Local deployment |
+| Need on-prem alerting independent of Azure | Want Azure-native alerting + Workbooks + Grafana |
+
+The dual-track design of this project means you don't have to choose — both surfaces
+read from the same conceptual model.
+

@@ -291,7 +291,7 @@ Both tracks use **worst-state** rollup as the default:
 - An expiring Key Vault secret rolls up to **Warning** at 30 days, **Critical** at 7 days.
 - VMs / workloads (out of scope here) that are stopped intentionally can be configured with **Suppressed** impact in workload-companion MPs.
 
-### Customization Strategy *(see [Customization](docs/project/customization.md))*
+### Customization Strategy *(see [Customization](docs/design/customization.md))*
 
 Every threshold, alert severity, and behavior is **parameterized** so customers customize without forking:
 
@@ -320,34 +320,32 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 - [x] Implement all three Mermaid diagrams in `diagrams/mermaid/`
 
 ### Phase 2 — Health Model Design
-- [ ] Author ADRs in `decisions/` (matches `AzureLocal/platform` template)
-  - [ ] ADR 0001 — Scope & topology (infra only — 3 layers, ~25 entities)
-  - [ ] ADR 0002 — Primary signal source (Azure Local PowerShell APIs + ARM/Resource Graph for Azure-side)
-  - [ ] ADR 0003 — Health rollup policy (worst-state default + impact exceptions)
-  - [ ] ADR 0004 — SCOM discovery strategy (PowerShell Discovery, not WMI)
-  - [ ] ADR 0005 — SCOM class hierarchy + hosting relationships (3-layer model)
-  - [ ] ADR 0006 — Azure Monitor entity model alignment (mirrors SCOM 1:1; uses ARM resources where available)
-  - [ ] ADR 0007 — Naming convention (cross-track parity)
-  - [ ] ADR 0008 — Customization strategy (sealed MP + override pack tiers; Bicep params + tiers)
-  - [ ] ADR 0009 — Alert vs health-state separation policy
-  - [ ] ADR 0010 — Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking)
-- [ ] Build full structural inventory tables in PLAN.md / `design/`
-  - [ ] Component inventory (~25 entities across 3 layers)
-  - [ ] Signal inventory (~50–70 signals × dimensions × thresholds × source cmdlet)
-  - [ ] SCOM class hierarchy table
-  - [ ] Azure Monitor entity graph table
-  - [ ] SCOM ↔ Azure Monitor concept mapping table
-  - [ ] Threshold parameter catalog (cross-track parity table)
+- [x] Reorg docs site: add top-level Design section (cross-cutting), make track sections track-specific only
+- [x] Move ADRs into `docs/design/decisions/` so they render in MkDocs
+- [x] Move Customization into `docs/design/`
+- [x] Move SCOM ↔ AzMon concept mapping into `docs/design/concept-mapping.md`; comparison/ becomes Migration only
+- [x] Author ADRs in `docs/design/decisions/` (matches `AzureLocal/platform` template)
+  - [x] ADR 0001 — Scope & topology (infra only — 3 layers, ~25 entities) — Proposed
+  - [x] ADR 0002 — Primary signal source (Azure Local PowerShell APIs + ARM/Resource Graph) — Proposed
+  - [x] ADR 0003 — Health rollup policy (worst-state default + impact exceptions) — Proposed
+  - [x] ADR 0004 — SCOM discovery strategy (PowerShell Discovery, not WMI) — Proposed
+  - [x] ADR 0005 — SCOM class hierarchy + hosting relationships (3-layer model) — Proposed
+  - [x] ADR 0006 — Azure Monitor entity model alignment (mirrors SCOM 1:1) — Proposed
+  - [x] ADR 0007 — Naming convention (cross-track parity) — Proposed
+  - [x] ADR 0008 — Customization strategy (sealed MP + override pack tiers; Bicep params + tiers) — Proposed
+  - [x] ADR 0009 — Alert vs health-state separation policy — Proposed
+  - [x] ADR 0010 — Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) — Proposed
+- [x] Build full structural inventory tables in `docs/design/`
+  - [x] Component inventory (~25 entities across 3 layers) — `scope-topology.md`
+  - [x] Signal inventory (~60 signals × dimensions × thresholds × source) — `signal-catalog.md`
+  - [x] SCOM ↔ Azure Monitor concept mapping table — `concept-mapping.md`
+  - [x] Cloud-side prerequisites table — `azure-monitor/prerequisites.md`
 - [ ] Complete draw.io diagrams (replace Phase 1 stubs with real visuals)
   - [ ] `scom-health-model.drawio` — full 3-layer rollup tree
   - [ ] `azure-monitor-entity-graph.drawio` — entity graph w/ relationships
   - [ ] `concept-comparison.drawio` — side-by-side mapping
 - [ ] Refine Mermaid sources to match ADR 0005 / 0006 names
-- [ ] Write `docs/scom-mp/health-model.md` (embedded Mermaid + draw.io exports)
-- [ ] Write `docs/azure-monitor/concepts.md` (entities, signals, relationships)
-- [ ] Write `docs/comparison/index.md` (concept mapping table)
-- [ ] Phase 2 sign-off gate: ADRs Accepted, inventory reviewed, diagrams complete
-
+- [ ] Phase 2 sign-off gate: all 10 ADRs Accepted, inventory reviewed by maintainers, draw.io
 ### Phase 3 — Track 1: SCOM MP Authoring
 - [ ] Watch/review Brian Wren's SC 2012 R2 video series (23 modules) as primary authoring reference — see [Brian Wren Resources](#brian-wren--mpauthor-resources) below
 - [ ] Set up VSAE project + fragment library references (Kevin Holman fragments)

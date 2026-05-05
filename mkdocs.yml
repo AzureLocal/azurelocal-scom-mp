@@ -111,16 +111,35 @@ extra:
 
 nav:
   - Home: index.md
+  - Design:
+      - Overview: design/index.md
+      - Scope & Topology: design/scope-topology.md
+      - Health Model: design/health-model.md
+      - Signal Catalog: design/signal-catalog.md
+      - Customization: design/customization.md
+      - Concept Mapping (SCOM ↔ AzMon): design/concept-mapping.md
+      - Decisions (ADRs):
+          - Index: design/decisions/index.md
+          - 0001 — Scope & topology: design/decisions/0001-scope-and-topology.md
+          - 0002 — Signal source: design/decisions/0002-signal-source.md
+          - 0003 — Health rollup policy: design/decisions/0003-health-rollup-policy.md
+          - 0004 — SCOM discovery strategy: design/decisions/0004-scom-discovery-strategy.md
+          - 0005 — SCOM class hierarchy: design/decisions/0005-scom-class-hierarchy.md
+          - 0006 — Azure Monitor entity model: design/decisions/0006-azmon-entity-model.md
+          - 0007 — Naming convention: design/decisions/0007-naming-convention.md
+          - 0008 — Customization strategy: design/decisions/0008-customization-strategy.md
+          - 0009 — Alert vs health-state separation: design/decisions/0009-alert-vs-health-state.md
+          - 0010 — Cloud-side prerequisites contract: design/decisions/0010-cloud-prerequisites-contract.md
+          - ADR template: design/decisions/template.md
   - SCOM MP:
       - Overview: scom-mp/index.md
   - Azure Monitor:
       - Overview: azure-monitor/index.md
       - Prerequisites: azure-monitor/prerequisites.md
-  - Comparison:
+  - Migration (SCOM → AzMon):
       - Overview: comparison/index.md
   - Project:
       - About: project/about.md
-      - Customization: project/customization.md
       - Roadmap: project/roadmap.md
       - Changelog: project/changelog.md
       - License: project/license.md

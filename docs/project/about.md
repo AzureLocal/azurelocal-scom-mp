@@ -26,7 +26,7 @@ what "healthy" means, and propagate health the same way. They differ only in imp
    in the other. Customers migrating from SCOM to Azure Monitor see the same health story.
 3. **Customizable without forking** — every threshold, alert severity, and behavior is parameterized.
    Customers ship their own override pack (SCOM) or `*.bicepparam` file (Azure Monitor) and customizations
-   survive upgrades. See [Customization](customization.md).
+   survive upgrades. See [Customization](../design/customization.md).
 4. **Document the health model first**, the implementation second — the design (this site) is the
    product; the XML and Bicep are downstream artifacts.
 5. **Conform to the [AzureLocal/platform](https://github.com/AzureLocal/platform) standards** — same docs

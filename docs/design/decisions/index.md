@@ -11,15 +11,15 @@ These are project-scoped ADRs. Org-wide platform standards live in
 | # | Title | Status |
 |---|---|---|
 | [0001](./0001-scope-and-topology.md) | Scope & topology — Azure Local infrastructure (3 layers, ~25 entities) | Proposed |
-| 0002 | Primary signal source — Azure Local PowerShell APIs + ARM/Resource Graph | _planned_ |
-| 0003 | Health rollup policy — worst-state default with impact exceptions | _planned_ |
-| 0004 | SCOM discovery strategy — PowerShell Discovery (not WMI) | _planned_ |
-| 0005 | SCOM class hierarchy + hosting relationships (3-layer model) | _planned_ |
-| 0006 | Azure Monitor entity model alignment (mirrors SCOM 1:1) | _planned_ |
-| 0007 | Naming convention — cross-track parity | _planned_ |
-| 0008 | Customization strategy — sealed MP + override pack tiers; Bicep params + tiers | _planned_ |
-| 0009 | Alert vs health-state separation policy | _planned_ |
-| 0010 | Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) | _planned_ |
+| [0002](./0002-signal-source.md) | Primary signal source — Azure Local PowerShell APIs + ARM/Resource Graph | Proposed |
+| [0003](./0003-health-rollup-policy.md) | Health rollup policy — worst-state default with documented exceptions | Proposed |
+| [0004](./0004-scom-discovery-strategy.md) | SCOM discovery strategy — PowerShell Discovery (not WMI) | Proposed |
+| [0005](./0005-scom-class-hierarchy.md) | SCOM class hierarchy + hosting relationships (3-layer model) | Proposed |
+| [0006](./0006-azmon-entity-model.md) | Azure Monitor entity model alignment (mirrors SCOM 1:1) | Proposed |
+| [0007](./0007-naming-convention.md) | Naming convention — cross-track parity | Proposed |
+| [0008](./0008-customization-strategy.md) | Customization strategy — sealed MP + override pack tiers; Bicep params + tiers | Proposed |
+| [0009](./0009-alert-vs-health-state.md) | Alert vs health-state separation policy | Proposed |
+| [0010](./0010-cloud-prerequisites-contract.md) | Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) | Proposed |
 
 ## When to write an ADR
 
