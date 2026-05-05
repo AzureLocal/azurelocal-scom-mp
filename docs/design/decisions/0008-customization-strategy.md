@@ -38,12 +38,13 @@ catalog**:
 
 ### Track 1 — SCOM
 
-Ship two MP files:
+Ship three MP files (3-MP split per Brian Wren Module 7 / [ADR 0007](0007-naming-convention.md)):
 
 | File | Sealed? | Edited by | Purpose |
 |---|---|---|---|
-| `AzureLocal.HealthModel.mp` | ✅ Sealed | Project maintainers only | Classes, discoveries, monitors, rules, DA |
-| `AzureLocal.HealthModel.Overrides.xml` | ❌ Unsealed | Customer | All threshold and behavior overrides; ships with sensible defaults |
+| `AzureLocal.SCOM.Library.mp` | ✅ Sealed | Project maintainers only | Classes, relationships, discoveries |
+| `AzureLocal.SCOM.Monitoring.mp` | ✅ Sealed | Project maintainers only | Monitors, rules, views, tasks (References Library) |
+| `AzureLocal.SCOM.Override.xml` | ❌ Unsealed | Customer | All threshold and behavior overrides; ships with sensible defaults |
 
 Customers either:
 - Edit the unsealed override pack we ship (preserves their changes across upgrades by
@@ -118,6 +119,11 @@ The project commits to:
 - **Negative**: Documentation cost — every threshold has to be documented with its
   default, the values across tiers, and what it means.
 - **Affected**: Phase 2 [Customization](../customization.md) page is the canonical
+  operator-facing description of these tiers.
+- **Neutral**: SquaredUp DS (SCOM track) and SquaredUp Cloud (Azure Monitor track)
+  are optional visualization layers that consume these customized outputs — they ship
+  as separate deliverables in `src/squaredup/` and are documented in the track-specific
+  SquaredUp pages. Neither requires MP changes.
   reference; Phase 3 + 4 authoring derives override keys / Bicep params from this ADR
   and ADR 0007.
 

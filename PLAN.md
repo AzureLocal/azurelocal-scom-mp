@@ -117,6 +117,12 @@ azurelocal-scom-mp/
 │       └── dist/                      # Generated output — do not hand-edit
 │           └── (bicep build artifacts, exported ARM JSON)
 │
+└── squaredup/                         # Optional visualization layer deliverables
+    ├── ds/                            # SquaredUp Dashboard Server pack (SCOM track)
+    │   └── (dashboard pack JSON files — authored in Phase 3)
+    └── cloud/                         # SquaredUp Cloud workspace export (Azure Monitor track)
+        └── (workspace JSON files — authored in Phase 4)
+│
 └── diagrams/                          # Master diagram sources (check in originals)
     ├── drawio/
     │   ├── scom-health-model.drawio            # Full SCOM health rollup tree (draw.io)
@@ -388,6 +394,12 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 - [ ] Run MP Best Practice Analyzer + MPVerify
 - [ ] Test in pre-production SCOM environment
 
+**Step 4 — SquaredUp DS dashboard pack (optional)**
+- [ ] Install SquaredUp DS trial against test SCOM environment
+- [ ] Author Azure Local dashboard pack in `src/squaredup/ds/` (Cluster Overview, Storage Detail, Network Detail, Platform Services, Alert NOC tiles)
+- [ ] Export dashboard pack JSON; validate against DS catalog format
+- [ ] Document DS setup and dashboard pack in `docs/scom-mp/squaredup/index.md`
+
 ### Phase 4 — Track 2: Azure Monitor Health Model
 > Deployment strategy: **Bicep-first, portal-bootstrap** — see [ADR 0013](docs/design/decisions/0013-azmon-deployment-strategy.md)
 
@@ -416,6 +428,12 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 - [ ] Run `bicep build` → generate `dist/` ARM JSON for audit review
 - [ ] Test end-to-end deployment with `lab.bicepparam` against pre-production environment
 - [ ] Write `docs/azure-monitor/` doc pages (entities, signals, health objectives, alerts, deployment guide)
+
+**Step 5 — SquaredUp Cloud workspace (optional)**
+- [ ] Connect SquaredUp Cloud to the Azure subscription (Azure plugin) and SCOM (SCOM plugin)
+- [ ] Build Cluster Health, Azure-side Resources, Hybrid View, and Alerts dashboards in SquaredUp Cloud
+- [ ] Export workspace JSON to `src/squaredup/cloud/`
+- [ ] Document SquaredUp Cloud setup and workspace in `docs/azure-monitor/squaredup/index.md`
 
 ### Phase 5 — Migration Guidance
 - [ ] Run SCOM→Azure Monitor migration tool against the new MP

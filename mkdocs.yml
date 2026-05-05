@@ -130,12 +130,17 @@ nav:
           - 0008 — Customization strategy: design/decisions/0008-customization-strategy.md
           - 0009 — Alert vs health-state separation: design/decisions/0009-alert-vs-health-state.md
           - 0010 — Cloud-side prerequisites contract: design/decisions/0010-cloud-prerequisites-contract.md
+          - 0011 — L3 Azure-side scope (Tier A/B): design/decisions/0011-l3-azure-scope-and-connectivity.md
+          - 0012 — Azure Monitor Workspace vs LAW: design/decisions/0012-azure-monitor-workspace-vs-law-metrics.md
+          - 0013 — Azure Monitor deployment strategy: design/decisions/0013-azmon-deployment-strategy.md
           - ADR template: design/decisions/template.md
   - SCOM MP:
       - Overview: scom-mp/index.md
+      - SquaredUp DS (optional): scom-mp/squaredup/index.md
   - Azure Monitor:
       - Overview: azure-monitor/index.md
       - Prerequisites: azure-monitor/prerequisites.md
+      - SquaredUp Cloud (optional): azure-monitor/squaredup/index.md
   - Migration (SCOM → AzMon):
       - Overview: comparison/index.md
   - Project:
