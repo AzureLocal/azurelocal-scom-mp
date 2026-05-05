@@ -22,6 +22,7 @@ These are project-scoped ADRs. Org-wide platform standards live in
 | [0010](./0010-cloud-prerequisites-contract.md) | Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) | ✅ Accepted |
 | [0011](./0011-l3-azure-scope-and-connectivity.md) | L3 Azure-side scope: agent-local Arc health checks (Tier A) vs. management server ARM probes (Tier B) | ✅ Accepted |
 | [0012](./0012-azure-monitor-workspace-vs-law-metrics.md) | Azure Monitor Workspace vs Log Analytics Workspace: metrics routing for the health model (dual-topology support) | ✅ Accepted |
+| [0013](./0013-azmon-deployment-strategy.md) | Azure Monitor Health Model deployment strategy — Bicep-first, portal-bootstrap | ✅ Accepted |
 
 ## When to write an ADR
 

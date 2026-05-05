@@ -91,21 +91,31 @@ azurelocal-scom-mp/
 │   │           └── views.xml                   # State/alert/performance views
 │   │
 │   └── azure-monitor/                 # Track 2: Azure Monitor artifacts
-│       ├── arm-templates/
-│       │   ├── health-model.json              # ARM template: health model resource
-│       │   ├── service-group.json             # ARM template: service group
-│       │   └── alert-rules.json               # ARM template: health-state alert rules
-│       ├── bicep/
-│       │   ├── health-model.bicep
-│       │   ├── service-group.bicep
-│       │   └── alert-rules.bicep
+│       │                              # Deployment strategy: Bicep-first (see ADR 0013)
+│       │                              # Portal bootstrap once → export → Bicep is source of truth
+│       ├── bicep/                     # Source: Bicep modules (checked in, versioned)
+│       │   ├── main.bicep             # Orchestrator: deploys all modules in dependency order
+│       │   ├── modules/
+│       │   │   ├── service-group.bicep        # Microsoft.Management/serviceGroups
+│       │   │   ├── health-model.bicep         # Microsoft.Monitor/healthModels
+│       │   │   ├── entities.bicep             # Entity + relationship definitions, embedded KQL signals
+│       │   │   ├── alerts.bicep               # Metric alert rules + scheduled query rules
+│       │   │   ├── action-groups.bicep        # Notification routing (action groups)
+│       │   │   └── dcr.bicep                  # Data Collection Rules (DCMA/AMA metrics)
+│       │   └── parameters/
+│       │       ├── lab.bicepparam             # Lab/dev: relaxed thresholds, no paging
+│       │       ├── standard.bicepparam        # Standard production defaults
+│       │       └── strict.bicepparam          # High-criticality: tighter thresholds
+│       ├── scripts/
+│       │   └── Deploy-HealthModel.ps1         # az deployment wrapper + pre-flight checks
 │       ├── kql/
-│       │   ├── azurelocal-health-score.kql    # Layered health score query (WAF pattern)
-│       │   ├── node-availability.kql
-│       │   ├── storage-pool-health.kql
-│       │   └── vm-performance.kql
-│       └── workbooks/
-│           └── azurelocal-health.json          # Azure Monitor Workbook for SCOM migration users
+│       │   ├── signals/                       # One .kql per signal (matches signal-catalog.md)
+│       │   │   └── (per-signal .kql files)
+│       │   └── health-score.kql               # WAF-pattern layered health score query
+│       ├── workbooks/
+│       │   └── azurelocal-health.workbook.json  # Azure Monitor Workbook for visualization
+│       └── dist/                      # Generated output — do not hand-edit
+│           └── (bicep build artifacts, exported ARM JSON)
 │
 └── diagrams/                          # Master diagram sources (check in originals)
     ├── drawio/
@@ -307,7 +317,7 @@ Both tracks use **worst-state** rollup as the default:
 
 Every threshold, alert severity, and behavior is **parameterized** so customers customize without forking:
 
-- **SCOM track** — sealed `AzureLocal.HealthModel.mp` + unsealed `AzureLocal.HealthModel.Overrides.xml` with three pre-built tiers (Lab / Standard / Strict). Customer-authored override packs reference our override pack, not the sealed MP. Upgrade-safe by SCOM design.
+- **SCOM track** — sealed `AzureLocal.SCOM.Library.mp` + sealed `AzureLocal.SCOM.Monitoring.mp` + unsealed `AzureLocal.SCOM.Override.xml` with three pre-built tiers (Lab / Standard / Strict). Customer-authored override packs reference our override pack, not the sealed MPs. Upgrade-safe by SCOM design.
 - **Azure Monitor track** — every threshold is a Bicep `param` with a documented default. Three pre-built `*.bicepparam` files (lab / standard / strict). KQL signals are replaceable via named module inputs. Action group routing is parameter-driven.
 - **Cross-track parity** — same logical threshold has the same name across both tracks (`Volume.FreeSpace.WarnPercent` ↔ `volumeFreeSpaceWarningThresholdPct`).
 
@@ -349,9 +359,10 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
   - [x] ADR 0010 — Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) — Accepted
   - [x] ADR 0011 — L3 Azure-side scope: agent-local Arc health checks (Tier A) vs. management server ARM probes (Tier B) — Accepted
   - [x] ADR 0012 — Azure Monitor Workspace vs Log Analytics Workspace: metrics routing for the health model (dual-topology support, LAW Perf fallback) — Accepted
+  - [x] ADR 0013 — Azure Monitor Health Model deployment strategy (Bicep-first, portal-bootstrap) — Accepted
 - [x] Build full structural inventory tables in `docs/design/`
   - [x] Component inventory (~27 entities across 3 layers — updated with `AzureLocal.PhysicalDisk`, `AzureLocal.NetworkAdapter`, Arc agent Tier A group) — `scope-topology.md`
-  - [x] Signal inventory (~90+ signals × dimensions × thresholds × source — expanded with physical disk health, storage pool size/reserve/retired, volume size detail, physical NIC/RDMA, Arc agent local checks, extension installation probes, cluster network state) — `signal-catalog.md`
+  - [x] Signal inventory (~250+ signals × dimensions × thresholds × source × Default ON/OFF/Rule column) — `signal-catalog.md`
   - [x] SCOM ↔ Azure Monitor concept mapping table — `concept-mapping.md`
   - [x] Cloud-side prerequisites table — `azure-monitor/prerequisites.md`
 - [x] Complete draw.io diagrams (replace Phase 1 stubs with real visuals)
@@ -359,7 +370,7 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
   - [x] `azure-monitor-entity-graph.drawio` — entity graph w/ relationships
   - [x] `concept-comparison.drawio` — side-by-side mapping
 - [x] Refine Mermaid sources to match ADR 0005 / 0006 names
-- [x] Phase 2 sign-off gate: all 10 ADRs Accepted ✅; inventory reviewed ✅; draw.io diagrams complete ✅; SquaredUp optional integration documented in ADR 0008 + customization.md ✅
+- [x] Phase 2 sign-off gate: all 13 ADRs Accepted ✅; inventory reviewed ✅; draw.io diagrams complete ✅; SquaredUp optional integration documented in ADR 0008 + customization.md ✅
 ### Phase 3 — Track 1: SCOM MP Authoring
 - [ ] Watch/review Brian Wren's SC 2012 R2 video series (23 modules) as primary authoring reference — see [Brian Wren Resources](#brian-wren--mpauthor-resources) below
 - [ ] Set up VSAE project + fragment library references (Kevin Holman fragments)
@@ -378,16 +389,33 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 - [ ] Test in pre-production SCOM environment
 
 ### Phase 4 — Track 2: Azure Monitor Health Model
-- [ ] Create Azure Service Group for Azure Local resources
-- [ ] Create health model in Azure portal (linked to service group)
-- [ ] Configure entities and relationships to match the SCOM topology
-- [ ] Add signals to each entity (metric + KQL)
-- [ ] Configure Impact settings (Standard/Limited/Suppressed per component)
+> Deployment strategy: **Bicep-first, portal-bootstrap** — see [ADR 0013](docs/design/decisions/0013-azmon-deployment-strategy.md)
+
+**Step 1 — Bootstrap (portal, one-time)**
+- [ ] Verify all cloud prerequisites met (ADR 0010): HCI Insights, AMA, DCMA, RBAC, networking
+- [ ] Create Azure Service Group for Azure Local resources (ARM resource — script in `scripts/`)
+- [ ] Build initial health model interactively in Azure portal to validate entity topology
+- [ ] Validate KQL signal queries from `src/azure-monitor/kql/signals/` against live LAW
+- [ ] Configure Impact settings (Standard/Limited/Suppressed per ADR 0003 + ADR 0006)
 - [ ] Set Health Objectives on root entity
-- [ ] Create alert rules at appropriate entity levels
-- [ ] Export ARM/Bicep templates for the health model
-- [ ] Write KQL health score queries (WAF Mission-Critical pattern)
-- [ ] Build Azure Monitor Workbook for visualization
+
+**Step 2 — Export and modularize (one-time)**
+- [ ] Export portal model to ARM JSON; decompile to Bicep with `az bicep decompile`
+- [ ] Split decompiled output into `src/azure-monitor/bicep/modules/` structure (ADR 0013)
+- [ ] Parameterize all thresholds as Bicep `param` — generate `lab.bicepparam`, `standard.bicepparam`, `strict.bicepparam`
+- [ ] Wire KQL signal files from `kql/signals/` into `entities.bicep` as module inputs
+- [ ] Write `scripts/Deploy-HealthModel.ps1` wrapper (pre-flight checks + `az deployment sub create`)
+
+**Step 3 — Alert rules and visualization**
+- [ ] Author alert rules in `bicep/modules/alerts.bicep` (curated allow-list from ADR 0009)
+- [ ] Author action group module with parameter-driven routing
+- [ ] Write KQL health score queries in `kql/health-score.kql` (WAF Mission-Critical pattern)
+- [ ] Build Azure Monitor Workbook for visualization (`workbooks/azurelocal-health.workbook.json`)
+
+**Step 4 — Validate and document**
+- [ ] Run `bicep build` → generate `dist/` ARM JSON for audit review
+- [ ] Test end-to-end deployment with `lab.bicepparam` against pre-production environment
+- [ ] Write `docs/azure-monitor/` doc pages (entities, signals, health objectives, alerts, deployment guide)
 
 ### Phase 5 — Migration Guidance
 - [ ] Run SCOM→Azure Monitor migration tool against the new MP
