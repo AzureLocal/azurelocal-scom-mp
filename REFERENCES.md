@@ -118,8 +118,8 @@ All upstream sources used in designing and implementing this project. Organized 
 | Performance Monitors and Rules | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457556(v=sc.12) | |
 | Script Monitors and Rules | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457579(v=sc.12) | |
 | Event Monitor Reset | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457598(v=sc.12) | Manual/Timer reset patterns. |
-| Distributed Applications | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457612(v=sc.12) | |
-| Watcher Nodes | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457584(v=sc.12) | |
+| Distributed Applications | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457612(v=sc.12) | DA structure, component groups, health rollup limitations of the designer vs XML authoring. Cited in ADR 0005. |
+| Watcher Nodes | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457584(v=sc.12) | Proxy agent / watcher node pattern — used for cluster-level discovery. Cited in ADR 0005. |
 | Selecting a Target | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457539(v=sc.12) | |
 | Creating a New Target | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457543(v=sc.12) | |
 | MP Templates | https://learn.microsoft.com/en-us/previous-versions/system-center/system-center-2012-R2/hh457614(v=sc.12) | |
@@ -137,14 +137,14 @@ All upstream sources used in designing and implementing this project. Organized 
 |---|---|---|
 | **SC 2012 R2 MP Video Series (23 modules)** ⭐⭐ | https://learn.microsoft.com/en-us/shows/system-center-2012-r2-operations-manager-management-packs/ | Jan 2014 – Mar 2015. Most complete MP authoring video course produced. **Modules 15–19 cover the health model directly.** |
 | Channel 9 (original URL) | https://channel9.msdn.com/Series/System-Center-2012-R2-Operations-Manager-Management-Packs | Same content, legacy URL. |
-| Module 15 — Health Model Introduction ⭐ | `/Health-Model-Introduction` (append to Learn URL above) | |
+| **Module 6 — Designing a Service Model** ⭐⭐ | `/Designing-a-Service-Model` | **Primary reference for class hierarchy design.** How to decompose an application into components, identify relationships, and design a service model before writing any XML. Cited in ADR 0005. |
+| **Module 7 — Building Classes and Relationships** ⭐⭐ | `/Building-Classes-and-Relationships` | **Primary reference for class authoring.** Base class selection (LocalApplication / ApplicationComponent / LogicalEntity), key properties, hosting vs containment vs reference, proxy agent pattern, element ID naming convention. Cited in ADR 0005 and ADR 0007. |
+| Module 8 — Intro to Discoveries | `/Introduction-to-Discoveries` | |
+| Module 15 — Health Model Introduction ⭐ | `/Health-Model-Introduction` | |
 | Module 16 — Designing a Health Model ⭐ | `/Designing-a-Health-Model` | |
 | Module 17 — Unit Monitors ⭐ | `/Unit-Monitors` | |
-| Module 18 — Rules ⭐ | `/Rules` | |
+| **Module 18 — Rules** ⭐ | `/Rules` | **Primary reference for rule ID naming and data collection rule design.** Perf collection rules, event collection rules. Cited in ADR 0007. |
 | Module 19 — Health Rollup ⭐ | `/Health-Rollup` | |
-| Module 6 — Designing a Service Model | `/Designing-a-Service-Model` | |
-| Module 7 — Building Classes and Relationships | `/Building-Classes-and-Relationships` | |
-| Module 8 — Intro to Discoveries | `/Introduction-to-Discoveries` | |
 | Module 23 — Cookdown | `/Cookdown` | |
 | **VSAE Intro YouTube Playlist** (by Teknoglot) | https://www.youtube.com/playlist?list=PL9Yal_Kg7hiHPirvvtlb5zQWsWb54Twmu | 5 videos. Brian Wren VSAE intro content. |
 
@@ -176,7 +176,7 @@ All upstream sources used in designing and implementing this project. Organized 
 
 | Resource | URL | Notes |
 |---|---|---|
-| **SC 2012 OpsMgr Authoring PDF** ⭐ | https://download.microsoft.com/download/3/3/F/33F52373-3A75-422C-969B-61E05EEC5E72/SC2012_OpsMgr_Authoring.pdf | The authoritative downloadable authoring guide. |
+| **SC 2012 OpsMgr Authoring PDF** ⭐ | https://download.microsoft.com/download/3/3/F/33F52373-3A75-422C-969B-61E05EEC5E72/SC2012_OpsMgr_Authoring.pdf | The authoritative downloadable authoring guide. Classes & Relationships chapter = primary reference for base class selection, key properties, and element ID naming (ADR 0005, ADR 0007). Management Pack Basics chapter covers MP file structure (ADR 0007). |
 
 ---
 

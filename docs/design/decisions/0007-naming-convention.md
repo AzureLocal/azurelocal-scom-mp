@@ -1,4 +1,4 @@
-# ADR 0007 — Naming convention: cross-track parity
+# ADR 0007 — Naming convention: cross-track parity + SCOM element IDs
 
 - **Status**: Accepted
 - **Date**: 2026-05-05
@@ -21,9 +21,11 @@ Without a project-wide convention three failure modes are likely:
 
 Inputs to consider:
 
-- SCOM convention (Brian Wren, Microsoft Operations Manager Authoring Guide):
-  `Vendor.Product.Suffix` PascalCase (e.g., `AzureLocal.Cluster`, `Volume.FreeSpace`).
-  Override property keys use dot-separated PascalCase.
+- **Primary reference:** Brian Wren, SC 2012 R2 Module 7 "Building Classes and
+  Relationships" + the [SC 2012 OpsMgr Authoring PDF](https://download.microsoft.com/download/3/3/F/33F52373-3A75-422C-969B-61E05EEC5E72/SC2012_OpsMgr_Authoring.pdf).
+  Brian Wren's convention: `Vendor.Product[.Version].Component` PascalCase for class
+  and element IDs. Override property keys use dot-separated PascalCase matching the
+  logical signal name.
 - ARM/Bicep convention: camelCase parameter names (e.g.,
   `volumeFreeSpaceWarningThresholdPct`).
 - Azure Monitor signal IDs are JSON properties — also camelCase.
@@ -31,6 +33,97 @@ Inputs to consider:
   prescribes `kebab-case` for filenames and resource IDs.
 
 ## Decision
+
+Two complementary conventions:
+1. **SCOM internal element IDs** — all XML elements inside the MP (classes, monitors,
+   rules, discoveries, relationships, the DA). Follows Brian Wren's authoring guide
+   naming pattern. Covered in the first section below.
+2. **Cross-track logical signal names** — the project-wide canonical name used both
+   as SCOM override keys and as the source for Bicep parameter translation. Covered
+   in the second section below.
+
+---
+
+## Part 1 — SCOM element IDs (internal MP names)
+
+Per Brian Wren Module 7: every element in a management pack has an `ID=""` attribute that
+is the **globally unique identifier** for that element. IDs must be unique across *all
+management packs installed in the management group*, not just within this MP. The
+convention prevents collisions.
+
+### Pattern: `<Prefix>.<Type>.<Entity>[.<Qualifier>]`
+
+| Segment | Value | Example |
+|---|---|---|
+| `<Prefix>` | `AzureLocal` (always) | `AzureLocal` |
+| `<Type>` | element type (see table below) | `Monitor`, `Rule`, `Discovery`, `Class`, `Relationship` |
+| `<Entity>` | short entity name from class hierarchy | `Cluster`, `Volume`, `StoragePool` |
+| `<Qualifier>` | optional signal/discovery descriptor | `FreeSpace`, `HealthStatus`, `ServiceState` |
+
+### Type prefixes
+
+| Element | Type prefix | Example ID |
+|---|---|---|
+| Management pack identity | *(no type prefix — `AzureLocal.SCOM.<Area>`)* | `AzureLocal.SCOM.Library`, `AzureLocal.SCOM.Monitoring` |
+| Class | `Class` | `AzureLocal.Class.Cluster` ← **exception: use just `AzureLocal.Cluster`** |
+| Class (L3 Azure) | *(see below)* | `AzureLocal.Azure.HCICluster` |
+| Monitor | `Monitor` | `AzureLocal.Monitor.Volume.FreeSpace` |
+| Rule (perf collection) | `Rule` | `AzureLocal.Rule.Node.CPU.Percent` |
+| Rule (event collection) | `Rule` | `AzureLocal.Rule.Node.EventLog.System.Critical` |
+| Discovery | `Discovery` | `AzureLocal.Discovery.Cluster`, `AzureLocal.Discovery.Volume` |
+| Relationship | `Relationship` | `AzureLocal.Relationship.Cluster.StoragePool` |
+| Run As profile | `Profile` | `AzureLocal.Profile.ClusterNode`, `AzureLocal.Profile.AzureArm` |
+| Distributed Application | `DA` | `AzureLocal.DA.Deployment` |
+| Component group | `ComponentGroup` | `AzureLocal.ComponentGroup.Infrastructure` |
+| View | `View` | `AzureLocal.View.Cluster.State`, `AzureLocal.View.Dashboard` |
+| Task | `Task` | `AzureLocal.Task.Cluster.RecycleAgent` |
+| Override | *(not named — live in the Override MP)* | — |
+
+> **Class ID exception:** Brian Wren's authoring guide and the real-world Microsoft MPs
+> (e.g., `Microsoft.Windows.Computer`, `Microsoft.SQLServer.2014.DBEngine`) omit the
+> `Class.` type prefix from class IDs. Classes are the *nouns* of the system and their
+> IDs are used everywhere as references — keeping them short reduces noise. This MP
+> follows the same pattern: `AzureLocal.Cluster` not `AzureLocal.Class.Cluster`.
+
+### Management pack file names and IDs
+
+| File | MP identity ID | Purpose |
+|---|---|---|
+| `AzureLocal.SCOM.Library.mp` | `AzureLocal.SCOM.Library` | Classes, relationships, discoveries. **Sealed.** |
+| `AzureLocal.SCOM.Monitoring.mp` | `AzureLocal.SCOM.Monitoring` | Monitors, rules, views, tasks. **Sealed.** |
+| `AzureLocal.SCOM.Override.xml` | `AzureLocal.SCOM.Override` | Override pack for operator customization. **Unsealed.** |
+
+The Library MP is sealed first; the Monitoring MP takes a `Reference` dependency on it.
+This matches the pattern in real-world Microsoft MPs (library → monitoring → override).
+
+### Display names (console-visible strings)
+
+Per the authoring guide: display names are **separate from IDs**. They can contain
+spaces and are defined in `<DisplayStrings>` elements. They are never used as references.
+
+| Class ID | Display name |
+|---|---|
+| `AzureLocal.Cluster` | `Azure Local Cluster` |
+| `AzureLocal.Node` | `Azure Local Node` |
+| `AzureLocal.StoragePool` | `Azure Local Storage Pool (S2D)` |
+| `AzureLocal.Volume` | `Azure Local Volume (CSV)` |
+| `AzureLocal.StorageTier` | `Azure Local Storage Tier` |
+| `AzureLocal.PhysicalDisk` | `Azure Local Physical Disk` |
+| `AzureLocal.NetworkIntent` | `Azure Local Network Intent` |
+| `AzureLocal.NetworkAdapter` | `Azure Local Network Adapter` |
+| `AzureLocal.StorageReplica` | `Azure Local Storage Replica` |
+| `AzureLocal.LCMState` | `Azure Local LCM State` |
+| `AzureLocal.ArcResourceBridge` | `Azure Local Arc Resource Bridge` |
+| `AzureLocal.AKSArcPlatform` | `Azure Local AKS Arc Platform` |
+| `AzureLocal.DCMA` | `Azure Local Cloud Management Agent` |
+| `AzureLocal.HCIRegistration` | `Azure Local HCI Registration` |
+| `AzureLocal.Azure.HCICluster` | `Azure Local — HCI Cluster (ARM)` |
+| `AzureLocal.Azure.ArcMachine` | `Azure Local — Arc Machine (ARM)` |
+| `AzureLocal.DA.Deployment` | `Azure Local Deployment` |
+
+---
+
+## Part 2 — Cross-track logical signal names
 
 We adopt a **mechanical translation rule** between a single canonical *logical name* and
 each track's idiomatic surface form. The rule is reversible (round-trippable) so a linter
@@ -137,6 +230,9 @@ A PR-time linter (planned for Phase 3) walks the customization tier files
 
 - ADR 0006 — [Azure Monitor entity model alignment](0006-azmon-entity-model.md)
 - ADR 0008 — [Customization strategy](0008-customization-strategy.md)
+- **Brian Wren, Module 7 — "Building Classes and Relationships"** (primary — class ID naming, vendor prefix convention)
+- **Brian Wren, Module 18 — "Rules"** (primary — rule ID naming pattern)
+- [SC 2012 OpsMgr Authoring PDF](https://download.microsoft.com/download/3/3/F/33F52373-3A75-422C-969B-61E05EEC5E72/SC2012_OpsMgr_Authoring.pdf) — Management Pack Basics chapter (element IDs, display strings, file structure)
 - [Brian Wren, "Management Pack Basics" (2010)](https://learn.microsoft.com/en-us/archive/blogs/mpauthor/management-pack-basics)
 - [AzureLocal/platform — naming standards](https://github.com/AzureLocal/platform)
 - [Bicep best practices — naming conventions](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/best-practices)

@@ -56,35 +56,35 @@ flowchart TD
 
 ### Layer 1 — On-prem (the cluster box)
 
-| Entity | SCOM class | Purpose | Source |
-|---|---|---|---|
-| **Cluster** | `AzureLocal.Cluster` | The Azure Local cluster (S2D + Failover Clustering) | `Get-Cluster` / `Get-ClusterResource` |
-| **Node** | `AzureLocal.Node` | Each cluster member node | `Get-ClusterNode` / WMI |
-| **Storage Pool** | `AzureLocal.StoragePool` | The Storage Spaces Direct pool | `Get-StoragePool` |
-| **Volume (CSV)** | `AzureLocal.Volume` | Each cluster shared volume | `Get-Volume` / `Get-ClusterSharedVolume` |
-| **Storage Tier** | `AzureLocal.StorageTier` | Pool's cache + capacity tiers | `Get-StorageTier` |
-| **Physical Disk** | `AzureLocal.PhysicalDisk` | Each physical disk in the S2D pool — health, media type, usage | `Get-PhysicalDisk` |
-| **Network Intent** | `AzureLocal.NetworkIntent` | Each named Network ATC intent (Mgmt / Compute / Storage) | `Get-NetIntent` / `Get-NetIntentStatus` |
-| **Network Adapter** | `AzureLocal.NetworkAdapter` | Each physical NIC bound to a Network Intent — link speed, RDMA, PFC/ETS | `Get-NetAdapter` / `Get-NetAdapterRdma` |
-| **Storage Replica** | `AzureLocal.StorageReplica` | Replication relationship (if configured) | `Get-SRPartnership` |
-| **Update / LCM state** | `AzureLocal.LCMState` | Solution-level update posture | `Get-SolutionUpdate` (Azure Local LCM) |
+| Entity | SCOM class | Base class | Purpose | Source |
+|---|---|---|---|---|
+| **Cluster** | `AzureLocal.Cluster` | `Microsoft.Windows.LocalApplication` | The Azure Local cluster (S2D + Failover Clustering) | `Get-Cluster` / `Get-ClusterResource` |
+| **Node** | `AzureLocal.Node` | `Microsoft.Windows.LocalApplication` | Each cluster member node | `Get-ClusterNode` / WMI |
+| **Storage Pool** | `AzureLocal.StoragePool` | `Microsoft.Windows.ApplicationComponent` | The Storage Spaces Direct pool | `Get-StoragePool` |
+| **Volume (CSV)** | `AzureLocal.Volume` | `Microsoft.Windows.ApplicationComponent` | Each cluster shared volume | `Get-Volume` / `Get-ClusterSharedVolume` |
+| **Storage Tier** | `AzureLocal.StorageTier` | `Microsoft.Windows.ApplicationComponent` | Pool's cache + capacity tiers | `Get-StorageTier` |
+| **Physical Disk** | `AzureLocal.PhysicalDisk` | `Microsoft.Windows.ApplicationComponent` | Each physical disk in the S2D pool — health, media type, usage | `Get-PhysicalDisk` |
+| **Network Intent** | `AzureLocal.NetworkIntent` | `Microsoft.Windows.ApplicationComponent` | Each named Network ATC intent (Mgmt / Compute / Storage) | `Get-NetIntent` / `Get-NetIntentStatus` |
+| **Network Adapter** | `AzureLocal.NetworkAdapter` | `Microsoft.Windows.ApplicationComponent` | Each physical NIC bound to a Network Intent — link speed, RDMA, PFC/ETS | `Get-NetAdapter` / `Get-NetAdapterRdma` |
+| **Storage Replica** | `AzureLocal.StorageReplica` | `Microsoft.Windows.ApplicationComponent` | Replication relationship (if configured) | `Get-SRPartnership` |
+| **LCM State** | `AzureLocal.LCMState` | `Microsoft.Windows.ApplicationComponent` | Solution-level update posture | `Get-SolutionUpdate` (Azure Local LCM) |
 
 > **Granularity note (updated):** `AzureLocal.PhysicalDisk` is a hosted class beneath
 > `AzureLocal.StoragePool`. A disk's health state is its own SCOM object, but it rolls up
 > to the pool via an aggregated health roll-up monitor. Similarly `AzureLocal.NetworkAdapter`
 > is hosted beneath `AzureLocal.NetworkIntent`; individual NIC failures propagate to the
-> parent intent. This extends the original 8-entity model to 10 L1 entities without
-> breaking existing aggregation logic.
+> parent intent. All base class choices follow Brian Wren Module 7 — see
+> [ADR 0005](decisions/0005-scom-class-hierarchy.md) for the full inheritance tree.
 
 ### Layer 2 — Cluster-resident platform services
 
-| Entity | SCOM class | Purpose | Source |
-|---|---|---|---|
-| **Arc Resource Bridge / MOC** | `AzureLocal.ArcResourceBridge` | The Resource Bridge VM and its MOC components | `az arcappliance` / Resource Health |
-| **AKS Arc platform** | `AzureLocal.AKSArcPlatform` | AKS *platform* only (host pool, control plane reachability) | AKS extension status |
-| **Cloud Agent / DCMA** | `AzureLocal.DCMA` | Microsoft-supplied management agents — locally observable | Service state + registry + last heartbeat |
-| **Arc agent (per node)** | `AzureLocal.Node` (attribute group) | Arc Connected Machine Agent services + extension health — locally observable, no ARM required (see ADR 0011 Tier A) | `Get-Service HIMDS`, registry, event log |
-| **HCI registration state** | `AzureLocal.HCIRegistration` | Registration / billing / license tier | ARM resource state + local registry |
+| Entity | SCOM class | Base class | Purpose | Source |
+|---|---|---|---|---|
+| **Arc Resource Bridge / MOC** | `AzureLocal.ArcResourceBridge` | `Microsoft.Windows.LocalApplication` | The Resource Bridge VM and its MOC components | `az arcappliance` / Resource Health |
+| **AKS Arc platform** | `AzureLocal.AKSArcPlatform` | `Microsoft.Windows.ApplicationComponent` | AKS *platform* only (host pool, control plane reachability) | AKS extension status |
+| **Cloud Agent / DCMA** | `AzureLocal.DCMA` | `Microsoft.Windows.ApplicationComponent` | Microsoft-supplied management agents — locally observable | Service state + registry + last heartbeat |
+| **Arc agent (per node)** | `AzureLocal.Node` (attribute group) | *(extends Node)* | Arc Connected Machine Agent services + extension health — locally observable, no ARM required (see ADR 0011 Tier A) | `Get-Service HIMDS`, registry, event log |
+| **HCI registration state** | `AzureLocal.HCIRegistration` | `Microsoft.Windows.ApplicationComponent` | Registration / billing / license tier | ARM resource state + local registry |
 
 > **ADR 0011 Tier A signals:** Arc agent connectivity and extension health signals are
 > collected on `AzureLocal.Node` (not a separate class) using agent-local data sources.
