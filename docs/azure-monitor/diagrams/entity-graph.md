@@ -1,7 +1,7 @@
 # Azure Monitor Entity Graph — Azure Local
 
-> Source: `diagrams/mermaid/azure-monitor-entity-graph.md`  
-> Entity names mirror [ADR 0006](../../docs/design/decisions/0006-azmon-entity-model.md) (1:1 with ADR 0005 SCOM classes).
+> Source: `docs/azure-monitor/diagrams/entity-graph.md`  
+> Entity names mirror [ADR 0006](../../design/decisions/0006-azmon-entity-model.md) (1:1 with ADR 0005 SCOM classes).
 > Embed in docs using the `mermaid` fenced code block.
 
 ```mermaid

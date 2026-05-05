@@ -88,7 +88,7 @@ flowchart TD
 
 > **ADR 0011 Tier A signals:** Arc agent connectivity and extension health signals are
 > collected on `AzureLocal.Node` (not a separate class) using agent-local data sources.
-> See [signal-catalog.md — Arc agent locally observable](signal-catalog.md#arc-agent--locally-observable-adr-0011-tier-a).
+> See [signal-catalog.md — Arc agent locally observable](signal-catalog.md#arc-agent-locally-observable-adr-0011-tier-a).
 
 ### Layer 3 — Azure-side infrastructure
 

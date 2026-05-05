@@ -1,7 +1,7 @@
 # SCOM Health Rollup Tree — Azure Local
 
-> Source: `diagrams/mermaid/scom-health-rollup.md`  
-> Class names match [ADR 0005](../../docs/design/decisions/0005-scom-class-hierarchy.md).
+> Source: `docs/scom-mp/diagrams/health-tree.md`  
+> Class names match [ADR 0005](../../design/decisions/0005-scom-class-hierarchy.md).
 > Embed in docs using the `mermaid` fenced code block.
 
 ```mermaid
