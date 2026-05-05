@@ -68,15 +68,27 @@ azurelocal-scom-mp/
 ├── src/
 │   │
 │   ├── scom-mp/                       # Track 1: Management Pack XML source
-│   │   ├── AzureLocal.SCOM.MP.xml              # Main sealed MP (classes, discoveries, monitors, rules)
-│   │   ├── AzureLocal.SCOM.MP.Overrides.xml    # Companion unsealed overrides pack
-│   │   └── fragments/                          # XML fragment building blocks
-│   │       ├── discovery-wmi.xml
-│   │       ├── monitor-unit-event.xml
-│   │       ├── monitor-unit-perf.xml
-│   │       ├── monitor-aggregate.xml
-│   │       ├── monitor-dependency.xml
-│   │       └── rule-collection-perf.xml
+│   │   │                              # 3-MP split per Brian Wren Module 7 / SC 2012 Authoring Guide:
+│   │   │                              #   Library (sealed) → Monitoring (sealed, refs Library) → Override (unsealed)
+│   │   ├── AzureLocal.SCOM.Library.mp          # Sealed: TypeDefinitions (classes, relationships), discoveries
+│   │   ├── AzureLocal.SCOM.Monitoring.mp       # Sealed: monitors, rules, views, tasks (References Library)
+│   │   ├── AzureLocal.SCOM.Override.xml        # Unsealed: operator-editable threshold overrides
+│   │   └── fragments/                          # XML fragment building blocks, organized by target MP
+│   │       ├── library/
+│   │       │   ├── classes.xml                 # <TypeDefinitions>: all 24 AzureLocal.* classes
+│   │       │   ├── relationships.xml           # Hosting + Containment + Reference relationships
+│   │       │   ├── discovery-cluster.xml       # Cluster + Node discovery (PowerShell/WMI)
+│   │       │   ├── discovery-storage.xml       # StoragePool, Volume, StorageTier, PhysicalDisk
+│   │       │   └── discovery-network.xml       # NetworkIntent, NetworkAdapter
+│   │       └── monitoring/
+│   │           ├── monitor-unit-event.xml      # Event-based unit monitors template
+│   │           ├── monitor-unit-perf.xml       # Performance threshold unit monitors template
+│   │           ├── monitor-unit-service.xml    # Windows service unit monitors template
+│   │           ├── monitor-aggregate.xml       # Aggregate monitor roll-up template
+│   │           ├── monitor-dependency.xml      # Dependency monitor template
+│   │           ├── rule-collection-perf.xml    # Performance collection rules template
+│   │           ├── rule-collection-event.xml   # Event collection rules template
+│   │           └── views.xml                   # State/alert/performance views
 │   │
 │   └── azure-monitor/                 # Track 2: Azure Monitor artifacts
 │       ├── arm-templates/
