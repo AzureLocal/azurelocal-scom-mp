@@ -70,19 +70,28 @@ ever calling Azure.
 
 ### "Hard L3" — signals that genuinely require ARM access (management server only)
 
-These signals require calling Azure management APIs. They run from the designated
-management server only, targeting `Class="Microsoft.SystemCenter.ManagementServer"`:
+Only signals with **no on-box representation at all** belong here. If a local proxy
+exists (registry, service state, event log), the signal moves to Tier A. This list
+was reviewed against all known local data sources and trimmed accordingly.
 
-| Signal | ARM endpoint | SCOM class | Why it can't be done locally |
+These run from the designated management server only, targeting
+`Class="Microsoft.SystemCenter.ManagementServer"`:
+
+| Signal | ARM / Graph endpoint | SCOM class | Why it cannot be done locally |
 |---|---|---|---|
-| HCI cluster resource provisioning state | `microsoft.azurestackhci/clusters` ARM property | `AzureLocal.Azure.HCICluster` | ARM-only; not in local registry |
-| Arc Machine connection status (authoritative) | `microsoft.hybridcompute/machines` ARM property | `AzureLocal.Azure.ArcMachine` | Local check is self-reported; ARM is authoritative |
-| Key Vault Resource Health + secret expiry | `microsoft.keyvault/vaults` + Key Vault data plane | `AzureLocal.Azure.KeyVault` | KV is a pure Azure resource |
-| Storage Account Resource Health | `microsoft.storage/storageaccounts` | `AzureLocal.Azure.StorageAccount` | Storage Account is a pure Azure resource |
-| Required RBAC role assignments | ARM Authorization API | `AzureLocal.Azure.RBAC` | Role assignments live in ARM only |
-| SPN credential expiry | Microsoft Graph `servicePrincipals/{id}/passwordCredentials` | *(management server monitor)* | Microsoft Graph only |
-| Update Manager linkage freshness | `microsoft.maintenance/maintenanceconfigurations` | `AzureLocal.Azure.HCICluster` | ARM-only |
-| DCR existence and association | ARM Resource Graph | `AzureLocal.Azure.HCICluster` | ARM-only |
+| Key Vault Resource Health + secret expiry | `microsoft.keyvault/vaults` + KV data plane | `AzureLocal.Azure.KeyVault` | Pure Azure resource — no local representation |
+| Storage Account Resource Health | `microsoft.storage/storageaccounts` | `AzureLocal.Azure.StorageAccount` | Pure Azure resource — no local representation |
+| Required RBAC role assignments (SPN, MI, cluster identity) | ARM Authorization `roleAssignments` | `AzureLocal.Azure.RBAC` | Role assignments exist only in ARM — no local copy |
+| SPN credential expiry | Microsoft Graph `servicePrincipals/{id}/passwordCredentials` | *(management server monitor)* | Microsoft Graph only — no local representation |
+| Custom Location provisioning state | `microsoft.extendedlocation/customlocations` | `AzureLocal.Azure.CustomLocation` | ARM-only resource created by deployment stack |
+| Logical Network provisioning state + IP pool usage | `microsoft.azurestackhci/logicalnetworks` | `AzureLocal.Azure.LogicalNetwork` | ARM-only resource managed by MOC |
+| Update Manager maintenance config ARM linkage | `microsoft.maintenance/maintenanceconfigurations` | `AzureLocal.Azure.HCICluster` | Whether the ARM maintenance config is *linked* to the cluster is ARM-only; update state itself is available locally via `Get-SolutionUpdate` |
+| DCR ARM-side association (supplementary) | ARM `dataCollectionRuleAssociations` via Resource Graph | `AzureLocal.Azure.HCICluster` | Whether the ARM-side association record still exists — the local AMA config (Tier A) tells you what AMA is doing, but can't detect if the ARM association was deleted |
+
+**Signals removed from Tier B compared to the original draft:**
+
+- **HCI cluster provisioning state** → moved to Tier A: `HKLM:\SOFTWARE\Microsoft\AzureStackHCI` → `RegistrationStatus` + `ConnectionIdentifier` + `LastConnectedTime` are valid local proxies. ARM is a cross-check, not the primary.
+- **Arc Machine connection status (authoritative)** → already covered by Tier A `ArcAgent.ConnectionStatus.Local`. The ARM view *lags* the node's reality by up to one sync interval — the local registry is actually *more* timely. The ARM version was removed from Tier B to avoid false health-state discrepancy between Tier A and Tier B.
 
 ## Decision
 
@@ -147,6 +156,24 @@ which propagates to the Cluster. **No ARM call required.**
 - **Neutral**: Tier B checks run on a 1-hour polling interval (see ADR 0004) — not real-time.
   This is acceptable for configuration drift, not acceptable for availability signals (which
   is why availability lives in Tier A).
+
+## Additional Tier A signals — locally checkable, previously missing
+
+These signals were identified during Tier B review as locally checkable but not
+previously included in the Tier A list. All run on the SCOM agent on each node
+or on a designated cluster node (cookdown target).
+
+| What to check | How to check it locally | SCOM class |
+|---|---|---|
+| **HCI cluster registration status (local proxy)** | Registry `HKLM:\SOFTWARE\Microsoft\AzureStackHCI` → `RegistrationStatus`, `LastConnectedTime`, `ConnectionIdentifier` | `AzureLocal.HCIRegistration` |
+| **LCM / SolutionUpdate state** | `Get-SolutionUpdate` (update pending/failed state) + `Get-SolutionUpdateEnvironment` (LCM health) | `AzureLocal.LCMState` |
+| **Environment Checker results** | `Invoke-AzureStackHCIEnvironmentChecker` — ships on every cluster; returns pass/fail per check category (network, storage, Arc, update) | `AzureLocal.Cluster` (run at discovery cadence) |
+| **Cloud Witness reachability** | `Get-ClusterQuorum` → witness type; if cloud witness: `Test-NetConnection <account>.blob.core.windows.net -Port 443` | `AzureLocal.Cluster` |
+| **Hyper-V host health** | `Get-VMHost` health state + `Get-VMSwitch` NIC binding presence | `AzureLocal.Node` |
+| **DCB / QoS policy conformance** | `Get-NetQosPolicy`, `Get-NetQosFlowControl`, `Get-NetQosTrafficClass` — verify PFC enabled on correct priorities, ETS bandwidth allocation per Network ATC intent | `AzureLocal.NetworkAdapter` |
+| **S2D cache dirty pages percent** | Perf counter `\Cluster Storage Cache Stores(*)\Cache Dirty Pages %` | `AzureLocal.StorageTier` |
+| **Storage rebuild job progress** | `Get-StorageJob | Where-Object JobState -eq 'Running'` → `PercentComplete` + elapsed time | `AzureLocal.StoragePool` |
+| **DCR local AMA config present** | Registry `HKLM:\SOFTWARE\Microsoft\Azure Monitor Agent\` → active DCR list present and non-empty | `AzureLocal.Node` (supplements Tier B ARM association check) |
 
 ## Required extensions to monitor (Tier A — locally checkable)
 

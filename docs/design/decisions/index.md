@@ -21,6 +21,7 @@ These are project-scoped ADRs. Org-wide platform standards live in
 | [0009](./0009-alert-vs-health-state.md) | Alert vs health-state separation policy | ✅ Accepted |
 | [0010](./0010-cloud-prerequisites-contract.md) | Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) | ✅ Accepted |
 | [0011](./0011-l3-azure-scope-and-connectivity.md) | L3 Azure-side scope: agent-local Arc health checks (Tier A) vs. management server ARM probes (Tier B) | ✅ Accepted |
+| [0012](./0012-azure-monitor-workspace-vs-law-metrics.md) | Azure Monitor Workspace vs Log Analytics Workspace: metrics routing for the health model (dual-topology support) | ✅ Accepted |
 
 ## When to write an ADR
 

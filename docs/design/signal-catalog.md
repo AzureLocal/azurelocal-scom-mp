@@ -22,8 +22,13 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 |---|---|---|---|---|---|---|
 | `Cluster.Service.State` | Availability | Running | — | Stopped/Degraded | `Get-ClusterResource "Cluster Name"` | DCMA metric `cluster_status` |
 | `Cluster.Quorum.State` | Availability | Normal | NoWitness | Failed | `Get-ClusterQuorum` | KQL `MicrosoftHCI_Cluster_Quorum` |
+| `Cluster.Quorum.Witness.Reachable` | Availability | Reachable | — | Unreachable | `Get-ClusterQuorum` witness type + `Test-NetConnection <account>.blob.core.windows.net -Port 443` (cloud witness) or UNC probe (file share) | KQL on cluster event log |
 | `Cluster.Validation.Warnings` | Configuration | 0 | ≤ 5 | > 5 | `Test-Cluster -List Inventory` | KQL on Event log |
 | `Cluster.NodeCount.Live` | Availability | All | n-1 | < n-1 | `Get-ClusterNode` | DCMA metric `cluster_node_count` |
+| `Cluster.EnvironmentChecker.Pass` | Configuration | All pass | ≥ 1 warning | ≥ 1 failure | `Invoke-AzureStackHCIEnvironmentChecker` (ships on every cluster; checks network, storage, Arc, update categories) | KQL on Health event log |
+| `LCM.Update.PendingCritical` | Configuration | 0 | — | ≥ 1 | `Get-SolutionUpdate \| Where-Object Health -eq 'InProgress'` + `Where-Object State -eq 'Failed'` | KQL |
+| `LCM.Environment.Health` | Availability | Healthy | — | Failed/Error | `Get-SolutionUpdateEnvironment` → `.State` | KQL |
+| `LCM.Update.LastRunResult` | Configuration | Succeeded | — | Failed | `Get-SolutionUpdate \| Sort-Object InstalledDate -Descending \| Select -First 1` | KQL |
 
 ### Node
 
@@ -33,6 +38,8 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `Node.CPU.Percent` | Performance | < 70 | 70–85 | > 85 | Perf counter `\Processor(_Total)\% Processor Time` | DCMA `node_cpu_usage_percentage` |
 | `Node.Memory.Percent` | Performance | < 75 | 75–90 | > 90 | Perf counter `\Memory\% Committed Bytes In Use` | DCMA `node_memory_usage_percentage` |
 | `Node.OS.UptimeDays` | Configuration | < 60 | 60–90 | > 90 | WMI `Win32_OperatingSystem.LastBootUpTime` | KQL `Heartbeat` |
+| `Node.HyperV.State` | Availability | Running | — | Stopped/Degraded | `Get-VMHost` → `.VirtualMachineMigrationEnabled` + Hyper-V service state | KQL on `Microsoft-Windows-Hyper-V-VMMS/Operational` |
+| `Node.HyperV.vSwitch.Binding` | Configuration | All NICs bound | — | vSwitch NIC binding missing | `Get-VMSwitch \| Get-VMSwitchTeam \| .NetAdapters` cross-referenced with `Get-NetIntent` adapters | KQL |
 | `Node.PendingReboot` | Configuration | False | — | True | Registry probe | KQL `Event` from AMA |
 | `Node.BMC.Alerts` | Availability | 0 | ≤ 2 | > 2 | OEM-specific (Dell APEX / HPE / Lenovo) | KQL on hardware event channel |
 | `Node.Arc.AgentConnected` | Availability | Connected | Stale (< 1h) | Disconnected | n/a (cross-references L3) | Resource Health on `HybridCompute/machines` |
@@ -50,6 +57,8 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `StoragePool.RetiredCapacity.TiB` | Configuration | 0 | > 0 | > 5% of total | `(Get-PhysicalDisk -Usage Retired \| Measure-Object Size -Sum).Sum / 1TB` | DCMA |
 | `StoragePool.Reserve.Policy` | Configuration | Configured | — | Missing | `(Get-StoragePool).RetireMissingPhysicalDisks` | KQL |
 | `StoragePool.RepairJobs.Active` | Performance | 0 | 1–2 | > 2 active for > 24h | `Get-StorageJob` | KQL on Storage event log |
+| `StoragePool.RebuildJob.PercentComplete` | Performance | n/a (no job) | Running ≥ 0% | Stalled (< 1% progress in 1h) | `Get-StorageJob \| Where-Object JobState -eq 'Running' \| Select-Object PercentComplete, ElapsedTime` | KQL |
+| `StoragePool.RebuildJob.ETA.Hours` | Performance | n/a | < 8h | > 8h (extended exposure) | Derived from PercentComplete + ElapsedTime | KQL |
 | `StoragePool.PhysicalDisks.Failed` | Availability | 0 | 1 (within fault tolerance) | > 1 | `Get-PhysicalDisk` | DCMA `storagepool_failed_disks` |
 
 ### Volume / CSV
@@ -72,6 +81,7 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 |---|---|---|---|---|---|---|
 | `StorageTier.Cache.HitRatio` | Performance | > 80 | 60–80 | < 60 | `Get-StorageTier` perf counters | DCMA `cache_hit_ratio` |
 | `StorageTier.Cache.State` | Availability | Bound | Unbinding | Failed | `Get-StorageTier` | DCMA |
+| `StorageTier.Cache.DirtyPages.Percent` | Performance | < 60 | 60–80 | > 80 | Perf counter `\Cluster Storage Cache Stores(*)\Cache Dirty Pages %` | DCMA |
 
 ### Physical Disk
 
@@ -123,6 +133,8 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `NIC.RSS.Enabled` | Configuration | True (storage NICs) | — | False | `Get-NetAdapterRss` | KQL |
 | `NIC.PFC.Enabled` | Configuration | True (RDMA NICs) | — | False | `Get-NetAdapterQos` | KQL |
 | `NIC.ETS.Enabled` | Configuration | True (RDMA NICs) | — | False | `Get-NetAdapterQos` | KQL |
+| `NIC.QoS.Policy.Conformance` | Configuration | Conformant | Partial (1 NIC drift) | Non-conformant (> 1 NIC) | `Get-NetQosPolicy` + `Get-NetQosFlowControl` + `Get-NetQosTrafficClass` — cross-referenced against Network ATC intent's expected QoS config | KQL |
+| `NIC.DCBX.Willing` | Configuration | False (host-side override) | — | True (switch controls QoS — not recommended for S2D) | `Get-NetAdapterQos \| .DcbxSetting` | KQL |
 | `Cluster.Network.State` | Availability | Up | PartiallyUp | Down | `Get-ClusterNetwork` | KQL |
 | `Cluster.LiveMigration.Network.Available` | Configuration | ≥ 1 | — | 0 (no LM network) | `Get-ClusterNetwork \| Where Role -like '*LiveMigration*'` | KQL |
 

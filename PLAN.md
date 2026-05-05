@@ -336,6 +336,7 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
   - [x] ADR 0009 — Alert vs health-state separation policy — Accepted
   - [x] ADR 0010 — Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) — Accepted
   - [x] ADR 0011 — L3 Azure-side scope: agent-local Arc health checks (Tier A) vs. management server ARM probes (Tier B) — Accepted
+  - [x] ADR 0012 — Azure Monitor Workspace vs Log Analytics Workspace: metrics routing for the health model (dual-topology support, LAW Perf fallback) — Accepted
 - [x] Build full structural inventory tables in `docs/design/`
   - [x] Component inventory (~27 entities across 3 layers — updated with `AzureLocal.PhysicalDisk`, `AzureLocal.NetworkAdapter`, Arc agent Tier A group) — `scope-topology.md`
   - [x] Signal inventory (~90+ signals × dimensions × thresholds × source — expanded with physical disk health, storage pool size/reserve/retired, volume size detail, physical NIC/RDMA, Arc agent local checks, extension installation probes, cluster network state) — `signal-catalog.md`
