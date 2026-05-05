@@ -1,0 +1,23 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+      - 'requirements-docs.txt'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  docs:
+    uses: AzureLocal/platform/.github/workflows/reusable-mkdocs-deploy.yml@main
+    with:
+      python-version: '3.12'
+      pip-packages: '-r requirements-docs.txt'
+      strict: true
+      fetch-depth: 0

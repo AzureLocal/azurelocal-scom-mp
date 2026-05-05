@@ -1,0 +1,10 @@
+name: Validate Repo Structure
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    uses: AzureLocal/.github/.github/workflows/reusable-validate-structure.yml@main
