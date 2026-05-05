@@ -118,6 +118,8 @@ nav:
       - Signal Catalog: design/signal-catalog.md
       - Customization: design/customization.md
       - Concept Mapping (SCOM ↔ AzMon): design/concept-mapping.md
+      - Diagrams:
+          - Health State Flow: design/diagrams/health-state-flow.md
       - Decisions (ADRs):
           - Index: design/decisions/index.md
           - 0001 — Scope & topology: design/decisions/0001-scope-and-topology.md
@@ -133,13 +135,23 @@ nav:
           - 0011 — L3 Azure-side scope (Tier A/B): design/decisions/0011-l3-azure-scope-and-connectivity.md
           - 0012 — Azure Monitor Workspace vs LAW: design/decisions/0012-azure-monitor-workspace-vs-law-metrics.md
           - 0013 — Azure Monitor deployment strategy: design/decisions/0013-azmon-deployment-strategy.md
+          - 0014 — CI/CD pipeline strategy: design/decisions/0014-cicd-pipeline-strategy.md
+          - 0015 — Testing strategy: design/decisions/0015-testing-strategy.md
+          - 0016 — Signing & secrets management: design/decisions/0016-signing-and-secrets.md
+          - 0017 — Versioning & release policy: design/decisions/0017-versioning-and-release.md
+          - 0018 — Self-observability: design/decisions/0018-self-observability.md
+          - 0019 — Cost, scale & retention: design/decisions/0019-cost-scale-retention.md
           - ADR template: design/decisions/template.md
   - SCOM MP:
       - Overview: scom-mp/index.md
+      - Diagrams:
+          - Health Rollup Tree: scom-mp/diagrams/health-tree.md
       - SquaredUp DS (optional): scom-mp/squaredup/index.md
   - Azure Monitor:
       - Overview: azure-monitor/index.md
       - Prerequisites: azure-monitor/prerequisites.md
+      - Diagrams:
+          - Entity Graph: azure-monitor/diagrams/entity-graph.md
       - SquaredUp Cloud (optional): azure-monitor/squaredup/index.md
   - Migration (SCOM → AzMon):
       - Overview: comparison/index.md

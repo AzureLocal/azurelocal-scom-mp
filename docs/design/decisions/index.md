@@ -23,6 +23,12 @@ These are project-scoped ADRs. Org-wide platform standards live in
 | [0011](./0011-l3-azure-scope-and-connectivity.md) | L3 Azure-side scope: agent-local Arc health checks (Tier A) vs. management server ARM probes (Tier B) | ✅ Accepted |
 | [0012](./0012-azure-monitor-workspace-vs-law-metrics.md) | Azure Monitor Workspace vs Log Analytics Workspace: metrics routing for the health model (dual-topology support) | ✅ Accepted |
 | [0013](./0013-azmon-deployment-strategy.md) | Azure Monitor Health Model deployment strategy — Bicep-first, portal-bootstrap | ✅ Accepted |
+| [0014](./0014-cicd-pipeline-strategy.md) | CI/CD pipeline strategy — GitHub Actions, OIDC, release-please | ✅ Accepted |
+| [0015](./0015-testing-strategy.md) | Testing strategy — 5-layer pyramid, cross-track parity gate | ✅ Accepted |
+| [0016](./0016-signing-and-secrets.md) | Signing & secrets management — two-key MP signing, OIDC SPNs | ✅ Accepted |
+| [0017](./0017-versioning-and-release.md) | Versioning & release policy — single repo SemVer, Conventional Commits, mike docs | ✅ Accepted |
+| [0018](./0018-self-observability.md) | Self-observability — monitor the monitoring pipeline as a parallel root branch | ✅ Accepted |
+| [0019](./0019-cost-scale-retention.md) | Cost, scale, and data retention — per-tier ingestion envelopes, sharding, retention policy | ✅ Accepted |
 
 ## When to write an ADR
 

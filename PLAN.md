@@ -117,22 +117,23 @@ azurelocal-scom-mp/
 │       └── dist/                      # Generated output — do not hand-edit
 │           └── (bicep build artifacts, exported ARM JSON)
 │
-└── squaredup/                         # Optional visualization layer deliverables
-    ├── ds/                            # SquaredUp Dashboard Server pack (SCOM track)
-    │   └── (dashboard pack JSON files — authored in Phase 3)
-    └── cloud/                         # SquaredUp Cloud workspace export (Azure Monitor track)
-        └── (workspace JSON files — authored in Phase 4)
+└── src/squaredup/                     # Optional visualization layer deliverables
+    ├── ds/                            # SquaredUp Dashboard Server pack (SCOM track, Phase 3)
+    │   └── (dashboard pack JSON files)
+    └── cloud/                         # SquaredUp Cloud workspace export (Azure Monitor track, Phase 4)
+        └── (workspace JSON files)
 │
-└── diagrams/                          # Master diagram sources (check in originals)
-    ├── drawio/
-    │   ├── scom-health-model.drawio            # Full SCOM health rollup tree (draw.io)
-    │   ├── azure-monitor-entity-graph.drawio   # Azure Monitor health model entity graph
-    │   └── concept-comparison.drawio           # Side-by-side SCOM ↔ Azure Monitor
-    └── mermaid/
-        ├── scom-health-rollup.md               # Mermaid flowchart: SCOM rollup tree
-        ├── azure-monitor-entity-graph.md       # Mermaid graph: entity relationships
-        └── health-state-flow.md                # Mermaid stateDiagram: health state transitions
+└── diagrams/                          # Diagram sources (originals only — rendered copies live under docs/)
+    └── drawio/
+        ├── scom-health-model.drawio            # Full SCOM health rollup tree (draw.io)
+        ├── azure-monitor-entity-graph.drawio   # Azure Monitor health model entity graph
+        └── concept-comparison.drawio           # Side-by-side SCOM ↔ Azure Monitor
 ```
+
+> **Mermaid diagrams** live under `docs/` (`docs/scom-mp/diagrams/`, `docs/azure-monitor/diagrams/`,
+> `docs/design/diagrams/`) so MkDocs renders them inline. The `diagrams/drawio/` directory holds
+> editable `.drawio` originals only; PNG/SVG exports are committed alongside the rendered docs pages.
+
 
 ---
 
@@ -153,39 +154,10 @@ Platform: **MkDocs Material** with the following plugins and extensions planned:
 | Tables | built-in | Reference tables |
 | Tags | `tags` | Cross-cutting topic tags |
 
-**`mkdocs.yml` nav structure:**
-
-```yaml
-nav:
-  - Home: index.md
-  - SCOM Management Pack:
-    - Overview: scom-mp/index.md
-    - Health Model Design: scom-mp/health-model.md
-    - Monitors: scom-mp/monitors.md
-    - Rules: scom-mp/rules.md
-    - Authoring Guide: scom-mp/authoring.md
-    - Overrides: scom-mp/overrides.md
-    - Lifecycle: scom-mp/lifecycle.md
-    - Diagrams:
-      - Health Rollup Tree: scom-mp/diagrams/health-tree.md
-      - Class Hierarchy: scom-mp/diagrams/class-hierarchy.md
-  - Azure Monitor Health Models:
-    - Overview: azure-monitor/index.md
-    - Concepts: azure-monitor/concepts.md
-    - Health States: azure-monitor/health-states.md
-    - Service Groups: azure-monitor/service-groups.md
-    - Signals: azure-monitor/signals.md
-    - Alerts: azure-monitor/alerts.md
-    - Create a Health Model: azure-monitor/create.md
-    - KQL Health Scores: azure-monitor/kql/health-score.md
-    - Diagrams:
-      - Entity Graph: azure-monitor/diagrams/entity-graph.md
-      - Health Propagation: azure-monitor/diagrams/health-propagation.md
-  - Comparison & Migration:
-    - SCOM ↔ Azure Monitor: comparison/index.md
-    - Migration Guide: comparison/migration.md
-  - References: references.md
-```
+**`mkdocs.yml` nav structure:** see the live [`mkdocs.yml`](../mkdocs.yml) — nav is the source of truth
+and evolves per phase. Top-level sections are: Home, **Design** (cross-cutting: scope, signals,
+concept-mapping, customization, decisions/), **SCOM Management Pack**, **Azure Monitor Health Models**,
+**Migration**, References.
 
 ---
 
@@ -366,6 +338,12 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
   - [x] ADR 0011 — L3 Azure-side scope: agent-local Arc health checks (Tier A) vs. management server ARM probes (Tier B) — Accepted
   - [x] ADR 0012 — Azure Monitor Workspace vs Log Analytics Workspace: metrics routing for the health model (dual-topology support, LAW Perf fallback) — Accepted
   - [x] ADR 0013 — Azure Monitor Health Model deployment strategy (Bicep-first, portal-bootstrap) — Accepted
+  - [x] ADR 0014 — CI/CD pipeline strategy (GitHub Actions, OIDC, release-please) — Accepted
+  - [x] ADR 0015 — Testing strategy (5-layer pyramid, cross-track parity gate) — Accepted
+  - [x] ADR 0016 — Signing & secrets management (two-key MP signing, OIDC SPNs) — Accepted
+  - [x] ADR 0017 — Versioning & release policy (single repo SemVer, Conventional Commits, mike) — Accepted
+  - [x] ADR 0018 — Self-observability (monitor the monitoring pipeline as a parallel root branch) — Accepted
+  - [x] ADR 0019 — Cost, scale, and data retention (per-tier ingestion envelopes, retention policy) — Accepted
 - [x] Build full structural inventory tables in `docs/design/`
   - [x] Component inventory (~27 entities across 3 layers — updated with `AzureLocal.PhysicalDisk`, `AzureLocal.NetworkAdapter`, Arc agent Tier A group) — `scope-topology.md`
   - [x] Signal inventory (~250+ signals × dimensions × thresholds × source × Default ON/OFF/Rule column) — `signal-catalog.md`
@@ -376,9 +354,20 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
   - [x] `azure-monitor-entity-graph.drawio` — entity graph w/ relationships
   - [x] `concept-comparison.drawio` — side-by-side mapping
 - [x] Refine Mermaid sources to match ADR 0005 / 0006 names
-- [x] Phase 2 sign-off gate: all 13 ADRs Accepted ✅; inventory reviewed ✅; draw.io diagrams complete ✅; SquaredUp optional integration documented in ADR 0008 + customization.md ✅
+- [x] Phase 2 sign-off gate: all 19 ADRs Accepted ✅; inventory reviewed ✅; draw.io diagrams complete ✅; SquaredUp optional integration documented in ADR 0008 + customization.md ✅; CI/CD + testing + signing + versioning + self-observability + cost design ratified via ADRs 0014–0019 ✅
+
+**Phase 2 Definition of Done (exit criteria):**
+
+- Every L1 / L2 / L3 entity in `scope-topology.md` has at least one signal in `signal-catalog.md` covering each declared health dimension (Availability / Performance / Configuration as applicable).
+- Every threshold name in `signal-catalog.md` is unambiguous, kebab-case in Bicep, PascalCase-with-dots in SCOM, and the cross-track parity test (ADR 0015 Layer 4) is implementable from the catalog as-is.
+- Every ADR has a `Status: Accepted` line and references at least one prior or sibling ADR where dependencies exist.
+- `mkdocs.yml` nav contains every page under `docs/` (no orphan files); `mkdocs build --strict` passes.
+- Self-Observability branch (ADR 0018) is reflected in `scope-topology.md` (`AzureLocal.Monitoring.*` entities) and `signal-catalog.md`.
 ### Phase 3 — Track 1: SCOM MP Authoring
 - [ ] Watch/review Brian Wren's SC 2012 R2 video series (23 modules) as primary authoring reference — see [Brian Wren Resources](#brian-wren--mpauthor-resources) below
+- [ ] **Wire CI/CD scaffolding (per ADR 0014)** — add `.github/workflows/{mp-build,bicep-validate,pwsh-test,kql-validate,parity-check,docs-build,docs-deploy,release-please}.yml`, `release-please-config.json`, `.release-please-manifest.json`, root `VERSION` file
+- [ ] **Wire signing + identity (per ADR 0016)** — provision lab + release Key Vaults, three OIDC-federated SPNs, GitHub `lab` and `release` environments with required reviewers; gitleaks pre-commit hook
+- [ ] **Wire test harness scaffolding (per ADR 0015)** — `tests/Test-Parity.ps1`, one Pester sample, one KQL signal test fixture as the pattern reference for all subsequent Phase 3/4 work
 - [ ] Set up VSAE project + fragment library references (Kevin Holman fragments)
 - [ ] Define Azure Local classes (Cluster, Node, Storage Pool, StorageTier, Volume, Network Intent, **Physical Disk**, **Network Adapter**) in XML — see `docs/design/scope-topology.md` for full class list
 - [ ] Author PowerShell discovery rules for each class (including hosted `AzureLocal.PhysicalDisk` from `Get-PhysicalDisk` and `AzureLocal.NetworkAdapter` from `Get-NetAdapter`/`Get-NetAdapterRdma`)
@@ -392,6 +381,9 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 - [ ] Create Distributed Application for Azure Local
 - [ ] Create override companion pack (including Tier B Limited → Standard impact overrides for L3 ARM probes)
 - [ ] Run MP Best Practice Analyzer + MPVerify
+- [ ] Author Self-Observability entities + monitors (per ADR 0018) — `AzureLocal.Monitoring.SCOMAgent`, `SCOMManagementServer`, plus the parallel root-branch aggregate
+- [ ] Author tuning runbooks (`docs/scom-mp/runbooks/`) — one per high-noise monitor with override-pattern recipe
+- [ ] Author SCOM DB sizing guidance (`docs/scom-mp/sizing.md`) per ADR 0019
 - [ ] Test in pre-production SCOM environment
 
 **Step 4 — SquaredUp DS dashboard pack (optional)**
@@ -427,6 +419,9 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 **Step 4 — Validate and document**
 - [ ] Run `bicep build` → generate `dist/` ARM JSON for audit review
 - [ ] Test end-to-end deployment with `lab.bicepparam` against pre-production environment
+- [ ] **Run Phase 4 sizing exercise on a real lab cluster (per ADR 0019)** — measure actual MB/day per tier, update ADR 0019 envelope numbers if reality diverges
+- [ ] Author Self-Observability entities + KQL signals (per ADR 0018) under `AzureLocal.Monitoring.*`
+- [ ] Author cost-tuning playbook (`docs/azure-monitor/cost-tuning.md`) per ADR 0019 (5-step downgrade procedure)
 - [ ] Write `docs/azure-monitor/` doc pages (entities, signals, health objectives, alerts, deployment guide)
 
 **Step 5 — SquaredUp Cloud workspace (optional)**
@@ -448,96 +443,19 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 
 ---
 
-## Org Standards — AzureLocal Platform Repo
+## Org Standards — Internal
 
-> **Local path:** `e:\git\azurelocal-platform` | **GitHub:** `AzureLocal/platform` | **Docs:** https://AzureLocal.github.io/platform/
+This repo follows org-internal standards from the private `AzureLocal/platform` repo (theme, plugins,
+reusable workflows, repo audit). Compliance is enforced via `Invoke-RepoAudit.ps1` and the
+`reusable-drift-check.yml` workflow — no public-facing artifacts in this repo should reference the
+private platform repo by URL.
 
-The `AzureLocal/platform` repo is the single source of truth for all standards, reusable workflows, test frameworks, and scaffolding across the ~28 repos in the AzureLocal org. Every product repo must carry three breadcrumbs pointing back to platform:
+Phase 0 platform compliance items (`.editorconfig`, `.gitignore`, `CHANGELOG.md`, `CODEOWNERS`,
+`STANDARDS.md` stub, `.azurelocal-platform.yml`, pinned `requirements-docs.txt`, reusable
+workflows) were completed during Phase 1 and are validated continuously by the audit workflow.
 
-1. A README badge linking to `AzureLocal/platform`
-2. A `STANDARDS.md` stub at repo root (points to `platform/docs/standards/` — does NOT keep a local copy)
-3. A `.azurelocal-platform.yml` metadata file at repo root
-
-### Required root files (from `_common/` template)
-
-| File | Notes |
-|---|---|
-| `.azurelocal-platform.yml` | Declares `platformVersion`, `repoType`, `adopts.*`. Consumed by `Invoke-RepoAudit.ps1` and `reusable-drift-check.yml`. |
-| `.editorconfig` | Canonical AzureLocal editor config — UTF-8, LF, 2-space indent (4 for `.ps1`/`.py`), preserve MD trailing spaces. |
-| `.gitignore` | Canonical AzureLocal gitignore — includes OS, editors, MkDocs `site/`, PowerShell, Node, Claude Code local settings. |
-| `CHANGELOG.md` | Keep-a-Changelog format + Semantic Versioning. Auto-generated by `release-please`. |
-| `CODEOWNERS` | Required — must be present. |
-| `STANDARDS.md` | Stub only. Points to platform repo. |
-
-### `.azurelocal-platform.yml` for this repo
-
-This repo is closest to the **`iac-solution`** template type (IaC + MkDocs). The metadata file to create:
-
-```yaml
-# AzureLocal platform self-descriptor
-# Schema: https://AzureLocal.github.io/platform/reference/platform-metadata/
-
-platformVersion: 1
-repoType: iac-solution
-
-adopts:
-  standards: true
-  reusableWorkflows:
-    - release-please
-    - validate-structure
-  maproom: false
-  trailhead: false
-
-lastAudited: 2026-05-05
-```
-
-### MkDocs standards (from `templates/iac-solution/mkdocs.yml` + `platform/mkdocs.yml`)
-
-The platform canonical MkDocs config defines:
-- **Theme:** `material`, primary/accent = `blue`, font = `Inter` (text) + `JetBrains Mono` (code)
-- **Navigation features:** `navigation.tabs`, `navigation.sections`, `navigation.top`, `navigation.footer`, `navigation.instant`, `navigation.tracking`, `navigation.indexes`, `toc.follow`
-- **Search:** `search.suggest`, `search.highlight`, `search.share`
-- **Code:** `content.code.copy`, `content.code.annotate`
-- **Mermaid:** via `mermaid2` plugin with `pymdownx.superfences` custom fence
-
-### Pinned pip dependencies (from `platform/requirements-docs.txt`)
-
-```
-mkdocs==1.6.1
-mkdocs-material==9.5.49
-mkdocs-material-extensions==1.3.1
-pymdown-extensions==10.13
-pygments==2.17.2          # pinned — >=2.19 breaks pymdownx.highlight
-mkdocs-include-markdown-plugin==7.1.2
-mkdocs-mermaid2-plugin==1.2.1
-mkdocs-minify-plugin==0.8.0
-mkdocs-git-revision-date-localized-plugin==1.3.0
-```
-
-### Reusable workflows
-
-Consumer repos reference platform workflows by tag:
-```yaml
-jobs:
-  ci:
-    uses: AzureLocal/platform/.github/workflows/reusable-ps-module-ci.yml@v1
-```
-See `platform/docs/reusable-workflows/consumer-patterns.md` for copy-paste examples.
-
-### Phase 0 platform compliance checklist
-
-- [ ] Create `.azurelocal-platform.yml` at repo root (use `iac-solution` type, content above)
-- [ ] Copy canonical `.editorconfig` from `platform/templates/_common/`
-- [ ] Copy canonical `.gitignore` from `platform/templates/_common/`
-- [ ] Create `CHANGELOG.md` (Keep-a-Changelog stub)
-- [ ] Create `CODEOWNERS`
-- [ ] Create `STANDARDS.md` stub pointing to platform
-- [ ] Update `mkdocs.yml` to match platform canonical config (theme, plugins, pinned deps)
-- [ ] Copy `requirements-docs.txt` with pinned platform versions
-- [ ] Add README badge: `[![Platform Standards](https://img.shields.io/badge/standards-AzureLocal%2Fplatform-0078D4)](https://github.com/AzureLocal/platform)`
-- [ ] Wire `release-please` + `validate-structure` reusable workflows
-- [ ] Run `Invoke-RepoAudit.ps1` from platform repo to validate compliance
-- [ ] Review `platform/docs/onboarding/adopt-from-existing-repo.md` for any additional steps
+<!-- internal-only details (file contents, badge URLs, version pins) live in the private platform
+     repo and in repo memory; do not surface them in PLAN.md which is rendered publicly. -->
 
 ---
 
@@ -560,11 +478,9 @@ SquaredUp provides best-in-class dashboards for both tracks of this project. The
 | SCOM MI support | Yes — blog: [Dashboarding Azure Monitor SCOM MI in SquaredUp](https://squaredup.com/blog/dashboarding-scom-mi-in-squaredup/) |
 | Health roll-up blog | [A dive into health roll-up](https://squaredup.com/blog/a-dive-into-health-roll-up/) — explains DS's own health propagation model |
 
-**Plan items for Track 1 (SCOM MP):**
-- [ ] Evaluate Dashboard Server (DS) as the visualization layer for the SCOM MP
-- [ ] Review DS dashboard packs at `ds.squaredup.com/dashboard-packs/` for any Azure Local or HCI packs
-- [ ] Author an Azure Local SCOM Dashboard Pack for DS (aligned to the health model)
-- [ ] Document DS setup and the Azure Local dashboard pack in `docs/scom-mp/`
+**Track 1 commitment:** SquaredUp DS is the chosen visualization layer for the SCOM MP. Authoring
+tasks live under [Phase 3 Step 4](#phase-3--track-1-scom-mp-authoring); design docs at
+[`docs/scom-mp/squaredup/`](docs/scom-mp/squaredup/index.md).
 
 ### SquaredUp Cloud — Azure + SCOM Plugin
 
@@ -582,27 +498,10 @@ SquaredUp provides best-in-class dashboards for both tracks of this project. The
 - SCOM Managed Instance reporting: [SCOM MI reporting – New SquaredUp Plugin](https://squaredup.com/blog/scom-mi-reporting-new-squaredup-plugin/)
 - Free tier: 2 users, 3 data sources, 10 monitors, unlimited dashboards
 
-**Plan items for Track 2 (Azure Monitor):**
-- [ ] Evaluate SquaredUp Cloud Azure plugin as an alternative/complement to Azure Monitor Workbooks
-- [ ] Build a combined SCOM + Azure Monitor dashboard in SquaredUp Cloud for the hybrid story
-- [ ] Document SquaredUp Cloud setup in `docs/azure-monitor/`
-
----
-
-## Blog & New Repo Reminders
-
-> **BLOG POST TO WRITE:** SquaredUp has launched a new Azure dashboard experience in SquaredUp Cloud (Azure plugin v2.56.16, 55 data streams, 44 ready-made dashboards, full KQL + Azure Monitor + Cost + Sentinel coverage). Write a blog post covering:
-> - What's new in SquaredUp's Azure dashboards
-> - How it compares to native Azure Monitor Workbooks and Grafana
-> - Azure Local monitoring use case — surfacing cluster/node/storage health in SquaredUp Cloud
-> - Reference: [Dashboarding Azure: SquaredUp vs Grafana](https://squaredup.com/blog/dashboarding-azure-squaredup-vs-grafana/) (Feb 2026)
-> - Reference: [Azure dashboard user story](https://squaredup.com/user-stories/azure-dashboards/)
-
-> **NEW REPO TO CREATE:** Create `azurelocal/azurelocal-squaredup` in the azurelocal GitHub org. Dedicated repo for:
-> - SquaredUp Dashboard Server dashboard packs for Azure Local (SCOM)
-> - SquaredUp Cloud dashboard definitions for Azure Local (Azure Monitor + SCOM combined)
-> - MkDocs docs site covering both SquaredUp products in the Azure Local context
-> - Reference the `azurelocal/platform` repo standards from the start
+**Track 2 commitment:** SquaredUp Cloud is the chosen complement to Azure Monitor Workbooks for
+the hybrid SCOM + Azure Monitor pane. Authoring tasks live under
+[Phase 4 Step 5](#phase-4--track-2-azure-monitor-health-model); design docs at
+[`docs/azure-monitor/squaredup/`](docs/azure-monitor/squaredup/index.md).
 
 ---
 
@@ -704,7 +603,7 @@ https://www.youtube.com/playlist?list=PL9Yal_Kg7hiHPirvvtlb5zQWsWb54Twmu
 |---|---|---|
 | MP authoring tool | VSAE + Kevin Holman Fragment Library | Free, community-standard, fragments accelerate development significantly. |
 | MP signing | Unsigned for development, signed for release | Sealed MPs require a key pair; use test key in dev, production key for release. |
-| Override companion pack name | `AzureLocal.SCOM.MP.Overrides.xml` | Follows Microsoft naming convention. |
+| Override companion pack name | `AzureLocal.SCOM.Override.xml` (per ADR 0007) | Follows Microsoft 3-MP naming convention; see ADR 0007. |
 | Aggregate structure | 4 standard categories + custom cluster rollup | Consistent with every other well-authored vendor MP. |
 | Dependency monitor rollup policy | Worst-state (default) with per-entity exceptions | Matches operational reality — one bad node should surface. |
 | Azure Monitor signal type | Platform metrics where available, KQL for complex logic | Platform metrics are always collected; KQL for Storage Spaces / S2D events. |
@@ -713,10 +612,14 @@ https://www.youtube.com/playlist?list=PL9Yal_Kg7hiHPirvvtlb5zQWsWb54Twmu
 | Diagram tools | draw.io (design) + Mermaid (in-docs) | draw.io for rich design-time diagrams; Mermaid for version-controlled in-doc diagrams. |
 | Dashboard visualization (SCOM) | SquaredUp Dashboard Server (DS) | Best-in-class SCOM dashboard layer. VADA topology maps app dependencies. 60+ integrations extend beyond SCOM. On-premises, installs alongside SCOM. |
 | Dashboard visualization (Azure Monitor) | Azure Monitor Workbooks + SquaredUp Cloud | Workbooks for native Azure portal health model views; SquaredUp Cloud for cross-source unified SCOM+Azure view. |
-| Org standards compliance | Defer to `azurelocal/platform` repo | All structural/CI/CD/MkDocs decisions to be validated against platform repo before Phase 1 kicks off. |
+| Org standards compliance | Internal `AzureLocal/platform` audit | Validated continuously via `Invoke-RepoAudit.ps1` and the reusable drift-check workflow. |
 
 ---
 
 ## References
+
+> The root [`REFERENCES.md`](REFERENCES.md) is the authoritative source. The MkDocs page at
+> [`docs/references.md`](docs/references.md) is generated from it via the `include-markdown` plugin
+> — there is no hand-edited duplicate. Update only the root file.
 
 See [REFERENCES.md](REFERENCES.md) for the complete annotated list of all upstream sources.
