@@ -31,6 +31,7 @@ All upstream sources used in designing and implementing this project. Organized 
 | Mission-Critical Connected reference implementation | https://github.com/Azure/Mission-Critical-Connected | |
 | Azure Monitor Baseline Alerts (AMBA) ⭐ | https://azure.github.io/azure-monitor-baseline-alerts/welcome/ | Pre-built alert baselines for all Azure services — analogous to vendor Management Packs. |
 | AMBA GitHub | https://github.com/Azure/azure-monitor-baseline-alerts | Bicep/ARM/Azure Policy templates. |
+| **AMBA — Azure Monitoring Packs (MonStar Packs)** ⭐ | https://azure.github.io/azure-monitor-baseline-alerts/patterns/monitoring-packs/ | Open-source initiative (fka MonStar Packs). Quickly enables monitoring for services and IaaS workloads via Azure Function + Logic App + Workbook UI. Uses AMBA as source of truth. GitHub: https://github.com/Azure/AzureMonitorStarterPacks |
 | Cloud Adoption Framework — Monitor your Azure estate | https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/manage/monitor | |
 
 ---
