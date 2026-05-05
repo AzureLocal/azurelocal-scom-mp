@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/AzureLocal/azurelocal-scom-mp/compare/azurelocal-scom-mp-v0.2.0...azurelocal-scom-mp-v0.2.1) (2026-05-05)
+
+
+### Bug Fixes
+
+* Resolve 3 mkdocs strict-mode link errors ([52d9251](https://github.com/AzureLocal/azurelocal-scom-mp/commit/52d9251e4fc0f94ad610672cb7bf107f08222573))
+
 ## [0.2.0](https://github.com/AzureLocal/azurelocal-scom-mp/compare/azurelocal-scom-mp-v0.1.0...azurelocal-scom-mp-v0.2.0) (2026-05-05)
 
 
