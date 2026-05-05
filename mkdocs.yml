@@ -11,6 +11,8 @@ copyright: Copyright &copy; 2026 Azure Local — MIT License
 
 theme:
   name: material
+  logo: assets/images/azurelocal-scom-mp-icon.svg
+  favicon: assets/images/azurelocal-scom-mp-icon.svg
   language: en
   features:
     - navigation.instant

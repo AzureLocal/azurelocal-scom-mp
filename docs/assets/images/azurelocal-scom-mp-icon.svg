@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1A86D8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#003A70;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="healthGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#00B294;stop-opacity:0.30" />
+      <stop offset="100%" style="stop-color:#0078D4;stop-opacity:0" />
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#001A3A" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="200" height="200" rx="38" ry="38" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid lines -->
+  <g opacity="0.08" stroke="white" stroke-width="0.8">
+    <line x1="0" y1="50" x2="200" y2="50"/>
+    <line x1="0" y1="100" x2="200" y2="100"/>
+    <line x1="0" y1="150" x2="200" y2="150"/>
+    <line x1="50" y1="0" x2="50" y2="200"/>
+    <line x1="100" y1="0" x2="100" y2="200"/>
+    <line x1="150" y1="0" x2="150" y2="200"/>
+  </g>
+
+  <!-- MP badge (top center) -->
+  <g transform="translate(100,32)" filter="url(#shadow)">
+    <polygon points="0,-14 14,-5 10,12 0,7 -10,12 -14,-5"
+      fill="#00B294" stroke="#008F76" stroke-width="0.8"/>
+    <text x="0" y="3" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold"
+      font-size="7" fill="white">MP</text>
+  </g>
+
+  <!-- Monitor frame -->
+  <g filter="url(#shadow)">
+    <!-- Screen bezel (white frame) -->
+    <rect x="52" y="58" width="96" height="74" rx="10" ry="10" fill="white"/>
+
+    <!-- Screen face (dark) -->
+    <rect x="59" y="65" width="82" height="60" rx="5" ry="5" fill="url(#bgGrad)"/>
+    <rect x="59" y="65" width="82" height="60" rx="5" ry="5" fill="url(#healthGlow)"/>
+
+    <!-- Health pulse / ECG line -->
+    <polyline
+      points="64,95 73,95 76,79 80,112 84,79 88,95 96,95 100,88 105,102 110,95 136,95"
+      fill="none" stroke="#00B294" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Monitor stand neck -->
+    <rect x="96" y="132" width="8" height="14" rx="2" ry="2" fill="white" opacity="0.85"/>
+
+    <!-- Monitor stand base -->
+    <rect x="80" y="146" width="40" height="7" rx="3" ry="3" fill="white" opacity="0.85"/>
+  </g>
+
+  <!-- Health state dots (bottom row) -->
+  <g filter="url(#shadow)">
+    <circle cx="82" cy="167" r="5" fill="#57A300"/>
+    <circle cx="100" cy="167" r="5" fill="#FFB900"/>
+    <circle cx="118" cy="167" r="5" fill="#E81123"/>
+  </g>
+</svg>
