@@ -335,9 +335,10 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
   - [x] ADR 0008 — Customization strategy (sealed MP + override pack tiers; Bicep params + tiers) — Accepted
   - [x] ADR 0009 — Alert vs health-state separation policy — Accepted
   - [x] ADR 0010 — Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) — Accepted
+  - [x] ADR 0011 — L3 Azure-side scope: agent-local Arc health checks (Tier A) vs. management server ARM probes (Tier B) — Accepted
 - [x] Build full structural inventory tables in `docs/design/`
-  - [x] Component inventory (~25 entities across 3 layers) — `scope-topology.md`
-  - [x] Signal inventory (~60 signals × dimensions × thresholds × source) — `signal-catalog.md`
+  - [x] Component inventory (~27 entities across 3 layers — updated with `AzureLocal.PhysicalDisk`, `AzureLocal.NetworkAdapter`, Arc agent Tier A group) — `scope-topology.md`
+  - [x] Signal inventory (~90+ signals × dimensions × thresholds × source — expanded with physical disk health, storage pool size/reserve/retired, volume size detail, physical NIC/RDMA, Arc agent local checks, extension installation probes, cluster network state) — `signal-catalog.md`
   - [x] SCOM ↔ Azure Monitor concept mapping table — `concept-mapping.md`
   - [x] Cloud-side prerequisites table — `azure-monitor/prerequisites.md`
 - [x] Complete draw.io diagrams (replace Phase 1 stubs with real visuals)
@@ -349,13 +350,17 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 ### Phase 3 — Track 1: SCOM MP Authoring
 - [ ] Watch/review Brian Wren's SC 2012 R2 video series (23 modules) as primary authoring reference — see [Brian Wren Resources](#brian-wren--mpauthor-resources) below
 - [ ] Set up VSAE project + fragment library references (Kevin Holman fragments)
-- [ ] Define Azure Local classes (Cluster, Node, Storage Pool, Volume, VM) in XML
-- [ ] Author WMI discovery rules for each class
-- [ ] Author unit monitors (availability + performance + configuration)
-- [ ] Wire aggregate monitors (4 standard + custom rollups)
+- [ ] Define Azure Local classes (Cluster, Node, Storage Pool, StorageTier, Volume, Network Intent, **Physical Disk**, **Network Adapter**) in XML — see `docs/design/scope-topology.md` for full class list
+- [ ] Author PowerShell discovery rules for each class (including hosted `AzureLocal.PhysicalDisk` from `Get-PhysicalDisk` and `AzureLocal.NetworkAdapter` from `Get-NetAdapter`/`Get-NetAdapterRdma`)
+- [ ] Author unit monitors — coverage per signal-catalog.md:
+  - [ ] L1 availability + performance monitors (Cluster, Node, Storage Pool, Volume, Storage Tier, Physical Disk, Network Intent, Network Adapter, Storage Replica, LCM)
+  - [ ] L2 Tier A "Arc agent local checks" monitors (HIMDS service, connection status, heartbeat age, extension installation — no ARM required, runs on SCOM agent)
+  - [ ] L2 DCMA + AKS Arc monitors
+  - [ ] L3 Tier B ARM probe monitors (HCI Cluster resource, KV expiry, RBAC drift, SPN expiry — management server only, Limited impact by default)
+- [ ] Wire aggregate monitors (4 standard + custom rollups for Physical Disk → StoragePool, NetworkAdapter → NetworkIntent)
 - [ ] Wire dependency monitors between classes
 - [ ] Create Distributed Application for Azure Local
-- [ ] Create override companion pack
+- [ ] Create override companion pack (including Tier B Limited → Standard impact overrides for L3 ARM probes)
 - [ ] Run MP Best Practice Analyzer + MPVerify
 - [ ] Test in pre-production SCOM environment
 

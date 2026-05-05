@@ -33,47 +33,62 @@ flowchart TD
         ARB[Arc Resource Bridge / MOC]
         AKS[AKS Arc platform]
         DCMA[Cloud Agent / DCMA]
+        ARCAGENT["Arc Agent&#xa;&#40;per node — Tier A&#41;"]
         REG[HCI Registration]
     end
     subgraph L1["Layer 1 — On-prem"]
         CLU[Cluster]
         N[Node]
         SP[Storage Pool]
+        PD[Physical Disk]
         VOL[Volume / CSV]
         ST[Storage Tier]
         NI[Network Intent]
+        NA[Network Adapter]
         SR[Storage Replica]
         UP[Update / LCM]
     end
     L3 -->|deployment provisions| L2
     L2 -->|runs on| L1
+    PD -->|rolls up to| SP
+    NA -->|rolls up to| NI
 ```
 
 ### Layer 1 — On-prem (the cluster box)
 
-| Entity | Purpose | Source |
-|---|---|---|
-| **Cluster** | The Azure Local cluster (S2D + Failover Clustering) | `Get-Cluster` / `Get-ClusterResource` |
-| **Node** | Each cluster member node | `Get-ClusterNode` / WMI |
-| **Storage Pool** | The Storage Spaces Direct pool | `Get-StoragePool` / `Get-PhysicalDisk` |
-| **Volume (CSV)** | Each cluster shared volume | `Get-Volume` / `Get-ClusterSharedVolume` |
-| **Storage Tier** | Pool's cache + capacity tiers | `Get-StorageTier` |
-| **Network Intent** | Each named Network ATC intent (Mgmt / Compute / Storage) | `Get-NetIntent` / `Get-NetIntentStatus` |
-| **Storage Replica** | Replication relationship (if configured) | `Get-SRPartnership` |
-| **Update / LCM state** | Solution-level update posture | `Get-SolutionUpdate` (Azure Local LCM) |
+| Entity | SCOM class | Purpose | Source |
+|---|---|---|---|
+| **Cluster** | `AzureLocal.Cluster` | The Azure Local cluster (S2D + Failover Clustering) | `Get-Cluster` / `Get-ClusterResource` |
+| **Node** | `AzureLocal.Node` | Each cluster member node | `Get-ClusterNode` / WMI |
+| **Storage Pool** | `AzureLocal.StoragePool` | The Storage Spaces Direct pool | `Get-StoragePool` |
+| **Volume (CSV)** | `AzureLocal.Volume` | Each cluster shared volume | `Get-Volume` / `Get-ClusterSharedVolume` |
+| **Storage Tier** | `AzureLocal.StorageTier` | Pool's cache + capacity tiers | `Get-StorageTier` |
+| **Physical Disk** | `AzureLocal.PhysicalDisk` | Each physical disk in the S2D pool — health, media type, usage | `Get-PhysicalDisk` |
+| **Network Intent** | `AzureLocal.NetworkIntent` | Each named Network ATC intent (Mgmt / Compute / Storage) | `Get-NetIntent` / `Get-NetIntentStatus` |
+| **Network Adapter** | `AzureLocal.NetworkAdapter` | Each physical NIC bound to a Network Intent — link speed, RDMA, PFC/ETS | `Get-NetAdapter` / `Get-NetAdapterRdma` |
+| **Storage Replica** | `AzureLocal.StorageReplica` | Replication relationship (if configured) | `Get-SRPartnership` |
+| **Update / LCM state** | `AzureLocal.LCMState` | Solution-level update posture | `Get-SolutionUpdate` (Azure Local LCM) |
 
-> **Granularity note:** Physical disks roll into **Storage Pool**. Individual NICs roll
-> into **Network Intent**. This is the "standard" topology — pragmatic depth without
-> exploding the class count.
+> **Granularity note (updated):** `AzureLocal.PhysicalDisk` is a hosted class beneath
+> `AzureLocal.StoragePool`. A disk's health state is its own SCOM object, but it rolls up
+> to the pool via an aggregated health roll-up monitor. Similarly `AzureLocal.NetworkAdapter`
+> is hosted beneath `AzureLocal.NetworkIntent`; individual NIC failures propagate to the
+> parent intent. This extends the original 8-entity model to 10 L1 entities without
+> breaking existing aggregation logic.
 
 ### Layer 2 — Cluster-resident platform services
 
-| Entity | Purpose | Source |
-|---|---|---|
-| **Arc Resource Bridge / MOC** | The Resource Bridge VM and its MOC components | `az arcappliance` / Resource Health |
-| **AKS Arc platform** | AKS *platform* only (host pool, control plane reachability) | AKS extension status |
-| **Cloud Agent / DCMA** | Microsoft-supplied management agents | Service state + last heartbeat |
-| **HCI registration state** | Registration / billing / license tier | ARM resource state |
+| Entity | SCOM class | Purpose | Source |
+|---|---|---|---|
+| **Arc Resource Bridge / MOC** | `AzureLocal.ArcResourceBridge` | The Resource Bridge VM and its MOC components | `az arcappliance` / Resource Health |
+| **AKS Arc platform** | `AzureLocal.AKSArcPlatform` | AKS *platform* only (host pool, control plane reachability) | AKS extension status |
+| **Cloud Agent / DCMA** | `AzureLocal.DCMA` | Microsoft-supplied management agents — locally observable | Service state + registry + last heartbeat |
+| **Arc agent (per node)** | `AzureLocal.Node` (attribute group) | Arc Connected Machine Agent services + extension health — locally observable, no ARM required (see ADR 0011 Tier A) | `Get-Service HIMDS`, registry, event log |
+| **HCI registration state** | `AzureLocal.HCIRegistration` | Registration / billing / license tier | ARM resource state + local registry |
+
+> **ADR 0011 Tier A signals:** Arc agent connectivity and extension health signals are
+> collected on `AzureLocal.Node` (not a separate class) using agent-local data sources.
+> See [signal-catalog.md — Arc agent locally observable](signal-catalog.md#arc-agent--locally-observable-adr-0011-tier-a).
 
 ### Layer 3 — Azure-side infrastructure
 
@@ -93,7 +108,7 @@ flowchart TD
 | **Log Analytics Workspace linkage** | Workspace reachability + ingestion | ARM + KQL `Heartbeat` |
 | **Resource Health / Activity Log** | Per-resource health stream | Activity Log stream |
 
-**Total: ~25 entities across 3 layers.**
+**Total: ~27 entities across 3 layers** (10 L1, 5 L2, 13 L3 — up from the original ~25 with the addition of `AzureLocal.PhysicalDisk`, `AzureLocal.NetworkAdapter`, and the Arc agent Tier A group).
 
 ## Out of scope (deferred)
 

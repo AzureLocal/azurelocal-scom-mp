@@ -10,7 +10,7 @@ These are project-scoped ADRs. Org-wide platform standards live in
 
 | # | Title | Status |
 |---|---|---|
-| [0001](./0001-scope-and-topology.md) | Scope & topology — Azure Local infrastructure (3 layers, ~25 entities) | ✅ Accepted |
+| [0001](./0001-scope-and-topology.md) | Scope & topology — Azure Local infrastructure (3 layers, ~27 entities) | ✅ Accepted |
 | [0002](./0002-signal-source.md) | Primary signal source — Azure Local PowerShell APIs + ARM/Resource Graph | ✅ Accepted |
 | [0003](./0003-health-rollup-policy.md) | Health rollup policy — worst-state default with documented exceptions | ✅ Accepted |
 | [0004](./0004-scom-discovery-strategy.md) | SCOM discovery strategy — PowerShell Discovery (not WMI) | ✅ Accepted |
@@ -20,6 +20,7 @@ These are project-scoped ADRs. Org-wide platform standards live in
 | [0008](./0008-customization-strategy.md) | Customization strategy — sealed MP + override pack tiers; Bicep params + tiers | ✅ Accepted |
 | [0009](./0009-alert-vs-health-state.md) | Alert vs health-state separation policy | ✅ Accepted |
 | [0010](./0010-cloud-prerequisites-contract.md) | Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) | ✅ Accepted |
+| [0011](./0011-l3-azure-scope-and-connectivity.md) | L3 Azure-side scope: agent-local Arc health checks (Tier A) vs. management server ARM probes (Tier B) | ✅ Accepted |
 
 ## When to write an ADR
 

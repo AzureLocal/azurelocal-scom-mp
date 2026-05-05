@@ -44,6 +44,11 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `StoragePool.HealthStatus` | Availability | Healthy | Warning | Unhealthy | `Get-StoragePool` | DCMA `storagepool_health` |
 | `StoragePool.OperationalStatus` | Availability | OK | Degraded | Failed | `Get-StoragePool` | DCMA `storagepool_operational_status` |
 | `StoragePool.Capacity.Percent` | Performance | < 70 | 70–85 | > 85 | `Get-StoragePool` | DCMA `storagepool_capacity_used_percentage` |
+| `StoragePool.Size.TiB` | Configuration | > 0 | — | Unexpected shrink | `(Get-StoragePool).Size / 1TB` | DCMA |
+| `StoragePool.AllocatedSize.Percent` | Performance | < 70 | 70–85 | > 85 | `(Get-StoragePool).AllocatedSize / .Size * 100` | DCMA |
+| `StoragePool.FreeSpace.TiB` | Performance | > 20% of .Size | 10–20% | < 10% | `(Get-StoragePool).RemainingCapacity / 1TB` | DCMA |
+| `StoragePool.RetiredCapacity.TiB` | Configuration | 0 | > 0 | > 5% of total | `(Get-PhysicalDisk -Usage Retired \| Measure-Object Size -Sum).Sum / 1TB` | DCMA |
+| `StoragePool.Reserve.Policy` | Configuration | Configured | — | Missing | `(Get-StoragePool).RetireMissingPhysicalDisks` | KQL |
 | `StoragePool.RepairJobs.Active` | Performance | 0 | 1–2 | > 2 active for > 24h | `Get-StorageJob` | KQL on Storage event log |
 | `StoragePool.PhysicalDisks.Failed` | Availability | 0 | 1 (within fault tolerance) | > 1 | `Get-PhysicalDisk` | DCMA `storagepool_failed_disks` |
 
@@ -54,8 +59,12 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `Volume.HealthStatus` | Availability | Healthy | Warning | Unhealthy | `Get-Volume` | DCMA `volume_health` |
 | `Volume.OperationalStatus` | Availability | OK | Degraded | Unknown/Failed | `Get-Volume` | DCMA `volume_operational_status` |
 | `Volume.FreeSpace.Percent` | Performance | > 25 | 10–25 | < 10 | `Get-Volume` | DCMA `volume_free_space_percentage` |
+| `Volume.Size.TiB` | Configuration | > 0 | — | Unexpected shrink | `(Get-Volume).Size / 1TB` | DCMA |
+| `Volume.AllocatedSize.TiB` | Performance | < 80% of .Size | 80–90% | > 90% | `(Get-Volume).SizeRemaining / .Size` | DCMA |
 | `Volume.IOPS.Latency.ms` | Performance | < 20 | 20–50 | > 50 | Perf counter `\Cluster CSV File System(*)\Avg sec/Read` | DCMA `volume_latency_ms` |
+| `Volume.IOPS.Latency.Write.ms` | Performance | < 20 | 20–50 | > 50 | Perf counter `\Cluster CSV File System(*)\Avg sec/Write` | DCMA |
 | `Volume.RedirectedIO.Active` | Performance | False | True < 1h | True > 1h | `Get-ClusterSharedVolume` | KQL on cluster event |
+| `Volume.Dedup.SavedPercent` | Configuration | Match baseline | — | Unexpectedly low (dedup configured) | `Get-DedupVolume` | KQL |
 
 ### Storage Tier (cache)
 
@@ -64,7 +73,29 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `StorageTier.Cache.HitRatio` | Performance | > 80 | 60–80 | < 60 | `Get-StorageTier` perf counters | DCMA `cache_hit_ratio` |
 | `StorageTier.Cache.State` | Availability | Bound | Unbinding | Failed | `Get-StorageTier` | DCMA |
 
+### Physical Disk
+
+> Physical disks are **not** separate SCOM class instances in the default model (see
+> [scope-topology](scope-topology.md)). Their health aggregates into `AzureLocal.StoragePool`
+> and `AzureLocal.StorageTier`. All signals below target `AzureLocal.StoragePool`.
+
+| Logical name | Dimension | Healthy | Warning | Critical | SCOM source | Azure Monitor source |
+|---|---|---|---|---|---|---|
+| `StoragePool.PhysicalDisk.Failed.Count` | Availability | 0 | 1 (within fault tolerance) | > 1 or exceeds tolerance | `Get-PhysicalDisk \| Where HealthStatus -ne 'Healthy'` | DCMA `storagepool_failed_disks` |
+| `StoragePool.PhysicalDisk.Warning.Count` | Availability | 0 | ≥ 1 | — | `Get-PhysicalDisk \| Where HealthStatus -eq 'Warning'` | DCMA |
+| `StoragePool.PhysicalDisk.Retired.Count` | Configuration | 0 | ≥ 1 | — | `Get-PhysicalDisk \| Where Usage -eq 'Retired'` | DCMA |
+| `StoragePool.PhysicalDisk.Lost.Count` | Availability | 0 | — | ≥ 1 | `Get-PhysicalDisk \| Where OperationalStatus -eq 'Lost Communication'` | DCMA |
+| `StoragePool.PhysicalDisk.PredictiveFailure` | Availability | 0 | ≥ 1 | — | `Get-PhysicalDisk \| Where OperationalStatus -like '*Predictive*'` | DCMA |
+| `StoragePool.Reserve.Policy` | Configuration | HotSpare ≥ 1 | HotSpare = 0 (2-node) | HotSpare = 0 (≥ 3 nodes) | `Get-StoragePool \| .RetireMissingPhysicalDisks` | KQL |
+| `StoragePool.RetiredCapacity.Percent` | Performance | < 5 | 5–15 | > 15 | `(Get-PhysicalDisk -Usage Retired \| Measure-Object Size -Sum).Sum / Pool.Size` | DCMA |
+| `StoragePool.FaultDomain.Count` | Configuration | ≥ 2 | — | < 2 (pool degraded) | `Get-StorageFaultDomain` | KQL |
+| `StorageTier.Cache.DriveCount.Expected` | Configuration | Match | — | Mismatch (drive removed from tier) | `(Get-StorageTier -MediaType NVMe \| Get-PhysicalDisk).Count` | KQL |
+| `StorageTier.Capacity.DriveCount.Expected` | Configuration | Match | — | Mismatch | `(Get-StorageTier -MediaType HDD \| Get-PhysicalDisk).Count` | KQL |
+
 ### Network Intent
+
+> Network Intent signals cover the Network ATC intent state. Physical NIC and RDMA adapter
+> signals are in the **[Physical NIC & RDMA](#physical-nic--rdma)** subsection below.
 
 | Logical name | Dimension | Healthy | Warning | Critical | SCOM source | Azure Monitor source |
 |---|---|---|---|---|---|---|
@@ -73,6 +104,27 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `NetIntent.vSwitch.Health` | Availability | Up | — | Down | `Get-VMSwitch` | KQL |
 | `NetIntent.Adapter.LinkSpeed` | Performance | At expected | Below expected | Disconnected | `Get-NetAdapter` | DCMA `nic_link_speed` |
 | `NetIntent.MTU.Drift` | Configuration | Match | Drift on 1 NIC | Drift > 1 NIC | `Get-NetAdapterAdvancedProperty` | KQL |
+| `NetIntent.VLAN.Drift` | Configuration | Match | Drift on 1 NIC | Drift > 1 NIC | `Get-NetAdapterAdvancedProperty -RegistryKeyword VlanID` | KQL |
+| `NetIntent.AdapterCount.Expected` | Configuration | Match | — | Missing adapter in intent | `(Get-NetIntentStatus).Adapters.Count` vs discovered | KQL |
+
+### Physical NIC & RDMA
+
+> Per-NIC signals collected on every node. Target class: `AzureLocal.Node`. Individual
+> NIC health rolls up into `NetIntent.RDMA.OpStatus` and `NetIntent.State`.
+> Source: `Get-NetAdapter`, `Get-NetAdapterRdma`, `Get-NetAdapterAdvancedProperty`.
+
+| Logical name | Dimension | Healthy | Warning | Critical | SCOM source | Azure Monitor source |
+|---|---|---|---|---|---|---|
+| `NIC.Physical.Status` | Availability | Up | — | Down / Not Present | `Get-NetAdapter \| .Status` | DCMA `nic_status` |
+| `NIC.RDMA.Enabled` | Configuration | True (for storage-intent NICs) | — | False | `Get-NetAdapterRdma \| .Enabled` | KQL |
+| `NIC.RDMA.OperationalStatus` | Availability | Operational | Degraded | NonOperational | `Get-NetAdapterRdma` | DCMA `rdma_operational_status` |
+| `NIC.LinkSpeed.Gbps` | Performance | At expected tier (10/25/100) | Below expected | 0 / Down | `Get-NetAdapter \| .LinkSpeed` | DCMA `nic_link_speed` |
+| `NIC.DriverVersion.Current` | Configuration | Current | One minor behind | Major version behind | `Get-NetAdapter \| .DriverVersion` vs HCI validated driver matrix | KQL |
+| `NIC.RSS.Enabled` | Configuration | True (storage NICs) | — | False | `Get-NetAdapterRss` | KQL |
+| `NIC.PFC.Enabled` | Configuration | True (RDMA NICs) | — | False | `Get-NetAdapterQos` | KQL |
+| `NIC.ETS.Enabled` | Configuration | True (RDMA NICs) | — | False | `Get-NetAdapterQos` | KQL |
+| `Cluster.Network.State` | Availability | Up | PartiallyUp | Down | `Get-ClusterNetwork` | KQL |
+| `Cluster.LiveMigration.Network.Available` | Configuration | ≥ 1 | — | 0 (no LM network) | `Get-ClusterNetwork \| Where Role -like '*LiveMigration*'` | KQL |
 
 ### Storage Replica
 
@@ -99,6 +151,7 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `ARB.MOC.Service.State` | Availability | Running | — | Stopped | `Get-MocConfig` / service state |
 | `ARB.ControlPlane.Reachable` | Availability | Reachable | Latency > 2s | Unreachable | `kubectl --kubeconfig` probe |
 | `ARB.K8s.PodHealth` | Availability | All Running | 1 NotReady | > 1 NotReady | `kubectl get pods` |
+| `ARB.K8s.NodeHealth` | Availability | All Ready | 1 NotReady | > 1 NotReady | `kubectl get nodes` |
 
 ### AKS Arc platform
 
@@ -107,7 +160,40 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `AKSArc.HostPool.State` | Availability | Succeeded | Updating | Failed | ARM resource state |
 | `AKSArc.ControlPlane.Reachable` | Availability | Reachable | Latency > 2s | Unreachable | API health probe |
 
-### Cloud Agent / DCMA
+### Arc agent — locally observable (ADR 0011 Tier A)
+
+> These signals do **not** require the SCOM agent to call Azure. All data comes from local
+> services, registry keys, and the `Microsoft-AzureArc-HybridAgent/Operational` event channel.
+> Target class: `AzureLocal.Node`. See [ADR 0011](decisions/0011-l3-azure-scope-and-connectivity.md).
+
+| Logical name | Dimension | Healthy | Warning | Critical | SCOM source | Azure Monitor source |
+|---|---|---|---|---|---|---|
+| `ArcAgent.HIMDS.Service.State` | Availability | Running | — | Stopped | `Get-Service "HIMDS"` | KQL `Event` |
+| `ArcAgent.GCArcService.State` | Availability | Running | — | Stopped | `Get-Service "GCArcService"` | KQL `Event` |
+| `ArcAgent.ConnectionStatus.Local` | Availability | Connected | Stale | Disconnected | Registry `HKLM:\SOFTWARE\Microsoft\Azure Connected Machine Agent\Config` → `status` | KQL |
+| `ArcAgent.Heartbeat.EventLog.AgeMin` | Availability | < 5 | 5–15 | > 15 or no event | Event log `Microsoft-AzureArc-HybridAgent/Operational` Event ID 50 / 70 | KQL `Event` |
+| `ArcAgent.LastHeartbeat.RegistryAge` | Availability | < 5 | 5–60 | > 60 | Registry `HKLM:\SOFTWARE\Microsoft\Azure Connected Machine Agent\Config` → `lastHeartbeatTime` | KQL |
+| `ArcAgent.ExtensionManager.Service.State` | Availability | Running | — | Stopped | `Get-Service "ExtensionService"` | KQL `Event` |
+| `ArcAgent.GuestConfigAgent.State` | Availability | Running | — | Stopped | `Get-Service "GCService"` | KQL `Event` |
+
+### Arc extensions — installation & health (ADR 0011 Tier A)
+
+> Locally verified via registry and service state. No ARM call required.
+> Required extensions for a supported Azure Local deployment.
+> Target class: `AzureLocal.Node`.
+
+| Logical name | Dimension | Healthy | Warning | Critical | SCOM source | Azure Monitor source |
+|---|---|---|---|---|---|---|
+| `Extension.AMA.Installed` | Configuration | True | — | False | Registry `HKLM:\SOFTWARE\Microsoft\Azure Connected Machine Agent\Extensions\AzureMonitorWindowsAgent` → `Status` | KQL |
+| `Extension.AMA.Service.State` | Availability | Running | — | Stopped | `Get-Service "AzureMonitorWindowsAgent"` | KQL `Event` from `Microsoft-AzureMonitorWindowsAgent/Operational` |
+| `Extension.AMA.Version.Current` | Configuration | Current | One minor behind | Major behind | Registry version vs. HCI validated matrix | KQL |
+| `Extension.DCMA.Installed` | Configuration | True | — | False | Registry `...\Extensions\AzureEdgeTelemetryAndDiagnostics` → `Status` | KQL |
+| `Extension.DCMA.Service.State` | Availability | Running | — | Stopped | `Get-Service "AzHCSvc"` | KQL `Event` |
+| `Extension.OsSettings.Installed` | Configuration | True | — | False | Registry `...\Extensions\WindowsOSSettings` → `Status` | KQL |
+| `HCI.Registration.Status` | Configuration | Connected | Out-of-policy < 30d | Out-of-policy > 30d | Registry `HKLM:\SOFTWARE\Microsoft\AzureStackHCI` → `RegistrationStatus` | ARM `connectivityStatus` |
+| `DCMA.LastUpload.RegistryAgeMin` | Availability | < 15 | 15–60 | > 60 | Registry `HKLM:\SOFTWARE\Microsoft\AzureStackHCI` → `LastConnectedTime` | KQL |
+
+### Cloud Agent / DCMA (service health)
 
 | Logical name | Dimension | Healthy | Warning | Critical | Source |
 |---|---|---|---|---|---|
@@ -238,7 +324,15 @@ Default values shown above are **Standard tier**. Lab and Strict tiers shift thr
 ## References
 
 - [Brian Wren, "Designing a Health Model" (SC 2012 R2 module 16)](https://learn.microsoft.com/en-us/shows/system-center-2012-r2-operations-manager-management-packs/)
+- [Brian Wren, "Unit Monitors" (module 17)](https://learn.microsoft.com/en-us/shows/system-center-2012-r2-operations-manager-management-packs/)
+- [Brian Wren, "Rules" (module 18)](https://learn.microsoft.com/en-us/shows/system-center-2012-r2-operations-manager-management-packs/)
 - [Azure Local — Telemetry & Diagnostics agent (DCMA) metrics](https://learn.microsoft.com/en-us/previous-versions/azure/azure-local/manage/monitor-hci-single?view=azloc-2604&tabs=22h2-and-later)
-- [Azure Local — Network ATC](https://learn.microsoft.com/en-us/azure/azure-local/concepts/network-atc-overview?view=azloc-2604)
+- [Azure Local — Network ATC overview](https://learn.microsoft.com/en-us/azure/azure-local/concepts/network-atc-overview?view=azloc-2604)
 - [Storage Spaces Direct — health and operational states](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/storage-spaces-states)
+- [Storage Spaces Direct — fault tolerance and storage efficiency](https://learn.microsoft.com/en-us/azure-stack/hci/concepts/fault-tolerance)
+- [Azure Local monitoring overview](https://learn.microsoft.com/en-us/azure/azure-local/concepts/monitoring-overview?view=azloc-2604)
 - [Resource Health — list of resource types](https://learn.microsoft.com/en-us/azure/service-health/resource-health-checks-resource-types)
+- [Azure Arc-enabled servers overview](https://learn.microsoft.com/en-us/azure/azure-arc/servers/overview)
+- [Azure Monitor Agent overview](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-overview)
+- [Azure Local — firewall requirements](https://learn.microsoft.com/en-us/azure/azure-local/concepts/firewall-requirements?view=azloc-2604)
+- ADR 0011 — [L3 Azure-side scope: agent-local checks vs. management server ARM probes](decisions/0011-l3-azure-scope-and-connectivity.md)
