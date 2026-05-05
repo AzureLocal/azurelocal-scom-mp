@@ -1,32 +1,86 @@
 <mxfile host="app.diagrams.net" modified="2026-05-05" agent="azurelocal-scom-mp" version="24.0.0">
   <diagram id="concept-comparison" name="SCOM vs Azure Monitor">
-    <!--
-      STUB — SCOM ↔ Azure Monitor Concept Comparison
-      ================================================
-      Design intent (from PLAN.md):
-        Dual-column layout.
-        Left column:  SCOM concepts
-        Right column: Azure Monitor equivalents
-        Dashed connecting lines between matched concepts.
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
 
-      SCOM (left)                        Azure Monitor (right)
-      ─────────────────────────────────────────────────────────
-      Management Pack                 ←→  DCR + Alert Rules + Workbook
-      Distributed Application         ←→  Service Group + Root Entity
-      Health Model (rollup tree)      ←→  Azure Monitor Health Model (preview)
-      Unit Monitor                    ←→  Signal on an Entity
-      Aggregate Monitor               ←→  Generic Entity (aggregating children)
-      Dependency Monitor              ←→  Relationship with health propagation
-      Green / Yellow / Red            ←→  Healthy / Degraded / Unhealthy
-      Discovery                       ←→  Azure Resource Graph auto-discovery
-      Override                        ←→  Signal threshold / Impact setting
-      Notification Subscription       ←→  Action Group
-      Data Warehouse                  ←→  Log Analytics Workspace
-      Operations Console              ←→  Azure Portal + Workbooks + Grafana
+        <!-- ===== Column headers ===== -->
+        <mxCell id="hdr_scom" value="SCOM" style="text;html=1;strokeColor=none;fillColor=#0078D4;align=center;verticalAlign=middle;fontStyle=1;fontSize=14;fontColor=#ffffff;" vertex="1" parent="1"><mxGeometry x="80" y="40" width="580" height="44" as="geometry" /></mxCell>
+        <mxCell id="hdr_azm"  value="Azure Monitor" style="text;html=1;strokeColor=none;fillColor=#0078D4;align=center;verticalAlign=middle;fontStyle=1;fontSize=14;fontColor=#ffffff;" vertex="1" parent="1"><mxGeometry x="994" y="40" width="580" height="44" as="geometry" /></mxCell>
+        <mxCell id="hdr_rel"  value="Relationship" style="text;html=1;strokeColor=none;fillColor=#004B8D;align=center;verticalAlign=middle;fontStyle=1;fontSize=11;fontColor=#ffffff;" vertex="1" parent="1"><mxGeometry x="672" y="40" width="310" height="44" as="geometry" /></mxCell>
 
-      See docs/comparison/index.md for the rendered table version.
-      Open this file in draw.io (app.diagrams.net) to build the full diagram.
-    -->
+        <!-- ===== Row 1: Deployment artefact ===== -->
+        <mxCell id="r1a" value="Management Pack (.mp)" style="rounded=1;whiteSpace=wrap;fillColor=#004B8D;strokeColor=#003771;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="120" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r1b" value="DCR + Alert Rules + Workbooks (Bicep)" style="rounded=1;whiteSpace=wrap;fillColor=#004B8D;strokeColor=#003771;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="120" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r1_lbl" value="Deployment artefact" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="120" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r1_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r1a" target="r1b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 2: Top-level grouping ===== -->
+        <mxCell id="r2a" value="Distributed Application" style="rounded=1;whiteSpace=wrap;fillColor=#0072C6;strokeColor=#005A9E;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="194" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r2b" value="Service Group + Root Entity" style="rounded=1;whiteSpace=wrap;fillColor=#0072C6;strokeColor=#005A9E;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="194" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r2_lbl" value="Top-level service grouping" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="194" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r2_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r2a" target="r2b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 3: Health model ===== -->
+        <mxCell id="r3a" value="Health Model (rollup tree)" style="rounded=1;whiteSpace=wrap;fillColor=#0072C6;strokeColor=#005A9E;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="268" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r3b" value="Azure Monitor Health Model" style="rounded=1;whiteSpace=wrap;fillColor=#0072C6;strokeColor=#005A9E;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="268" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r3_lbl" value="Hierarchical health rollup" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="268" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r3_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r3a" target="r3b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 4: Object type ===== -->
+        <mxCell id="r4a" value="Class" style="rounded=1;whiteSpace=wrap;fillColor=#107C41;strokeColor=#0E6B37;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="342" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r4b" value="Entity Type" style="rounded=1;whiteSpace=wrap;fillColor=#107C41;strokeColor=#0E6B37;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="342" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r4_lbl" value="Typed object definition" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="342" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r4_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r4a" target="r4b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 5: Relationship ===== -->
+        <mxCell id="r5a" value="Dependency Monitor (rollup relationship)" style="rounded=1;whiteSpace=wrap;fillColor=#107C41;strokeColor=#0E6B37;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="416" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r5b" value="Relationship with health propagation (Standard impact)" style="rounded=1;whiteSpace=wrap;fillColor=#107C41;strokeColor=#0E6B37;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="416" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r5_lbl" value="Parent/child health propagation" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="416" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r5_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r5a" target="r5b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 6: Signal check ===== -->
+        <mxCell id="r6a" value="Unit Monitor" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="490" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r6b" value="Signal on an Entity" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="490" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r6_lbl" value="Leaf-level check against one signal" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="490" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r6_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r6a" target="r6b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 7: Aggregate / rollup node ===== -->
+        <mxCell id="r7a" value="Aggregate Monitor" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="564" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r7b" value="Generic Entity (health dimension container)" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="564" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r7_lbl" value="Rollup across multiple unit checks" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="564" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r7_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r7a" target="r7b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 8: Health states ===== -->
+        <mxCell id="r8a" value="Green / Yellow / Red / Grey" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="638" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r8b" value="Healthy / Degraded / Unhealthy / Unknown" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="638" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r8_lbl" value="Four-state health scheme" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="638" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r8_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r8a" target="r8b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 9: Customization ===== -->
+        <mxCell id="r9a" value="Override (unsealed override pack)" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="712" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r9b" value="Signal threshold / Impact setting (Bicep param)" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="712" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r9_lbl" value="Customization mechanism" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="712" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r9_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r9a" target="r9b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 10: Alerting ===== -->
+        <mxCell id="r10a" value="Notification Subscription" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="786" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r10b" value="Action Group" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="786" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r10_lbl" value="Alert routing &amp; notification" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="786" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r10_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r10a" target="r10b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== Row 11: Discovery ===== -->
+        <mxCell id="r11a" value="Discovery (PowerShell Discovery module)" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="80" y="860" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r11b" value="Azure Resource Graph auto-discovery" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1314" y="860" width="260" height="44" as="geometry" /></mxCell>
+        <mxCell id="r11_lbl" value="Entity population mechanism" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;" vertex="1" parent="1"><mxGeometry x="672" y="860" width="310" height="44" as="geometry" /></mxCell>
+        <mxCell id="r11_e1" style="endArrow=none;dashed=1;strokeColor=#666666;" edge="1" source="r11a" target="r11b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+
     <mxCell id="0" />
     <mxCell id="1" parent="0" />
     <mxCell id="2" value="STUB: Build SCOM ↔ Azure Monitor comparison diagram here.&#xa;See PLAN.md → draw.io Diagrams for design spec." style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;" vertex="1" parent="1">

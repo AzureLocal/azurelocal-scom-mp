@@ -1,6 +1,6 @@
 # ADR 0005 — SCOM class hierarchy + hosting relationships (3-layer model)
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 

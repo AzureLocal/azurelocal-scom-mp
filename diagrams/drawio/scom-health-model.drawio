@@ -1,33 +1,89 @@
 <mxfile host="app.diagrams.net" modified="2026-05-05" agent="azurelocal-scom-mp" version="24.0.0">
   <diagram id="scom-health-model" name="SCOM Health Model">
-    <!--
-      STUB — Azure Local SCOM Health Rollup Tree
-      ============================================
-      Design intent (from PLAN.md):
-        Azure Local Distributed App
-          → Cluster (Dependency Monitor)
-              → Availability Aggregate
-                  → Node 1..N Availability Unit Monitors
-                  → Storage Pool Availability Unit Monitor
-                  → Arc Agent Heartbeat Unit Monitor
-              → Performance Aggregate
-                  → CPU %, Memory %, NIC, Volume % Full Unit Monitors
-              → Configuration Aggregate
-                  → Quorum, Cluster Validation Unit Monitors
-          → Storage Pool (Dependency Monitor)
-              → Volume 1..N Availability Unit Monitors
-          → Node (Dependency Monitor)
-              → VM 1..N Availability Unit Monitors
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
 
-      See diagrams/mermaid/scom-health-rollup.md for the equivalent Mermaid version.
-      Open this file in draw.io (app.diagrams.net) to build the full diagram.
+        <!-- ===== LEGEND ===== -->
+        <mxCell id="leg0" value="LEGEND" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontStyle=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="20" y="20" width="80" height="20" as="geometry" /></mxCell>
+        <mxCell id="leg1" value="L1 Entity" style="rounded=1;whiteSpace=wrap;fillColor=#004B8D;strokeColor=none;fontColor=#ffffff;fontSize=9;" vertex="1" parent="1"><mxGeometry x="20" y="46" width="100" height="24" as="geometry" /></mxCell>
+        <mxCell id="leg2" value="L2 Entity" style="rounded=1;whiteSpace=wrap;fillColor=#0072C6;strokeColor=none;fontColor=#ffffff;fontSize=9;" vertex="1" parent="1"><mxGeometry x="130" y="46" width="100" height="24" as="geometry" /></mxCell>
+        <mxCell id="leg3" value="L3 Entity" style="rounded=1;whiteSpace=wrap;fillColor=#7719AA;strokeColor=none;fontColor=#ffffff;fontSize=9;" vertex="1" parent="1"><mxGeometry x="240" y="46" width="100" height="24" as="geometry" /></mxCell>
+        <mxCell id="leg4" value="Aggregate Monitor" style="rounded=1;whiteSpace=wrap;fillColor=#107C41;strokeColor=none;fontColor=#ffffff;fontSize=9;" vertex="1" parent="1"><mxGeometry x="350" y="46" width="140" height="24" as="geometry" /></mxCell>
+        <mxCell id="leg5" value="Unit Monitor" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="500" y="46" width="100" height="24" as="geometry" /></mxCell>
 
-      Colour palette:
-        Distributed App / root:  #0078D4 (Microsoft Blue)
-        Dependency Monitors:     #004B8D
-        Aggregate Monitors:      #107C41 (green)
-        Unit Monitors:           #F0F0F0 / #333 text
-        Health states:
+        <!-- ===== ROW 0: Distributed Application ===== -->
+        <mxCell id="da" value="Azure Local\nDistributed Application" style="rounded=1;whiteSpace=wrap;fillColor=#0078D4;strokeColor=#005A9E;fontColor=#ffffff;fontStyle=1;fontSize=12;" vertex="1" parent="1"><mxGeometry x="627" y="100" width="300" height="60" as="geometry" /></mxCell>
+
+        <!-- ===== ROW 1: Dependency Monitors (L1/L2/L3) ===== -->
+        <mxCell id="cl" value="AzureLocal.Cluster&#xa;(L1 — Dependency Monitor)" style="rounded=1;whiteSpace=wrap;fillColor=#004B8D;strokeColor=#003771;fontColor=#ffffff;fontStyle=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="480" y="240" width="220" height="55" as="geometry" /></mxCell>
+        <mxCell id="nd" value="AzureLocal.Node&#xa;(L2 — Dependency Monitor)" style="rounded=1;whiteSpace=wrap;fillColor=#0072C6;strokeColor=#005A9E;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="140" y="240" width="220" height="55" as="geometry" /></mxCell>
+        <mxCell id="sp" value="AzureLocal.StoragePool&#xa;(L2 — Dependency Monitor)" style="rounded=1;whiteSpace=wrap;fillColor=#0072C6;strokeColor=#005A9E;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="840" y="240" width="220" height="55" as="geometry" /></mxCell>
+        <mxCell id="l3" value="AzureLocal.Azure.HCICluster&#xa;(L3 — Dependency Monitor)" style="rounded=1;whiteSpace=wrap;fillColor=#7719AA;strokeColor=#5C138E;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1140" y="240" width="240" height="55" as="geometry" /></mxCell>
+
+        <!-- DA → dep monitor edges -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="da" target="cl" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="da" target="nd" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="da" target="sp" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="da" target="l3" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== ROW 2: Cluster Aggregate Monitors ===== -->
+        <mxCell id="av" value="Availability&#xa;Aggregate Monitor" style="rounded=1;whiteSpace=wrap;fillColor=#107C41;strokeColor=#0E6B37;fontColor=#ffffff;fontStyle=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="280" y="380" width="180" height="50" as="geometry" /></mxCell>
+        <mxCell id="pf" value="Performance&#xa;Aggregate Monitor" style="rounded=1;whiteSpace=wrap;fillColor=#107C41;strokeColor=#0E6B37;fontColor=#ffffff;fontStyle=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="490" y="380" width="180" height="50" as="geometry" /></mxCell>
+        <mxCell id="cf" value="Configuration&#xa;Aggregate Monitor" style="rounded=1;whiteSpace=wrap;fillColor=#107C41;strokeColor=#0E6B37;fontColor=#ffffff;fontStyle=1;fontSize=10;" vertex="1" parent="1"><mxGeometry x="700" y="380" width="180" height="50" as="geometry" /></mxCell>
+
+        <!-- Cluster → aggregates -->
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="cl" target="av" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="cl" target="pf" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="cl" target="cf" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== ROW 3: Unit Monitors ===== -->
+        <!-- Under Availability -->
+        <mxCell id="u1" value="AzureLocal.Node&#xa;Availability UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="140" y="520" width="150" height="44" as="geometry" /></mxCell>
+        <mxCell id="u2" value="AzureLocal.StoragePool&#xa;Availability UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="300" y="520" width="150" height="44" as="geometry" /></mxCell>
+        <mxCell id="u3" value="AzureLocal.DCMA&#xa;Heartbeat UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="460" y="520" width="150" height="44" as="geometry" /></mxCell>
+        <!-- Under Performance -->
+        <mxCell id="u4" value="AzureLocal.Node&#xa;CPU % UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="460" y="590" width="140" height="44" as="geometry" /></mxCell>
+        <mxCell id="u5" value="AzureLocal.Node&#xa;Memory % UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="610" y="590" width="140" height="44" as="geometry" /></mxCell>
+        <mxCell id="u6" value="AzureLocal.Volume&#xa;Full % UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="760" y="590" width="140" height="44" as="geometry" /></mxCell>
+        <!-- Under Configuration -->
+        <mxCell id="u7" value="AzureLocal.Cluster&#xa;Quorum UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="660" y="520" width="140" height="44" as="geometry" /></mxCell>
+        <mxCell id="u8" value="AzureLocal.NetworkIntent&#xa;State UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="810" y="520" width="150" height="44" as="geometry" /></mxCell>
+        <mxCell id="u9" value="AzureLocal.UpdateState&#xa;Last Result UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="970" y="520" width="150" height="44" as="geometry" /></mxCell>
+
+        <!-- Aggregate → unit monitor edges -->
+        <mxCell id="e8"  style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="av" target="u1" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e9"  style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="av" target="u2" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="av" target="u3" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="pf" target="u4" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="pf" target="u5" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="pf" target="u6" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="cf" target="u7" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e15" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="cf" target="u8" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="cf" target="u9" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== StoragePool children ===== -->
+        <mxCell id="vol" value="AzureLocal.Volume&#xa;Availability UM × N" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="840" y="380" width="170" height="44" as="geometry" /></mxCell>
+        <mxCell id="srep" value="AzureLocal.StorageReplica&#xa;Partnership UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1020" y="380" width="170" height="44" as="geometry" /></mxCell>
+        <mxCell id="e17" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sp" target="vol"  parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e18" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sp" target="srep" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- ===== L3 children ===== -->
+        <mxCell id="l3a" value="AzureLocal.Azure.HCICluster&#xa;Arc Connected UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1140" y="380" width="170" height="44" as="geometry" /></mxCell>
+        <mxCell id="l3b" value="AzureLocal.Azure.ArcMachine&#xa;Heartbeat UM × N" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1320" y="380" width="170" height="44" as="geometry" /></mxCell>
+        <mxCell id="l3c" value="AzureLocal.Azure.KeyVault&#xa;Expiry UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1140" y="440" width="170" height="44" as="geometry" /></mxCell>
+        <mxCell id="l3d" value="AzureLocal.Azure.RBAC&#xa;Drift UM" style="rounded=1;whiteSpace=wrap;fillColor=#F0F0F0;strokeColor=#999999;fontColor=#333333;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1320" y="440" width="170" height="44" as="geometry" /></mxCell>
+        <mxCell id="e19" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="l3" target="l3a" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e20" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="l3" target="l3b" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e21" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="l3" target="l3c" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e22" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="l3" target="l3d" parent="1"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+
           Green  (Healthy):      #107C41
           Yellow (Warning):      #FFB900
           Red    (Critical):     #D13438

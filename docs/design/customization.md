@@ -171,3 +171,25 @@ includes:
 - Operational impact level (Standard / Limited / Suppressed)
 
 This is the contract between this project and the operator — nothing about thresholds is hidden in code.
+
+## Optional: visualization layer
+
+### SquaredUp (SCOM track)
+
+The SCOM track is compatible with [SquaredUp](https://squaredup.com/) without any MP
+changes. SquaredUp reads the SCOM SDK directly — it sees every class, health state,
+performance counter, and alert the MP produces.
+
+Three things our design does intentionally that make SquaredUp work well out of the box:
+
+1. **`AzureLocal.*` class prefix** — consistent naming lets SquaredUp tiles target all
+   Azure Local entities by prefix without per-class tile configuration.
+2. **Distributed Application at the root** — SquaredUp's DA tile renders the full
+   3-layer health rollup tree automatically.
+3. **Alert allow-list + auto-resolve** (ADR 0009) — prevents the alert tile from being
+   flooded by transient state changes that are only meaningful to the health model.
+
+A SquaredUp dashboard pack is a **Phase 4 optional deliverable** — it ships as a
+separate artefact in `squaredup/` once the SCOM track reaches GA. See
+[ADR 0008](decisions/0008-customization-strategy.md#optional-visualization-integrations)
+for the design constraints that enable it.

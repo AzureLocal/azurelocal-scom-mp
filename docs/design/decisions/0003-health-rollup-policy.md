@@ -1,6 +1,6 @@
 # ADR 0003 — Health rollup policy: worst-state default with documented exceptions
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 

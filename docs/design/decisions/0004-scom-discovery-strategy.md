@@ -1,6 +1,6 @@
 # ADR 0004 — SCOM discovery strategy: PowerShell Discovery (not WMI)
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 

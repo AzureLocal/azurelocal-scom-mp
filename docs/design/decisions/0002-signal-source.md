@@ -1,6 +1,6 @@
 # ADR 0002 — Primary signal source: Azure Local PowerShell APIs + ARM/Resource Graph
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 

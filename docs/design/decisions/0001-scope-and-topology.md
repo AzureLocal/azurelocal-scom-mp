@@ -1,6 +1,6 @@
 # ADR 0001 — Scope & topology: Azure Local infrastructure (3 layers, ~25 entities)
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 

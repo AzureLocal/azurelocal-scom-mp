@@ -1,6 +1,6 @@
 # ADR 0009 — Alert vs health-state separation policy
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 

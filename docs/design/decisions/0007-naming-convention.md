@@ -1,6 +1,6 @@
 # ADR 0007 — Naming convention: cross-track parity
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 

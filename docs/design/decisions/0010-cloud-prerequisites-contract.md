@@ -1,6 +1,6 @@
 # ADR 0010 — Cloud-side prerequisites contract
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 

@@ -10,16 +10,16 @@ These are project-scoped ADRs. Org-wide platform standards live in
 
 | # | Title | Status |
 |---|---|---|
-| [0001](./0001-scope-and-topology.md) | Scope & topology — Azure Local infrastructure (3 layers, ~25 entities) | Proposed |
-| [0002](./0002-signal-source.md) | Primary signal source — Azure Local PowerShell APIs + ARM/Resource Graph | Proposed |
-| [0003](./0003-health-rollup-policy.md) | Health rollup policy — worst-state default with documented exceptions | Proposed |
-| [0004](./0004-scom-discovery-strategy.md) | SCOM discovery strategy — PowerShell Discovery (not WMI) | Proposed |
-| [0005](./0005-scom-class-hierarchy.md) | SCOM class hierarchy + hosting relationships (3-layer model) | Proposed |
-| [0006](./0006-azmon-entity-model.md) | Azure Monitor entity model alignment (mirrors SCOM 1:1) | Proposed |
-| [0007](./0007-naming-convention.md) | Naming convention — cross-track parity | Proposed |
-| [0008](./0008-customization-strategy.md) | Customization strategy — sealed MP + override pack tiers; Bicep params + tiers | Proposed |
-| [0009](./0009-alert-vs-health-state.md) | Alert vs health-state separation policy | Proposed |
-| [0010](./0010-cloud-prerequisites-contract.md) | Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) | Proposed |
+| [0001](./0001-scope-and-topology.md) | Scope & topology — Azure Local infrastructure (3 layers, ~25 entities) | ✅ Accepted |
+| [0002](./0002-signal-source.md) | Primary signal source — Azure Local PowerShell APIs + ARM/Resource Graph | ✅ Accepted |
+| [0003](./0003-health-rollup-policy.md) | Health rollup policy — worst-state default with documented exceptions | ✅ Accepted |
+| [0004](./0004-scom-discovery-strategy.md) | SCOM discovery strategy — PowerShell Discovery (not WMI) | ✅ Accepted |
+| [0005](./0005-scom-class-hierarchy.md) | SCOM class hierarchy + hosting relationships (3-layer model) | ✅ Accepted |
+| [0006](./0006-azmon-entity-model.md) | Azure Monitor entity model alignment (mirrors SCOM 1:1) | ✅ Accepted |
+| [0007](./0007-naming-convention.md) | Naming convention — cross-track parity | ✅ Accepted |
+| [0008](./0008-customization-strategy.md) | Customization strategy — sealed MP + override pack tiers; Bicep params + tiers | ✅ Accepted |
+| [0009](./0009-alert-vs-health-state.md) | Alert vs health-state separation policy | ✅ Accepted |
+| [0010](./0010-cloud-prerequisites-contract.md) | Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) | ✅ Accepted |
 
 ## When to write an ADR
 

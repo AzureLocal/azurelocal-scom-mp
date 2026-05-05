@@ -1,6 +1,6 @@
 # ADR 0008 — Customization strategy: sealed MP + override pack tiers; Bicep params + tiers
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 
@@ -133,6 +133,31 @@ The project commits to:
   not consistent across deployments. Permitted as a *secondary* path for ad-hoc
   customization.
 
+## Optional visualization integrations
+
+> These are *optional* — they consume the MP output; no MP changes are required.
+
+### SquaredUp (SCOM track)
+
+[SquaredUp](https://squaredup.com/) is a web-based dashboard layer for SCOM that renders
+class health states, performance data, and alerts directly from the SCOM SDK. Because
+our MP follows the `AzureLocal.*` class naming convention (ADR 0007) and exposes a
+Distributed Application (ADR 0005), SquaredUp can target Azure Local entities with
+standard tile configuration — no custom connector code required.
+
+Design constraints that enable SquaredUp compatibility:
+
+| Constraint | Why it matters for SquaredUp |
+|---|---|
+| Consistent `AzureLocal.*` class prefix (ADR 0007) | Tiles can target classes by name pattern without per-class configuration |
+| Distributed Application at the root (ADR 0005) | SquaredUp's DA tile renders the full 3-layer rollup tree out of the box |
+| 4-dimension aggregate structure (ADR 0003) | SquaredUp health donuts map cleanly to the 4 aggregate categories |
+| Alert allow-list + auto-resolve (ADR 0009) | Prevents alert storm flooding the SquaredUp alert tile |
+
+A SquaredUp dashboard pack is a **Phase 4 (optional) deliverable** — it does not affect
+the core MP or Azure Monitor track, and will ship as a separate artefact in
+`squaredup/` once the SCOM track reaches GA.
+
 ## References
 
 - [Customization page](../customization.md) (the operational reference)
@@ -141,3 +166,4 @@ The project commits to:
 - [Kevin Holman — Authoring overrides](https://kevinholman.com/2017/02/05/scom-management-pack-fragment-library/)
 - [Microsoft Learn — Bicep parameter files](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/parameter-files)
 - [Azure Monitor Health Models — overview](https://learn.microsoft.com/en-us/azure/azure-monitor/health-models/)
+- [SquaredUp documentation](https://support.squaredup.com/)

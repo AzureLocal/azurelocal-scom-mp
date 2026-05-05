@@ -1,6 +1,6 @@
 # ADR 0006 — Azure Monitor entity model alignment (mirrors SCOM 1:1)
 
-- **Status**: Proposed
+- **Status**: Accepted
 - **Date**: 2026-05-05
 - **Deciders**: @AzureLocal/azurelocal-scom-mp-maintainers
 

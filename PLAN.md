@@ -325,27 +325,27 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 - [x] Move Customization into `docs/design/`
 - [x] Move SCOM ↔ AzMon concept mapping into `docs/design/concept-mapping.md`; comparison/ becomes Migration only
 - [x] Author ADRs in `docs/design/decisions/` (matches `AzureLocal/platform` template)
-  - [x] ADR 0001 — Scope & topology (infra only — 3 layers, ~25 entities) — Proposed
-  - [x] ADR 0002 — Primary signal source (Azure Local PowerShell APIs + ARM/Resource Graph) — Proposed
-  - [x] ADR 0003 — Health rollup policy (worst-state default + impact exceptions) — Proposed
-  - [x] ADR 0004 — SCOM discovery strategy (PowerShell Discovery, not WMI) — Proposed
-  - [x] ADR 0005 — SCOM class hierarchy + hosting relationships (3-layer model) — Proposed
-  - [x] ADR 0006 — Azure Monitor entity model alignment (mirrors SCOM 1:1) — Proposed
-  - [x] ADR 0007 — Naming convention (cross-track parity) — Proposed
-  - [x] ADR 0008 — Customization strategy (sealed MP + override pack tiers; Bicep params + tiers) — Proposed
-  - [x] ADR 0009 — Alert vs health-state separation policy — Proposed
-  - [x] ADR 0010 — Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) — Proposed
+  - [x] ADR 0001 — Scope & topology (infra only — 3 layers, ~25 entities) — Accepted
+  - [x] ADR 0002 — Primary signal source (Azure Local PowerShell APIs + ARM/Resource Graph) — Accepted
+  - [x] ADR 0003 — Health rollup policy (worst-state default + impact exceptions) — Accepted
+  - [x] ADR 0004 — SCOM discovery strategy (PowerShell Discovery, not WMI) — Accepted
+  - [x] ADR 0005 — SCOM class hierarchy + hosting relationships (3-layer model) — Accepted
+  - [x] ADR 0006 — Azure Monitor entity model alignment (mirrors SCOM 1:1) — Accepted
+  - [x] ADR 0007 — Naming convention (cross-track parity) — Accepted
+  - [x] ADR 0008 — Customization strategy (sealed MP + override pack tiers; Bicep params + tiers) — Accepted
+  - [x] ADR 0009 — Alert vs health-state separation policy — Accepted
+  - [x] ADR 0010 — Cloud-side prerequisites contract (HCI Insights, AMA, DCMA, Service Group, RBAC, networking) — Accepted
 - [x] Build full structural inventory tables in `docs/design/`
   - [x] Component inventory (~25 entities across 3 layers) — `scope-topology.md`
   - [x] Signal inventory (~60 signals × dimensions × thresholds × source) — `signal-catalog.md`
   - [x] SCOM ↔ Azure Monitor concept mapping table — `concept-mapping.md`
   - [x] Cloud-side prerequisites table — `azure-monitor/prerequisites.md`
-- [ ] Complete draw.io diagrams (replace Phase 1 stubs with real visuals)
-  - [ ] `scom-health-model.drawio` — full 3-layer rollup tree
-  - [ ] `azure-monitor-entity-graph.drawio` — entity graph w/ relationships
-  - [ ] `concept-comparison.drawio` — side-by-side mapping
-- [ ] Refine Mermaid sources to match ADR 0005 / 0006 names
-- [ ] Phase 2 sign-off gate: all 10 ADRs Accepted, inventory reviewed by maintainers, draw.io
+- [x] Complete draw.io diagrams (replace Phase 1 stubs with real visuals)
+  - [x] `scom-health-model.drawio` — full 3-layer rollup tree
+  - [x] `azure-monitor-entity-graph.drawio` — entity graph w/ relationships
+  - [x] `concept-comparison.drawio` — side-by-side mapping
+- [x] Refine Mermaid sources to match ADR 0005 / 0006 names
+- [x] Phase 2 sign-off gate: all 10 ADRs Accepted ✅; inventory reviewed ✅; draw.io diagrams complete ✅; SquaredUp optional integration documented in ADR 0008 + customization.md ✅
 ### Phase 3 — Track 1: SCOM MP Authoring
 - [ ] Watch/review Brian Wren's SC 2012 R2 video series (23 modules) as primary authoring reference — see [Brian Wren Resources](#brian-wren--mpauthor-resources) below
 - [ ] Set up VSAE project + fragment library references (Kevin Holman fragments)
