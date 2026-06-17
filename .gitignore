@@ -38,3 +38,5 @@ tmp/
 temp/
 out/
 *.log
+.claude/logs/
+.claude/settings.local.json
