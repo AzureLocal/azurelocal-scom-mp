@@ -8,10 +8,11 @@ description: SCOM-to-Azure-Monitor migration guidance for Azure Local health mon
 > **Phase 5 deliverable.** End-to-end migration guidance for operators moving from the
 > SCOM track to the Azure Monitor track (or running both side by side).
 
-!!! info "Phase 5 — coming after Phase 3 + 4"
-    Migration walkthroughs land after both tracks are authored and validated.
-    See [PLAN.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
-
+> [!NOTE]
+> **Phase 5 — coming after Phase 3 + 4**
+> Migration walkthroughs land after both tracks are authored and validated.
+> See [PLAN.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
+>
 ## Looking for the concept crosswalk?
 
 The side-by-side concept mapping (SCOM ↔ Azure Monitor) lives under Design now —

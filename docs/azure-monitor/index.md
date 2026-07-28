@@ -11,11 +11,12 @@ This section covers **how the design is implemented** as an Azure Monitor Health
 The *design itself* — entity model, signal catalog, rollup policy, customization — is
 track-agnostic and lives in [Design](../design/index.md). Read that first.
 
-!!! tip "Start here — Prerequisites"
-    Before building or deploying the health model, work through the [Prerequisites](prerequisites.md)
-    page. The model itself collects nothing — it pulls signals from data that other features (HCI
-    Insights, AMA, DCMA, Resource Health) must already be flowing.
-
+> [!TIP]
+> **Start here — Prerequisites**
+> Before building or deploying the health model, work through the [Prerequisites](prerequisites.md)
+> page. The model itself collects nothing — it pulls signals from data that other features (HCI
+> Insights, AMA, DCMA, Resource Health) must already be flowing.
+>
 !!! info "Phase 4 — coming after Phase 2 sign-off"
     Implementation lands in Phase 4 once the [Design ADRs](../design/decisions/index.md)
     move from Proposed to Accepted. Roadmap in

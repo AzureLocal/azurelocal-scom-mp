@@ -95,10 +95,11 @@ See [SCOM ↔ Azure Monitor concept mapping](comparison/index.md) for the full c
 
 ## Project status
 
-!!! info "Phase 0 — Research & Planning (complete)"
-    All upstream research is complete. Repo structure and documentation platform are being established.
-    See [PLAN.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md) for the full phased roadmap.
-
+> [!NOTE]
+> **Phase 0 — Research & Planning (complete)**
+> All upstream research is complete. Repo structure and documentation platform are being established.
+> See [PLAN.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md) for the full phased roadmap.
+>
 | Phase | Description | Status |
 |---|---|---|
 | 0 | Research & Planning | ✅ Complete |

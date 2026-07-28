@@ -78,12 +78,13 @@ them via KQL. ([Insights — Event channel](https://learn.microsoft.com/en-us/pr
 the DCR with extra event channels and counters — see
 [Monitor Azure Local features with Insights](https://learn.microsoft.com/en-us/azure/azure-local/manage/monitor-features?view=azloc-2604).
 
-!!! warning "Do not replace the Insights DCR"
-    The Insights doc explicitly warns: *"We strongly recommend that you don't create your own DCR.
-    The DCR created by Insights includes a special data stream required for its operation."* You **can**
-    edit it to add Windows/Syslog events, but don't replace it.
-    ([Enable Insights](https://learn.microsoft.com/en-us/previous-versions/azure/azure-local/manage/monitor-hci-single?view=azloc-2604&tabs=22h2-and-later#enable-insights))
-
+> [!WARNING]
+> **Do not replace the Insights DCR**
+> The Insights doc explicitly warns: *"We strongly recommend that you don't create your own DCR.
+> The DCR created by Insights includes a special data stream required for its operation."* You **can**
+> edit it to add Windows/Syslog events, but don't replace it.
+> ([Enable Insights](https://learn.microsoft.com/en-us/previous-versions/azure/azure-local/manage/monitor-hci-single?view=azloc-2604&tabs=22h2-and-later#enable-insights))
+>
 ### 2. VM Insights (for the platform VMs)
 
 VM Insights is **separate** from HCI Insights. It adds:
@@ -116,12 +117,13 @@ calls *the Telemetry and Diagnostics Arc extension*. Its metric output is what p
 `AzureStackHCI/clusters` resource type in Azure Monitor Metrics — those metrics are the natural source
 for **metric-based health-model signals**.
 
-!!! warning "Pre-November 2023 cluster gotcha"
-    AMA was originally configured to use *cluster* identity instead of *node* identity; this breaks
-    Arc-for-Servers, VM Insights, Defender, Sentinel data flow. Run `Register-AzStackHCI -RepairRegistration`,
-    then reinstall AMA, then reconfigure Insights.
-    ([Troubleshoot clusters registered before November 2023](https://learn.microsoft.com/en-us/previous-versions/azure/azure-local/manage/monitor-hci-single?view=azloc-2604&tabs=22h2-and-later#troubleshoot-clusters-registered-before-november-2023))
-
+> [!WARNING]
+> **Pre-November 2023 cluster gotcha**
+> AMA was originally configured to use *cluster* identity instead of *node* identity; this breaks
+> Arc-for-Servers, VM Insights, Defender, Sentinel data flow. Run `Register-AzStackHCI -RepairRegistration`,
+> then reinstall AMA, then reconfigure Insights.
+> ([Troubleshoot clusters registered before November 2023](https://learn.microsoft.com/en-us/previous-versions/azure/azure-local/manage/monitor-hci-single?view=azloc-2604&tabs=22h2-and-later#troubleshoot-clusters-registered-before-november-2023))
+>
 ### 4. Data Collection Rules (DCRs)
 
 | DCR | Created by | Contents | Tables targeted |

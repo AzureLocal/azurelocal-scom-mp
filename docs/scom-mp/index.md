@@ -11,11 +11,12 @@ This section covers **how the design is implemented** as a SCOM Management Pack.
 *design itself* — entity model, signal catalog, rollup policy, customization — is
 track-agnostic and lives in [Design](../design/index.md). Read that first.
 
-!!! info "Phase 3 — coming after Phase 2 sign-off"
-    Authoring lands in Phase 3 once the [Design ADRs](../design/decisions/index.md)
-    move from Proposed to Accepted. Current roadmap is in
-    [PLAN.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
-
+> [!NOTE]
+> **Phase 3 — coming after Phase 2 sign-off**
+> Authoring lands in Phase 3 once the [Design ADRs](../design/decisions/index.md)
+> move from Proposed to Accepted. Current roadmap is in
+> [PLAN.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
+>
 ## What lives here
 
 | Page (planned) | Content |
