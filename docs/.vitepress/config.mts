@@ -148,6 +148,8 @@ export default defineConfig({
           items: [
             { text: 'Track overview', link: '/hyper-v/' },
             { text: 'SCOM Management Pack', link: '/hyper-v/scom-mp' },
+            { text: 'SCOM monitoring research', link: '/hyper-v/monitoring-research' },
+            { text: 'Monitoring catalog policy', link: '/hyper-v/monitoring-catalog' },
             { text: 'Azure Monitor roadmap', link: '/hyper-v/azure-monitor' },
             { text: 'Research spikes', link: '/design/research-spikes' },
           ],

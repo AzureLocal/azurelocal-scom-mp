@@ -25,12 +25,26 @@ research and ADR gates.
 
 Authoring starts after these decisions are complete:
 
-1. [Research the Hyper-V topology, signals, and support matrix — AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327).
+1. [Research and define the Hyper-V SCOM monitoring catalog — AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327).
 2. Decide the shared library and packaging boundary in proposed [ADR 0022](../design/decisions/0022-scom-management-pack-packaging-boundaries.md).
 3. Accept a Hyper-V scope/topology successor ADR based on the spike results.
 
 The Management Pack will not inherit Azure Local-only assumptions such as Network ATC, solution
 updates, DCMA, or the Azure Local ARM resource model.
+
+## Phase one — monitoring research
+
+The active first phase is not MP XML authoring. It is the exhaustive inventory and evidence gate in
+[AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327).
+Eleven child spikes separate topology, Windows Server, Hyper-V/VM, clustering/CSV, storage/Replica,
+networking, incumbent MP coverage, SCOM workflow mapping, threshold engineering, lab validation,
+and final catalog curation.
+
+- [Research plan](monitoring-research.md)
+- [Monitoring catalog and threshold policy](monitoring-catalog.md)
+
+The research records everything technically observable, but only actionable and supportable signals
+will ship enabled by default.
 
 ## Why the SCOM design is reusable
 

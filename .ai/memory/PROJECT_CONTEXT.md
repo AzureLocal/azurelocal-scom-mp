@@ -15,3 +15,8 @@ GitHub Pages and the central Azure DevOps VitePress template.
 
 Azure DevOps project `Hybrid Infrastructure Health Monitoring` is the tracker. Epic AB#7313 owns
 Azure Local, Epic AB#7314 owns Hyper-V, and Features AB#7315–AB#7318 own the four delivery surfaces.
+
+Hyper-V SCOM phase one is active under Story AB#7327. Child Tasks AB#7343–AB#7353 cover support and
+topology, exhaustive raw inventories, incumbent MP overlap, SCOM workflow mapping, threshold
+engineering, lab/fault validation, and final catalog curation. Authoring Stories AB#7328–AB#7330
+remain gated by this evidence and the successor Hyper-V ADRs.

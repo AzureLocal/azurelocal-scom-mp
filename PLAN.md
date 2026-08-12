@@ -38,7 +38,11 @@ Epic AB#7313 — Deliver Azure Local health monitoring
 
 Epic AB#7314 — Deliver Hyper-V health monitoring
 ├── Feature AB#7317 — Deliver the Hyper-V SCOM Management Pack
-│   ├── Story AB#7327 — Research topology, signals, and support matrix
+│   ├── Story AB#7327 — Research and define the Hyper-V SCOM monitoring catalog
+│   │   ├── Tasks AB#7343–AB#7349 — Scope, raw inventories, and incumbent MP gaps
+│   │   ├── Tasks AB#7350–AB#7351 — SCOM workflow and threshold engineering
+│   │   ├── Task AB#7352 — Lab and fault validation
+│   │   └── Task AB#7353 — Curate the authoring-ready default catalog
 │   ├── Story AB#7328 — Author Hyper-V SCOM classes and discoveries
 │   ├── Story AB#7329 — Author Hyper-V SCOM monitoring and overrides
 │   └── Story AB#7330 — Validate, package, and document the release
@@ -107,7 +111,7 @@ Deliver:
 - namespace, artifact, signing, and versioning recommendation; and
 - updated ADR 0022.
 
-### Spike B — Hyper-V topology, signals, and support (AB#7327)
+### Spike B — Hyper-V SCOM monitoring catalog (AB#7327)
 
 Deliver:
 
@@ -116,6 +120,12 @@ Deliver:
 - supported PowerShell, CIM/WMI, event, service, and performance sources;
 - lab fixtures and negative cases; and
 - proposed scope, discovery, and signal ADRs.
+
+AB#7327 is now an active umbrella Story with child research spikes AB#7343–AB#7353. The child work
+first inventories everything observable, then maps acquisition and threshold behavior, validates it
+in the lab, and finally classifies each candidate as Must monitor, Should monitor, Could monitor,
+collect only, diagnostic, or excluded. The detailed contract is published in
+[`docs/hyper-v/monitoring-research.md`](docs/hyper-v/monitoring-research.md).
 
 ### Spike C — Azure Local Health Models revalidation (AB#7323)
 

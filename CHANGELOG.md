@@ -15,6 +15,8 @@
 
 * Add the committed Hyper-V SCOM Management Pack track and conditional Azure Monitor track through Arc-enabled SCVMM.
 * Add ADRs 0021–0023 for the platform split, SCOM packaging boundary, and Hyper-V Azure Monitor go/no-go gate.
+* Add the phase-one Hyper-V SCOM monitoring research plan, exhaustive inventory schema, threshold
+  policy, and ADO child spikes AB#7343–AB#7353.
 
 ## [0.2.1](https://github.com/AzureLocal/azurelocal-scom-mp/compare/azurelocal-scom-mp-v0.2.0...azurelocal-scom-mp-v0.2.1) (2026-05-05)
 

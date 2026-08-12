@@ -42,3 +42,7 @@ The first spike will define the supported matrix for:
 
 See [Research spikes](../design/research-spikes.md) and the
 [Hyper-V SCOM track](scom-mp.md) for the delivery gate.
+
+Phase-one execution is documented in the [Hyper-V SCOM monitoring research](monitoring-research.md)
+plan. Its [catalog policy](monitoring-catalog.md) separates the exhaustive raw inventory from the
+smaller default monitoring profile.

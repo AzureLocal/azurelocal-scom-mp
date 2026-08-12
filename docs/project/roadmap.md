@@ -39,12 +39,14 @@ These items unblock safe implementation:
 | Item | Outcome | Dependency |
 |---|---|---|
 | [Shared SCOM packaging spike — AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319) | Decide common library versus separate platform libraries | Feeds ADR 0022 and both SCOM Features |
-| [Hyper-V topology and support spike — AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327) | Supported versions, topology, discovery sources, signals, and lab fixtures | Gates Hyper-V authoring |
+| [Hyper-V SCOM monitoring research — AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327) | Exhaustive signal inventory, MP gap analysis, workflow/threshold research, lab validation, and curated defaults through AB#7343–AB#7353 | Active; gates Hyper-V authoring |
 | [Azure Local Health Models revalidation — AB#7323](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7323) | Revalidate APIs, preview limits, identity, and signal contracts | Gates Azure Local Azure Monitor authoring |
 | [Arc-enabled SCVMM inventory spike — AB#7331](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7331) | Prove inventory and guest-management boundaries | Precedes telemetry proof |
 | [Hyper-V Health Models feasibility spike — AB#7332](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7332) | Prove or disprove a useful supported entity and signal model | Precedes go/no-go ADR |
 
 See [Research spikes](../design/research-spikes.md) for the evidence contract.
+The complete phase-one Hyper-V breakdown is published in
+[Hyper-V SCOM monitoring research](../hyper-v/monitoring-research.md).
 
 ## Next — committed delivery
 

@@ -64,6 +64,29 @@ All upstream sources used in designing and implementing this project. Organized 
 
 ---
 
+## Windows Server Hyper-V and Failover Clustering monitoring
+
+| Resource | URL | Notes |
+|---|---|---|
+| **Detecting bottlenecks in a virtualized environment** ⭐ | https://learn.microsoft.com/en-us/windows-server/administration/performance-tuning/role/hyper-v-server/detecting-virtualized-environment-bottlenecks | Microsoft counter and threshold guidance for Hyper-V processor, memory, network, and storage bottlenecks. |
+| Hyper-V processor performance | https://learn.microsoft.com/en-us/windows-server/administration/performance-tuning/role/hyper-v-server/processor-performance | Processor, integration-service, virtual-processor, SMT, and vNUMA considerations. |
+| Hyper-V memory performance | https://learn.microsoft.com/en-us/windows-server/administration/performance-tuning/role/hyper-v-server/memory-performance | Root/child memory semantics, Dynamic Memory, and guest pressure counter guidance. |
+| Hyper-V storage I/O performance | https://learn.microsoft.com/en-us/windows-server/administration/performance-tuning/role/hyper-v-server/storage-io-performance | Guest-to-physical storage path, controllers, VHD/VHDX, differencing disks, and configuration guidance. |
+| Hyper-V network I/O performance | https://learn.microsoft.com/en-us/windows-server/administration/performance-tuning/role/hyper-v-server/network-io-performance | Hyper-V virtual networking and offload performance guidance. |
+| Troubleshoot Hyper-V VM performance | https://learn.microsoft.com/en-us/troubleshoot/windows-server/virtualization/troubleshoot-hyper-v-virtual-machine-performance | Current Microsoft data-collection and performance troubleshooting checklist. |
+| Working with Hyper-V and Windows PowerShell | https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/powershell | Supported Hyper-V PowerShell entry point. |
+| `Measure-VM` | https://learn.microsoft.com/en-us/powershell/module/hyper-v/measure-vm?view=windowsserver2025-ps | VM processor, memory, network, storage-capacity, and disk metric report after metering is enabled. |
+| Manage Cluster Shared Volumes | https://learn.microsoft.com/en-us/windows-server/failover-clustering/failover-cluster-manage-cluster-shared-volumes | CSV state and cache concepts plus CSV cache performance-counter guidance. |
+| Troubleshoot Failover Cluster event 1135 | https://learn.microsoft.com/en-us/troubleshoot/windows-server/high-availability/troubleshoot-cluster-event-id-1135 | Microsoft interpretation and investigation path for lost cluster membership. |
+| **Microsoft System Center 2019 MP for Hyper-V** ⭐ | https://www.microsoft.com/en-us/download/details.aspx?id=101312 | Version 11.0.4.0, published July 2024; download page lists Windows Server 2016, 2019, and 2022. Must be reverse-inventoried for coexistence and gaps. |
+| Microsoft Management Pack list | https://learn.microsoft.com/en-us/system-center/scom/management-pack-list?view=sc-om-2025 | Current Microsoft catalog listing for Hyper-V, Windows Server, and Failover Cluster MPs. |
+| Operations Manager process-monitoring template | https://learn.microsoft.com/en-us/system-center/scom/process-monitoring-template?view=sc-om-2025 | Microsoft example for consecutive samples and sampling intervals to reduce performance-alert noise. |
+| Best practices for SCOM overrides | https://learn.microsoft.com/en-us/troubleshoot/system-center/scom/best-practices-configure-overrides | Separate override MPs, group targeting, and test-environment guidance. |
+| **Veeam ONE Hyper-V alarm catalog** | https://helpcenter.veeam.com/docs/one/userguide/hyperv_alarms_events.html | Current commercial benchmark for Hyper-V/cluster/CSV alarm coverage, durations, and default bands; secondary evidence only. |
+| Veeam ONE Hyper-V alarm rules | https://helpcenter.veeam.com/docs/one/userguide/hyperv_alarm_rules.html | Vendor reference for event, state, service, resource, checkpoint, capacity, process, and existing-alarm rule types. |
+
+---
+
 ## SCOM → Azure Monitor Migration
 
 | Resource | URL | Notes |

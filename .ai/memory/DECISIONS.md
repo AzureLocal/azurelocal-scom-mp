@@ -17,3 +17,8 @@
   spikes, followed by an accepted go/no-go ADR.
 - Shared health semantics and SCOM engineering patterns are expected, but shared sealed Management
   Pack dependencies are not approved until proposed ADR 0022 is resolved.
+- Hyper-V SCOM research preserves a complete raw capability inventory separately from the curated
+  default monitoring catalog. Technically collectable does not mean enabled or health-impacting.
+- A 75% host-memory-used threshold is not accepted as a standalone default. Default memory health
+  must consider available/reserved memory, Hyper-V pressure, paging, duration, recovery, topology,
+  source evidence, and lab results.
