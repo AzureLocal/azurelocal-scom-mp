@@ -1,11 +1,11 @@
 import { defineConfig } from 'vitepress'
 
-const repositoryUrl = 'https://github.com/AzureLocal/azurelocal-scom-mp'
-const base = '/azurelocal-scom-mp/'
+const repositoryUrl = 'https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring'
+const base = '/hybrid-health-monitoring/'
 
 export default defineConfig({
   base,
-  title: 'Hybrid infrastructure health monitoring',
+  title: 'Hybrid Infrastructure Health Monitoring',
   description: 'SCOM and Azure Monitor health models for Hyper-V and Azure Local.',
   lang: 'en-US',
   cleanUrls: true,
@@ -21,7 +21,7 @@ export default defineConfig({
   ],
 
   sitemap: {
-    hostname: 'https://azurelocal.cloud/azurelocal-scom-mp/',
+    hostname: 'https://labs.hybridsolutions.cloud/hybrid-health-monitoring/',
   },
 
   markdown: {
@@ -47,7 +47,7 @@ export default defineConfig({
       src: '/assets/images/azurelocal-scom-mp-icon.svg',
       alt: 'Hybrid Infrastructure Health Monitoring',
     },
-    siteTitle: 'Hybrid infrastructure health monitoring',
+    siteTitle: 'Hybrid Infrastructure Health Monitoring',
 
     nav: [
       { text: 'Home', link: '/' },
@@ -101,6 +101,7 @@ export default defineConfig({
             { text: '0021 — Platform and delivery tracks', link: '/design/decisions/0021-platform-and-delivery-track-architecture' },
             { text: '0022 — SCOM packaging boundaries', link: '/design/decisions/0022-scom-management-pack-packaging-boundaries' },
             { text: '0023 — Hyper-V Azure Monitor gate', link: '/design/decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm' },
+            { text: '0024 — Repository and publishing identity', link: '/design/decisions/0024-repository-and-publishing-identity' },
             { text: 'ADR template', link: '/design/decisions/template' },
           ],
         },
@@ -204,7 +205,7 @@ export default defineConfig({
 
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © Hybrid Cloud Solutions and AzureLocal',
+      copyright: 'Copyright © Hybrid Solutions Cloud contributors',
     },
   },
 })

@@ -1,4 +1,4 @@
-# Azure DevOps Pipeline Trigger for azurelocal-scom-mp
+# Azure DevOps Pipeline Trigger for hybrid-health-monitoring
 # Governed centrally in HCS Platform Engineering
 
 trigger:

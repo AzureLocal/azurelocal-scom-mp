@@ -10,7 +10,7 @@ description: SCOM-to-Azure-Monitor migration guidance for Azure Local health mon
 
 ::: info Planned after both Azure Local surfaces ship
 Migration walkthroughs land after both implementation tracks are authored and validated.
-See the [implementation plan](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
+See the [implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
 :::
 
 ## Looking for the concept crosswalk?

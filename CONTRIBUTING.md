@@ -1,6 +1,9 @@
-# Contributing to azurelocal-scom-mp
+# Contributing to Hybrid Infrastructure Health Monitoring
 
-Please read the [AzureLocal Contributing Guide](https://github.com/AzureLocal/.github/blob/main/CONTRIBUTING.md) first — it covers branching, PR workflow, Conventional Commits, and the IIC example-data rule that apply to all AzureLocal repositories.
+Follow the [HCS governance standards](https://platform.hybridsolutions.cloud/standards/) for
+branching, pull requests, Conventional Commits, documentation, and the IIC example-data rule.
+Azure Local-specific contributions must also preserve the conventions established by the accepted
+Azure Local ADRs in this repository.
 
 ## Repo-specific notes
 

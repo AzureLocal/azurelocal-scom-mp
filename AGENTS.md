@@ -1,4 +1,4 @@
-# azurelocal-scom-mp — Agent instructions
+# hybrid-health-monitoring — Agent instructions
 
 <!--
   AGENTS.md is the canonical, cross-tool instruction file for this repo.
@@ -10,8 +10,9 @@
 
 ## What this repo is
 
-Documentation repo for the Azure Local SCOM Management Pack and Azure Monitor health-model design.
-Its public documentation is published with VitePress.
+Documentation repo for Hybrid Infrastructure Health Monitoring across Hyper-V and Azure Local,
+delivered through SCOM and, where supported, Azure Monitor. Its public documentation is published
+with VitePress.
 
 <!-- One paragraph. What the repo is, why it exists, and what it is not. -->
 
@@ -25,8 +26,8 @@ standards, hard rules, and orchestration guidance.
 
 **At session start, call:**
 
-```
-bootstrap(repo="azurelocal-scom-mp", client="<your client: claude-code | codex | gemini | cursor | vscode>")
+```text
+bootstrap(repo="hybrid-health-monitoring", client="<your client: claude-code | codex | gemini | cursor | vscode>")
 ```
 
 It returns this repo's scope, the applicable hard rules, the index of applicable
@@ -38,7 +39,7 @@ this file is the offline fallback.
 
 ## Offline fallback (when the MCP server is unreachable)
 
-**Standards scope:** `azurelocal` <!-- hcs | tierpoint-prodtech | azurelocal -->
+**Standards scope:** `hcs` <!-- hcs | tierpoint-prodtech | azurelocal -->
 
 **Hard rules digest:**
 

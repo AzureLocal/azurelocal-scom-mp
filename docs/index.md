@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Hybrid infrastructure health monitoring
+title: Hybrid Infrastructure Health Monitoring
 titleTemplate: false
 description: SCOM and Azure Monitor health models for Hyper-V and Azure Local.
 hero:
@@ -73,7 +73,7 @@ visualization layers for the SCOM and Azure Monitor tracks respectively.
 The original Azure Local design baseline is complete. The roadmap now separates Azure Local and
 Hyper-V into their own Epics and delivery Features. Hyper-V research and the shared SCOM packaging
 decision come before authoring. See the [project roadmap](/project/roadmap) and
-[implementation plan](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
+[implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
 :::
 
 | Phase | Description | Status |

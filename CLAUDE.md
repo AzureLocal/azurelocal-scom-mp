@@ -1,4 +1,4 @@
-# azurelocal-scom-mp — Claude Code
+# hybrid-health-monitoring — Claude Code
 
 @AGENTS.md
 
@@ -15,10 +15,10 @@
 - Follow the `.ai/` session protocol: read `.ai/state/*` at session start, and update `.ai/state/HANDOFF.md` before ending a session.
 - See the [agents standard](https://platform.hybridsolutions.cloud/standards/agents/) for the full multi-model model.
 
-
 ## Claude Code actions in this repo
 
 **Run autonomously:**
+
 - Read, search, and grep any file in this repo
 - Write and edit files in this repo
 - `git add`, `git commit`, `git push`
@@ -27,6 +27,7 @@
 - `npm run docs:build`, `npm run docs:dev`, and `npm run docs:preview` under `docs/`
 
 **Always confirm before:**
+
 - Creating or deleting Azure resources
 - Any `az` CLI write operation that modifies Azure state
 - Running destructive operations

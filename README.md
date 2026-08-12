@@ -1,6 +1,6 @@
-# Hybrid infrastructure health monitoring
+# Hybrid Infrastructure Health Monitoring
 
-[![Platform Standards](https://img.shields.io/badge/standards-AzureLocal%2Fplatform-0078D4)](https://github.com/AzureLocal/platform)
+[![HCS Standards](https://img.shields.io/badge/standards-HCS-0078D4)](https://platform.hybridsolutions.cloud/standards/)
 
 > SCOM and Azure Monitor health models for **Hyper-V and Azure Local**.
 
@@ -31,7 +31,7 @@ the current research and architecture gates complete.
 ## Documentation
 
 The `docs/` folder is a [VitePress](https://vitepress.dev/) site published at
-<https://azurelocal.cloud/azurelocal-scom-mp/>. It includes:
+<https://labs.hybridsolutions.cloud/hybrid-health-monitoring/>. It includes:
 
 - separate [Azure Local](docs/azure-local/index.md) and [Hyper-V](docs/hyper-v/index.md) entry points;
 - the shared health-model design, signal catalog, and Architecture Decision Records;
@@ -49,7 +49,7 @@ npm run docs:dev
 ```
 
 The configured local URL includes the repository base path:
-`http://localhost:5173/azurelocal-scom-mp/`.
+`http://localhost:5173/hybrid-health-monitoring/`.
 
 ## Delivery hierarchy
 
@@ -65,7 +65,7 @@ Research and implementation Stories are linked in [PLAN.md](PLAN.md).
 ## Repository structure
 
 ```text
-azurelocal-scom-mp/
+hybrid-health-monitoring/
 ├── docs/                    # VitePress content and configuration
 │   ├── azure-local/         # Azure Local platform entry point
 │   ├── hyper-v/             # Hyper-V platform and conditional Arc track

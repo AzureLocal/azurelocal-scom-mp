@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+* Move the project to `Hybrid-Solutions-Cloud/hybrid-health-monitoring` and publish documentation
+  at `https://labs.hybridsolutions.cloud/hybrid-health-monitoring/`.
+
 ### Changed
 
 * Migrate the documentation site and deployment pipelines from MkDocs to VitePress while preserving the project logo, banner, and favicon.
@@ -32,7 +35,7 @@
 
 ## Changelog
 
-All notable changes to azurelocal-scom-mp are documented here.
+All notable changes to Hybrid Infrastructure Health Monitoring are documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

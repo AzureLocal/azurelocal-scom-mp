@@ -3,7 +3,7 @@
 # Input: JSON from stdin { tool_name, tool_input, tool_response }
 # Configure: set $logDir to your repo's .claude/logs/ path
 
-$logDir = "D:\git\azurelocal\azurelocal-scom-mp\.claude\logs"
+$logDir = "D:\git\hybrid-solutions-cloud\hybrid-health-monitoring\.claude\logs"
 
 $input_json = $input | Out-String
 try { $payload = $input_json | ConvertFrom-Json } catch { exit 0 }

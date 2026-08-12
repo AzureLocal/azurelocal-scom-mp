@@ -1,9 +1,9 @@
-# Implementation plan — Hybrid infrastructure health monitoring
+# Implementation plan — Hybrid Infrastructure Health Monitoring
 
 > Last updated: August 12, 2026
 >
 > Status: Platform split planned; research and architecture gates are next
-> Published roadmap: <https://azurelocal.cloud/azurelocal-scom-mp/project/roadmap>
+> Published roadmap: <https://labs.hybridsolutions.cloud/hybrid-health-monitoring/project/roadmap>
 
 ## Objective
 

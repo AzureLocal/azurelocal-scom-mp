@@ -8,6 +8,10 @@ description: Platform-first roadmap for Hyper-V and Azure Local health monitorin
 The roadmap is organized by platform first and delivery surface second. Azure DevOps owns the
 delivery hierarchy; this page is the published summary.
 
+Repository and publishing migration is tracked by
+[AB#7340](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7340)
+and governed by [ADR 0024](../design/decisions/0024-repository-and-publishing-identity.md).
+
 ## Portfolio structure
 
 ```mermaid
@@ -99,6 +103,6 @@ model without expanding the platform MPs into application monitoring suites.
 
 ## How to suggest a roadmap addition
 
-[Open a discussion or issue](https://github.com/AzureLocal/azurelocal-scom-mp/issues/new/choose).
+[Open a discussion or issue](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/issues/new/choose).
 Approved delivery work is represented in Azure DevOps and linked back to the applicable Epic or
 Feature.

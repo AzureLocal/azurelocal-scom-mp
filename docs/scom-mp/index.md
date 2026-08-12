@@ -15,7 +15,7 @@ track-agnostic and lives in [Design](../design/index.md). Read that first.
 The Azure Local design baseline is accepted. Shared SCOM packaging is gated by proposed ADR 0022
 and [AB#7319](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7319).
 Delivery is tracked by [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7315). See the
-[implementation plan](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
+[implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
 :::
 
 Looking for the other SCOM product? See the planned
@@ -46,4 +46,4 @@ Looking for the other SCOM product? See the planned
 - [Brian Wren / MPAuthor video series (SC 2012 R2 — Operations Manager Management Packs)](https://learn.microsoft.com/en-us/shows/system-center-2012-r2-operations-manager-management-packs/)
 - [Kevin Holman — SCOM Management Pack Fragment Library](https://kevinholman.com/2017/02/05/scom-management-pack-fragment-library/)
 - [Silect MP Author](https://www.silect.com/mp-author/) (free authoring tool)
-- See full reference list in [REFERENCES.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/REFERENCES.md).
+- See full reference list in [REFERENCES.md](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/REFERENCES.md).

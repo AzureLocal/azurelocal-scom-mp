@@ -7,8 +7,8 @@
       {
         "matcher": "Write|Edit",
         "hooks": [
-          { "type": "command", "command": "pwsh -NonInteractive -File D:/git/azurelocal/azurelocal-scom-mp/.claude/hooks/block-secrets.ps1" },
-          { "type": "command", "command": "pwsh -NonInteractive -File D:/git/azurelocal/azurelocal-scom-mp/.claude/hooks/validate-path.ps1" }
+          { "type": "command", "command": "pwsh -NonInteractive -File D:/git/hybrid-solutions-cloud/hybrid-health-monitoring/.claude/hooks/block-secrets.ps1" },
+          { "type": "command", "command": "pwsh -NonInteractive -File D:/git/hybrid-solutions-cloud/hybrid-health-monitoring/.claude/hooks/validate-path.ps1" }
         ]
       }
     ],
@@ -16,14 +16,14 @@
       {
         "matcher": "Write|Edit",
         "hooks": [
-          { "type": "command", "command": "pwsh -NonInteractive -File D:/git/azurelocal/azurelocal-scom-mp/.claude/hooks/log-tokens.ps1" }
+          { "type": "command", "command": "pwsh -NonInteractive -File D:/git/hybrid-solutions-cloud/hybrid-health-monitoring/.claude/hooks/log-tokens.ps1" }
         ]
       }
     ],
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "pwsh -NonInteractive -File D:/git/azurelocal/azurelocal-scom-mp/.claude/hooks/summarize-session.ps1" }
+          { "type": "command", "command": "pwsh -NonInteractive -File D:/git/hybrid-solutions-cloud/hybrid-health-monitoring/.claude/hooks/summarize-session.ps1" }
         ]
       }
     ]
@@ -50,7 +50,7 @@
       "Bash(mkdocs:*)",
       "Bash(pip:*)",
       "Bash(python:*)",
-      "Read(//d/git/azurelocal/azurelocal-scom-mp/**)",
+      "Read(//d/git/hybrid-solutions-cloud/hybrid-health-monitoring/**)",
       "WebSearch",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",

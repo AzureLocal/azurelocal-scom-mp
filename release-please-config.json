@@ -7,12 +7,10 @@
   "prerelease": false,
   "packages": {
     ".": {
-      "package-name": "azurelocal-scom-mp",
+      "package-name": "hybrid-health-monitoring",
       "changelog-path": "CHANGELOG.md",
       "include-v-in-tag": true,
-      "extra-files": [
-        ".azurelocal-platform.yml"
-      ]
+      "extra-files": []
     }
   },
   "plugins": [

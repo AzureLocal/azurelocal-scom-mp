@@ -52,7 +52,7 @@ The choices in this section are guided by five principles:
    `Volume.FreeSpace.WarnPercent` and its Azure Monitor parameter retain the same semantics.
 5. **Cite first-party sources** — every signal, threshold, and prerequisite is traced back
    to Microsoft Learn, Azure Local product docs, or a named upstream reference. The
-   [REFERENCES](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/REFERENCES.md)
+   [REFERENCES](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/REFERENCES.md)
    file is the bibliography.
 
 ## Status

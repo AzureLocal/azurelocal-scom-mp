@@ -1,7 +1,7 @@
 # Architecture Decision Records
 
-Lightweight, numbered, immutable records of architectural decisions that govern the
-These decisions govern the shared foundation plus the Azure Local and Hyper-V platform tracks.
+Lightweight, numbered, immutable records of architectural decisions that govern the shared
+foundation plus the Azure Local and Hyper-V platform tracks.
 
 These are project-scoped ADRs. Org-wide platform standards live in
 [`AzureLocal/platform/decisions/`](https://github.com/AzureLocal/platform/tree/main/decisions).
@@ -33,6 +33,7 @@ These are project-scoped ADRs. Org-wide platform standards live in
 | [0021](./0021-platform-and-delivery-track-architecture.md) | Platform-first architecture — Azure Local and Hyper-V, split by SCOM and Azure Monitor delivery surfaces | Accepted |
 | [0022](./0022-scom-management-pack-packaging-boundaries.md) | SCOM packaging boundaries — shared sealed library vs separate platform libraries | Proposed |
 | [0023](./0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) | Hyper-V Azure Monitor through Arc-enabled SCVMM — go, defer, or no-go gate | Proposed |
+| [0024](./0024-repository-and-publishing-identity.md) | Repository and publishing identity — Hybrid Solutions Cloud and labs.hybridsolutions.cloud | Accepted |
 
 ## When to write an ADR
 

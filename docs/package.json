@@ -1,5 +1,5 @@
 {
-  "name": "azurelocal-scom-mp-docs",
+  "name": "hybrid-health-monitoring-docs",
   "version": "1.0.0",
   "description": "Canonical VitePress documentation for HCS / AzureLocal repository",
   "private": true,

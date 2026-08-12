@@ -5,13 +5,15 @@ description: About the Hybrid Infrastructure Health Monitoring project.
 
 # About
 
-`azurelocal-scom-mp` is a community project under the
-[AzureLocal](https://github.com/AzureLocal) organization. It delivers production-grade health
-monitoring for **Hyper-V and Azure Local** through SCOM and, where supported, Azure Monitor.
+`hybrid-health-monitoring` is an open-source project under the
+[Hybrid Solutions Cloud](https://github.com/Hybrid-Solutions-Cloud) organization. It delivers
+production-grade health monitoring for **Hyper-V and Azure Local** through SCOM and, where
+supported, Azure Monitor.
 
-The repository name reflects its original Azure Local scope. The public product title is
-**Hybrid Infrastructure Health Monitoring**. Renaming the repository or ADO project is deferred
-until SCOM packaging and release dependencies are understood.
+The public product title is **Hybrid Infrastructure Health Monitoring**. The repository moved from
+its original Azure Local-specific identity so the project name, ownership, roadmap, and published
+documentation represent both platform tracks. [ADR 0024](../design/decisions/0024-repository-and-publishing-identity.md)
+records the migration decision.
 
 ## Product structure
 
@@ -74,9 +76,9 @@ Future companion products can depend on the appropriate platform health model.
 
 ## Maintainers
 
-See [`CODEOWNERS`](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/CODEOWNERS).
+See [`CODEOWNERS`](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/CODEOWNERS).
 
 ## License
 
 [MIT](license.md). See the
-[LICENSE](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/LICENSE) file.
+[LICENSE](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/LICENSE) file.

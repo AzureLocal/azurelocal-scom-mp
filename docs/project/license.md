@@ -1,6 +1,6 @@
 ---
 title: License
-description: MIT License for azurelocal-scom-mp.
+description: MIT License for Hybrid Infrastructure Health Monitoring.
 ---
 
 # License
@@ -31,7 +31,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-The canonical source is the [`LICENSE`](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/LICENSE)
+The canonical source is the [`LICENSE`](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/LICENSE)
 file at the repository root.
 
 ## Third-party content
@@ -39,5 +39,5 @@ file at the repository root.
 Where this project references documentation, code, or assets owned by third parties
 (Microsoft Learn pages, Brian Wren's blog/video series, Kevin Holman's MP fragments,
 SquaredUp documentation, etc.), those sources retain their own licensing.
-See [`REFERENCES.md`](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/REFERENCES.md)
+See [`REFERENCES.md`](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/REFERENCES.md)
 for attribution.

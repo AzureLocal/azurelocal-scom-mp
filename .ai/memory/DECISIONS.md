@@ -8,6 +8,8 @@
   removed after its browser runtime showed syntax-error placeholders for valid diagrams.
 - The public product title is "Hybrid infrastructure health monitoring" with the subtitle "SCOM
   and Azure Monitor health models for Hyper-V and Azure Local."
+- The repository identity is `Hybrid-Solutions-Cloud/hybrid-health-monitoring`; the canonical site
+  is `https://labs.hybridsolutions.cloud/hybrid-health-monitoring/`. ADR 0024 records the migration.
 - Planning is platform-first: Azure Local and Hyper-V each have an Azure DevOps Epic, with SCOM and
   Azure Monitor represented as child Features.
 - Azure Local SCOM and Azure Monitor plus Hyper-V SCOM are committed delivery surfaces. Hyper-V
