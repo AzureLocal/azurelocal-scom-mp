@@ -13,8 +13,8 @@ track-agnostic and lives in [Design](../design/index.md). Read that first.
 
 ::: info Authoring has not started
 The Azure Local design baseline is accepted. Shared SCOM packaging is gated by proposed ADR 0022
-and [AB#7319](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7319).
-Delivery is tracked by [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7315). See the
+and [AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319).
+Delivery is tracked by [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7315). See the
 [implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
 :::
 

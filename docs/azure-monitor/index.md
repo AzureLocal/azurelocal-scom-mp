@@ -19,8 +19,8 @@ Telemetry and Diagnostics, and Resource Health.
 
 ::: info Implementation has not started
 The Azure Local design baseline is accepted. Current APIs and signal contracts will be revalidated
-in [AB#7323](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7323)
-before implementation under [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7316). See the
+in [AB#7323](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7323)
+before implementation under [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7316). See the
 [implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
 :::
 

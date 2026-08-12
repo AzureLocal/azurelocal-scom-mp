@@ -66,7 +66,7 @@ public product title, while `hybrid-health-monitoring` is the stable technical i
 
 ## Related work
 
-- Migration Story [AB#7340](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7340)
+- Migration Story [AB#7340](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7340)
 - [ADR 0021](0021-platform-and-delivery-track-architecture.md)
 - [GitHub repository transfer behavior](https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository)
 - [GitHub repository rename behavior](https://docs.github.com/en/repositories/creating-and-managing-repositories/renaming-a-repository)

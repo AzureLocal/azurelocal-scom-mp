@@ -25,7 +25,7 @@ research and ADR gates.
 
 Authoring starts after these decisions are complete:
 
-1. [Research the Hyper-V topology, signals, and support matrix — AB#7327](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7327).
+1. [Research the Hyper-V topology, signals, and support matrix — AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327).
 2. Decide the shared library and packaging boundary in proposed [ADR 0022](../design/decisions/0022-scom-management-pack-packaging-boundaries.md).
 3. Accept a Hyper-V scope/topology successor ADR based on the spike results.
 

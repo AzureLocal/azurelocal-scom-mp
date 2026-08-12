@@ -2,7 +2,7 @@
 
 **Status:** Proposed  
 **Date:** 2026-08-12  
-**Decision gate:** Research spike [AB#7319](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7319)
+**Decision gate:** Research spike [AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319)
 
 ## Context
 

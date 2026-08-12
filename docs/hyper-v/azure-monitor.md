@@ -20,9 +20,9 @@ Data Collection Rules.
 
 | Spike | Question | ADO |
 |---|---|---|
-| Arc-enabled SCVMM inventory and guest management | Which clusters, hosts, networks, and VMs become Azure resources, and when can guest management be enabled? | [AB#7331](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7331) |
-| Telemetry and Health Models proof of concept | Can supported AMA, DCR, Resource Graph, metrics, logs, and health objectives produce a useful Hyper-V model? | [AB#7332](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7332) |
-| Go/no-go decision | Is the result supportable and valuable enough to implement, defer, or reject? | [AB#7333](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7333) |
+| Arc-enabled SCVMM inventory and guest management | Which clusters, hosts, networks, and VMs become Azure resources, and when can guest management be enabled? | [AB#7331](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7331) |
+| Telemetry and Health Models proof of concept | Can supported AMA, DCR, Resource Graph, metrics, logs, and health objectives produce a useful Hyper-V model? | [AB#7332](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7332) |
+| Go/no-go decision | Is the result supportable and valuable enough to implement, defer, or reject? | [AB#7333](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7333) |
 
 ## Go criteria
 

@@ -2,7 +2,8 @@
 
 <!-- What is being worked on right now. Keep it short; update as work moves. -->
 
-_No active implementation task. The platform split is published; research and architecture gates are next._
+_Repository, ADO, and governance identity migration is complete. GitHub Pages custom-domain
+activation and the former-site redirect are being verified._
 
 <!--
   Optional advisory model hint the next tool should honour if available.

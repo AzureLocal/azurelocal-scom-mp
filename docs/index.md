@@ -59,8 +59,8 @@ graph TD
 
 | Platform | SCOM Management Pack | Azure Monitor Health Models |
 |---|---|---|
-| **Azure Local** | Committed — [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7315) | Committed — [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7316) |
-| **Hyper-V** | Committed — [Feature AB#7317](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7317) | Conditional on Arc-enabled SCVMM research — [Feature AB#7318](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7318) |
+| **Azure Local** | Committed — [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7315) | Committed — [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7316) |
+| **Hyper-V** | Committed — [Feature AB#7317](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7317) | Conditional on Arc-enabled SCVMM research — [Feature AB#7318](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7318) |
 
 ## Companion tooling
 

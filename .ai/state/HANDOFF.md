@@ -8,30 +8,32 @@
 
 ## Last session
 
-- **What changed and why:** Split the project into Azure Local and Hyper-V platform tracks under the
-  public title "Hybrid infrastructure health monitoring." Azure Local has committed SCOM and Azure
-  Monitor surfaces. Hyper-V has a committed SCOM surface and a conditional Azure Monitor surface
-  through Arc-enabled SCVMM. Updated the site information architecture, home page, banner, roadmap,
-  implementation plan, shared design framing, contributor guidance, and durable memory. Added
-  accepted ADR 0021 plus proposed ADRs 0022–0023 and a research-spike evidence contract.
-- **Azure DevOps:** Created area paths `Azure Local` and `Hyper-V`; Epics AB#7313 and AB#7314;
-  Features AB#7315–AB#7318; and child Stories AB#7319–AB#7334 with parent, predecessor, priority,
-  tags, descriptions, and acceptance criteria. Updated the project description to the new public
-  product scope. Hyper-V Azure Monitor remains Priority 4 / `future-roadmap` and cannot activate
-  before its research and go/no-go ADR.
-- **Files touched:** `README.md`, `PLAN.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, VitePress config and
-  banner assets, platform entry pages under `docs/azure-local/` and `docs/hyper-v/`, roadmap/about,
-  shared design pages, ADR index and ADRs 0021–0023, research spikes, and `.ai/` state/memory.
-  Product implementation directories remain untouched pending ADR 0022.
-- **Commands / tests run and results:** HCS Governance bootstrap; current Microsoft Learn research
-  for Arc-enabled SCVMM, Arc-enabled Servers, Azure Monitor Agent, and Health Models; `npm run
-  docs:build` passed; markdownlint passed on all 29 changed Markdown files; `git diff --check`
-  passed; secret-pattern scan passed; ADO hierarchy audit passed; representative local VitePress
-  routes returned HTTP 200; visual browser review passed for home branding, Hyper-V, and research
-  content. Governance validation could not run `lychee` because it is not installed; VitePress
-  internal-link validation passed during the production build.
-- **Branch:** `main`; publish commit and GitHub Pages deployment verified before session end.
-- **Blockers:** None for the planning/documentation split. Product authoring is deliberately gated.
-- **Exact next steps:** Run AB#7319 (SCOM packaging), AB#7327 (Hyper-V topology/signals/support), and
-  AB#7323 (Azure Local Health Models revalidation). Run AB#7331 then AB#7332 before resolving ADR
-  0023. Do not activate Hyper-V Azure Monitor implementation unless ADR 0023 records a go decision.
+- **What changed and why:** Renamed the product and repository identity for the cross-platform
+  Azure Local and Hyper-V scope. Accepted ADR 0024. The canonical GitHub repository is now
+  `Hybrid-Solutions-Cloud/hybrid-health-monitoring`; the canonical documentation URL is
+  `https://labs.hybridsolutions.cloud/hybrid-health-monitoring/`.
+- **GitHub:** Transferred and renamed the public repository, updated its description, homepage, and
+  topics, and preserved the old GitHub repository redirect. Migration commit
+  `6cea867` was pushed with AB#7340 before transfer. The canonical local clone is
+  `D:/git/hybrid-solutions-cloud/hybrid-health-monitoring`.
+- **Azure DevOps:** Renamed project `Azure Local SCOM MP` to
+  `Hybrid Infrastructure Health Monitoring`. Migration Story AB#7340 owns the cutover. Existing
+  Epics AB#7313–AB#7314, Features AB#7315–AB#7318, and Stories AB#7319–AB#7334 remain intact.
+- **Governance:** Platform registry commit `aba6241` replaces the old registry entry with
+  `hybrid-health-monitoring`, sets the Hybrid-Solutions-Cloud org and HCS scope, corrects the docs
+  platform to VitePress, updates the local path and ADO project, and refreshes reference tables.
+  The governance build and smoke suite passed and the commit was pushed to Platform Engineering.
+- **Validation:** `npm run docs:build` passed; representative local routes returned HTTP 200;
+  markdownlint passed with the repository configuration; `git diff --check`, identity assertions,
+  and the secret-pattern scan passed. The HCS Governance MCP build and smoke suite passed.
+- **Remaining verification:** GitHub Pages still reported
+  `http://hybrid-solutions-cloud.github.io/hybrid-health-monitoring/` immediately after transfer;
+  verify the organization custom-domain cutover to `labs.hybridsolutions.cloud`, trigger/verify
+  the target workflow, and configure the old AzureLocal documentation redirect.
+- **Local cleanup:** Windows would not move the active session folder because the current process
+  holds it open. A clean canonical clone was created in the correct location. Remove
+  `D:/git/azurelocal/azurelocal-scom-mp` only after that handle is released and after confirming
+  the canonical clone is clean.
+- **Branch:** `main`.
+- **Next product work:** Run AB#7319, AB#7327, and AB#7323. Run AB#7331 then AB#7332 before resolving
+  ADR 0023. Do not activate Hyper-V Azure Monitor unless ADR 0023 records a go decision.

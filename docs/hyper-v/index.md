@@ -11,11 +11,11 @@ System Center Virtual Machine Manager (SCVMM) and meet the yet-to-be-approved pr
 
 | Delivery surface | Commitment | Status | ADO |
 |---|---|---|---|
-| **SCOM Management Pack** | Committed platform track | Research and design next | [Feature AB#7317](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7317) |
-| **Azure Monitor through Arc-enabled SCVMM** | Conditional roadmap track | Research gate; no implementation commitment | [Feature AB#7318](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7318) |
+| **SCOM Management Pack** | Committed platform track | Research and design next | [Feature AB#7317](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7317) |
+| **Azure Monitor through Arc-enabled SCVMM** | Conditional roadmap track | Research gate; no implementation commitment | [Feature AB#7318](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7318) |
 
 ::: info Hyper-V delivery epic
-Azure DevOps [Epic AB#7314](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7314)
+Azure DevOps [Epic AB#7314](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7314)
 owns this platform track and its two delivery Features.
 :::
 

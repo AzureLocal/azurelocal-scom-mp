@@ -9,15 +9,15 @@ Azure Local is a first-class platform track with two committed delivery surfaces
 
 | Delivery surface | Scope | Status | ADO |
 |---|---|---|---|
-| **SCOM Management Pack** | Azure Local classes, discoveries, monitors, rules, health rollups, overrides, views, packaging, and operator guidance | Planned | [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7315) |
-| **Azure Monitor Health Models** | Service Groups, entities, signals, health objectives, alerts, workbooks, and Bicep deployment | Planned | [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7316) |
+| **SCOM Management Pack** | Azure Local classes, discoveries, monitors, rules, health rollups, overrides, views, packaging, and operator guidance | Planned | [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7315) |
+| **Azure Monitor Health Models** | Service Groups, entities, signals, health objectives, alerts, workbooks, and Bicep deployment | Planned | [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7316) |
 
 Both surfaces implement the Azure Local topology already documented in the shared
 [Design](../design/index.md) section. They use the same logical entities, health dimensions,
 rollup rules, and signal names where the underlying platforms expose equivalent data.
 
 ::: info Azure Local delivery epic
-Azure DevOps [Epic AB#7313](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7313)
+Azure DevOps [Epic AB#7313](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7313)
 owns this platform track and its two delivery Features.
 :::
 
