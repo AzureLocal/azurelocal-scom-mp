@@ -19,12 +19,14 @@
 - **Commands / tests run and results:** HCS Governance bootstrap and docs validation; `npm ci` passed;
   `npm run docs:build` passed; `git diff --check` passed; all 42 Markdown pages are represented in
   VitePress navigation. Browser renders verified the home page branding and Mermaid health model,
-  plus the complex SCOM health-rollup diagram. HCS validation could not run optional markdownlint
-  or lychee checks because those tools are not installed. `npm audit` reports three transitive
-  development-tool vulnerabilities (two moderate, one high).
+  plus the complex SCOM health-rollup diagram. The GitHub Pages build and deployment completed
+  successfully; action dependencies were then updated to their current Node 24-based majors. HCS
+  validation could not run optional markdownlint or lychee checks because those tools are not
+  installed. `npm audit` reports three transitive development-tool vulnerabilities (two moderate,
+  one high).
 - **Branch:** `main`, pushed directly to `origin/main` at the operator's request using the GitHub App
   installation token.
 - **Blockers:** None for the documentation migration. SCOM Management Pack and Azure Monitor product
   authoring have not started.
-- **Exact next steps:** Confirm the GitHub Pages deployment action succeeds, then begin Phase 3 test
-  harness and SCOM Management Pack authoring when approved.
+- **Exact next steps:** Begin the Phase 3 test harness and SCOM Management Pack authoring when
+  approved.
