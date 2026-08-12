@@ -14,7 +14,7 @@ desktop.ini
 # ── Claude Code ───────────────────────────────────────────────────────
 .claude/settings.local.json
 
-# ── MkDocs / Python ───────────────────────────────────────────────────
+# ── Legacy MkDocs / Python ───────────────────────────────────────────
 site/
 .cache/
 __pycache__/
@@ -32,6 +32,8 @@ coverage.xml
 node_modules/
 npm-debug.log
 dist/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
 
 # ── Temp / output ─────────────────────────────────────────────────────
 tmp/

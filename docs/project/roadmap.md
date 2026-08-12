@@ -10,8 +10,8 @@ description: Phased delivery roadmap and future enhancements.
 | Phase | Status | Description |
 |---|---|---|
 | Phase 0 — Research & Planning | ✅ Complete | Health model concepts, references, scope |
-| Phase 1 — Documentation Scaffold | ✅ Complete | MkDocs site, platform compliance, diagram stubs, GitHub Pages live |
-| Phase 2 — Health Model Design | 🚧 In progress | ADRs, full infra entity inventory, customization strategy, completed diagrams |
+| Phase 1 — Documentation Scaffold | ✅ Complete | VitePress site, platform compliance, diagram stubs, GitHub Pages deployment |
+| Phase 2 — Health Model Design | ✅ Complete | 20 accepted ADRs, full infrastructure entity inventory, customization strategy, completed diagrams |
 | Phase 3 — Track 1: SCOM MP Authoring | ⬜ Not started | VSAE project, classes, discoveries, monitors, rules, overrides |
 | Phase 4 — Track 2: Azure Monitor Health Model | ⬜ Not started | Service Group, entities, signals, ARM/Bicep export, KQL |
 | Phase 5 — Migration Guidance | ⬜ Not started | SCOM → Azure Monitor migration tool walkthrough |

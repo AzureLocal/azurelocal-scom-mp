@@ -21,13 +21,21 @@ This repo contains everything needed to monitor **Azure Local (HCI) clusters** a
 
 ## Documentation
 
-The `docs/` folder is a [MkDocs Material](https://squidfunk.github.io/mkdocs-material/) site covering both tracks, including:
+The `docs/` folder is a [VitePress](https://vitepress.dev/) site covering both tracks, including:
 
 - Conceptual health model explanations with **draw.io** and **Mermaid** diagrams
 - SCOM MP authoring guide and fragment reference
 - Azure Monitor health model configuration walkthroughs
 - Side-by-side SCOM ↔ Azure Monitor concept mapping
-- Full [References](docs/references.md) page with every upstream source
+- An annotated [reference library](REFERENCES.md) covering the upstream sources
+
+Preview the site locally:
+
+```powershell
+Set-Location docs
+npm ci
+npm run docs:dev
+```
 
 ---
 
@@ -44,45 +52,32 @@ azurelocal-scom-mp/
 ├── .azurelocal-platform.yml         # Platform metadata (repoType: iac-solution)
 ├── .editorconfig                    # Canonical AzureLocal editor config
 ├── .gitignore
-├── mkdocs.yml                       # MkDocs site config
 │
-├── docs/                            # MkDocs source
+├── docs/                            # VitePress source and configuration
+│   ├── .vitepress/config.mts
 │   ├── index.md
-│   ├── references.md
+│   ├── package.json
+│   ├── package-lock.json
 │   ├── scom-mp/
 │   │   ├── index.md
-│   │   ├── health-model.md
-│   │   ├── monitors.md
-│   │   ├── rules.md
-│   │   ├── authoring.md
-│   │   ├── overrides.md
-│   │   ├── lifecycle.md
 │   │   └── diagrams/
 │   ├── azure-monitor/
 │   │   ├── index.md
-│   │   ├── concepts.md
-│   │   ├── health-states.md
-│   │   ├── service-groups.md
-│   │   ├── alerts.md
-│   │   ├── create.md
+│   │   ├── prerequisites.md
 │   │   └── diagrams/
 │   └── comparison/
-│       ├── index.md
-│       └── migration.md
+│       └── index.md
 │
 ├── src/
 │   ├── scom-mp/                     # Management Pack XML source
-│   │   ├── AzureLocal.SCOM.MP.xml
-│   │   ├── AzureLocal.SCOM.MP.Overrides.xml
-│   │   └── fragments/
+│   │   └── fragments/               # Phase 3 placeholders
 │   └── azure-monitor/               # Azure Monitor artifacts
-│       ├── arm-templates/
+│       ├── bicep/                    # Phase 4 placeholders
 │       ├── kql/
 │       └── workbooks/
 │
 └── diagrams/                        # Master diagram sources
-    ├── drawio/
-    └── mermaid/
+    └── drawio/
 ```
 
 ---
@@ -99,6 +94,15 @@ azurelocal-scom-mp/
 
 ## Status
 
-> **Phase 0 — Research & Planning** complete (May 2026).  
-> See [PLAN.md](PLAN.md) for the full phased delivery roadmap.
+Phases 0–2 are complete: research, documentation scaffolding, health-model design, 19 accepted
+architecture decisions, the signal catalog, and diagrams. SCOM and Azure Monitor implementation
+have not started. See [PLAN.md](PLAN.md) for the full delivery roadmap.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for authoring, testing, signing, and documentation guidance.
+
+## License
+
+Licensed under the [MIT License](LICENSE).
 

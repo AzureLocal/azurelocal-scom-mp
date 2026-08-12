@@ -9,8 +9,9 @@
     "docs:preview": "vitepress preview ."
   },
   "devDependencies": {
-    "vitepress": "^1.2.0",
-    "vue": "^3.4.0"
+    "mermaid": "^11.16.1",
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.41"
   }
 }
 

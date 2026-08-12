@@ -75,7 +75,7 @@ DCMA → native metrics store (always)
 ```
 
 Queries performance signals via PromQL (or Metrics Query API targeting the AMW):
-```promql
+```text
 avg(windows_cpu_time_total{mode="idle"})
 ```
 or via Metrics API on the AMW endpoint.

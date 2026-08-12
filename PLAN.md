@@ -14,7 +14,7 @@ Build a comprehensive, well-documented health monitoring solution for **Azure Lo
 
 Both tracks will share:
 - A single conceptual health model (what "healthy" means for an Azure Local cluster)
-- A unified MkDocs Material documentation site
+- A unified VitePress documentation site
 - draw.io diagrams and advanced Mermaid diagrams as first-class artifacts
 
 ---
@@ -27,11 +27,13 @@ azurelocal-scom-mp/
 │   README.md                          # Project overview
 │   PLAN.md                            # This file
 │   REFERENCES.md                      # All reference links
-│   mkdocs.yml                         # MkDocs site configuration
 │   .gitignore
 │
-├── docs/                              # MkDocs source (Markdown + assets)
+├── docs/                              # VitePress source (Markdown + assets)
 │   │
+│   ├── .vitepress/config.mts          # Site, theme, navigation, and Mermaid configuration
+│   ├── package.json                   # Documentation build scripts and dependencies
+│   ├── package-lock.json              # Reproducible dependency lock
 │   ├── index.md                       # Landing page — project overview
 │   ├── references.md                  # Full references page (rendered from REFERENCES.md)
 │   │
@@ -131,30 +133,28 @@ azurelocal-scom-mp/
 ```
 
 > **Mermaid diagrams** live under `docs/` (`docs/scom-mp/diagrams/`, `docs/azure-monitor/diagrams/`,
-> `docs/design/diagrams/`) so MkDocs renders them inline. The `diagrams/drawio/` directory holds
+> `docs/design/diagrams/`) so VitePress renders them inline. The `diagrams/drawio/` directory holds
 > editable `.drawio` originals only; PNG/SVG exports are committed alongside the rendered docs pages.
 
 
 ---
 
-## MkDocs Configuration Overview
+## VitePress configuration overview
 
-Platform: **MkDocs Material** with the following plugins and extensions planned:
+Platform: **VitePress** with the following capabilities:
 
-| Feature | Plugin / Extension | Purpose |
+| Feature | Configuration | Purpose |
 |---|---|---|
-| Theme | `material` | Base theme |
-| Diagrams | `pymdownx.superfences` + `mermaid` | Render Mermaid diagrams inline in docs |
-| draw.io embed | `drawio-exporter` or static PNG exports | Render draw.io diagrams |
-| Navigation | `navigation.tabs`, `navigation.sections` | Two-track top-level nav |
-| Search | `search` | Full-text search |
-| Versioning | `mike` | Version the docs site alongside MP releases |
-| Code blocks | `pymdownx.highlight` + `pymdownx.inlinehilite` | XML/KQL syntax highlighting |
-| Admonitions | `admonition` + `pymdownx.details` | Note/Warning/Tip callouts |
-| Tables | built-in | Reference tables |
-| Tags | `tags` | Cross-cutting topic tags |
+| Theme | VitePress default theme | Responsive documentation layout and dark mode |
+| Diagrams | `vitepress-plugin-mermaid` + `mermaid` | Render Mermaid diagrams inline |
+| draw.io | Static exports plus committed `.drawio` sources | Preserve editable diagram sources |
+| Navigation | `themeConfig.nav` and `themeConfig.sidebar` | Two-track top-level navigation |
+| Search | VitePress local search | Full-text site search |
+| Code blocks | VitePress built-in Shiki integration | XML, KQL, Bicep, and PowerShell highlighting |
+| Callouts | VitePress custom containers | Information, tip, and warning callouts |
+| Branding | VitePress `head`, `logo`, and home hero | Banner, navigation logo, and favicon |
 
-**`mkdocs.yml` nav structure:** see the live [`mkdocs.yml`](../mkdocs.yml) — nav is the source of truth
+**`docs/.vitepress/config.mts` is the navigation source of truth**
 and evolves per phase. Top-level sections are: Home, **Design** (cross-cutting: scope, signals,
 concept-mapping, customization, decisions/), **SCOM Management Pack**, **Azure Monitor Health Models**,
 **Migration**, References.
@@ -312,16 +312,16 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 - [x] Write README, PLAN, REFERENCES
 
 ### Phase 1 — Documentation Scaffold ✅ COMPLETE
-- [x] Initialize MkDocs Material site (`mkdocs.yml` + `docs/index.md`)
+- [x] Initialize documentation site
 - [x] Create stub pages for all doc sections (both tracks)
-- [x] Add MkDocs plugins: mermaid, superfences, navigation tabs
+- [x] Add Mermaid rendering, local search, and top-level navigation
 - [x] Publish skeleton site (GitHub Pages → azurelocal.cloud/azurelocal-scom-mp/)
 - [x] Add draw.io diagram stubs to `diagrams/drawio/`
 - [x] Implement all three Mermaid diagrams in `diagrams/mermaid/`
 
 ### Phase 2 — Health Model Design
 - [x] Reorg docs site: add top-level Design section (cross-cutting), make track sections track-specific only
-- [x] Move ADRs into `docs/design/decisions/` so they render in MkDocs
+- [x] Move ADRs into `docs/design/decisions/` so they render in the documentation site
 - [x] Move Customization into `docs/design/`
 - [x] Move SCOM ↔ AzMon concept mapping into `docs/design/concept-mapping.md`; comparison/ becomes Migration only
 - [x] Author ADRs in `docs/design/decisions/` (matches `AzureLocal/platform` template)
@@ -341,7 +341,7 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
   - [x] ADR 0014 — CI/CD pipeline strategy (GitHub Actions, OIDC, release-please) — Accepted
   - [x] ADR 0015 — Testing strategy (5-layer pyramid, cross-track parity gate) — Accepted
   - [x] ADR 0016 — Signing & secrets management (two-key MP signing, OIDC SPNs) — Accepted
-  - [x] ADR 0017 — Versioning & release policy (single repo SemVer, Conventional Commits, mike) — Accepted
+- [x] ADR 0017 — Versioning and release policy (single repo SemVer, Conventional Commits) — Accepted
   - [x] ADR 0018 — Self-observability (monitor the monitoring pipeline as a parallel root branch) — Accepted
   - [x] ADR 0019 — Cost, scale, and data retention (per-tier ingestion envelopes, retention policy) — Accepted
 - [x] Build full structural inventory tables in `docs/design/`
@@ -354,14 +354,14 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
   - [x] `azure-monitor-entity-graph.drawio` — entity graph w/ relationships
   - [x] `concept-comparison.drawio` — side-by-side mapping
 - [x] Refine Mermaid sources to match ADR 0005 / 0006 names
-- [x] Phase 2 sign-off gate: all 19 ADRs Accepted ✅; inventory reviewed ✅; draw.io diagrams complete ✅; SquaredUp optional integration documented in ADR 0008 + customization.md ✅; CI/CD + testing + signing + versioning + self-observability + cost design ratified via ADRs 0014–0019 ✅
+- [x] Phase 2 sign-off gate: all 20 ADRs Accepted ✅; inventory reviewed ✅; draw.io diagrams complete ✅; SquaredUp optional integration documented in ADR 0008 + customization.md ✅; CI/CD + testing + signing + versioning + self-observability + cost design ratified via ADRs 0014–0019 ✅; VitePress migration ratified via ADR 0020 ✅
 
 **Phase 2 Definition of Done (exit criteria):**
 
 - Every L1 / L2 / L3 entity in `scope-topology.md` has at least one signal in `signal-catalog.md` covering each declared health dimension (Availability / Performance / Configuration as applicable).
 - Every threshold name in `signal-catalog.md` is unambiguous, kebab-case in Bicep, PascalCase-with-dots in SCOM, and the cross-track parity test (ADR 0015 Layer 4) is implementable from the catalog as-is.
 - Every ADR has a `Status: Accepted` line and references at least one prior or sibling ADR where dependencies exist.
-- `mkdocs.yml` nav contains every page under `docs/` (no orphan files); `mkdocs build --strict` passes.
+- `docs/.vitepress/config.mts` contains every page under `docs/`; `npm run docs:build` passes.
 - Self-Observability branch (ADR 0018) is reflected in `scope-topology.md` (`AzureLocal.Monitoring.*` entities) and `signal-catalog.md`.
 ### Phase 3 — Track 1: SCOM MP Authoring
 - [ ] Watch/review Brian Wren's SC 2012 R2 video series (23 modules) as primary authoring reference — see [Brian Wren Resources](#brian-wren--mpauthor-resources) below
@@ -437,7 +437,7 @@ Every threshold, alert severity, and behavior is **parameterized** so customers 
 
 ### Phase 6 — Documentation Polish & Release
 - [ ] Review all doc pages for completeness
-- [ ] Publish full MkDocs site
+- [ ] Publish the complete VitePress site
 - [ ] Tag v1.0.0 release
 - [ ] Publish MP to release artifacts
 
@@ -451,7 +451,7 @@ reusable workflows, repo audit). Compliance is enforced via `Invoke-RepoAudit.ps
 private platform repo by URL.
 
 Phase 0 platform compliance items (`.editorconfig`, `.gitignore`, `CHANGELOG.md`, `CODEOWNERS`,
-`STANDARDS.md` stub, `.azurelocal-platform.yml`, pinned `requirements-docs.txt`, reusable
+`STANDARDS.md` stub, `.azurelocal-platform.yml`, pinned Node dependencies, reusable
 workflows) were completed during Phase 1 and are validated continuously by the audit workflow.
 
 <!-- internal-only details (file contents, badge URLs, version pins) live in the private platform
@@ -608,7 +608,7 @@ https://www.youtube.com/playlist?list=PL9Yal_Kg7hiHPirvvtlb5zQWsWb54Twmu
 | Dependency monitor rollup policy | Worst-state (default) with per-entity exceptions | Matches operational reality — one bad node should surface. |
 | Azure Monitor signal type | Platform metrics where available, KQL for complex logic | Platform metrics are always collected; KQL for Storage Spaces / S2D events. |
 | Health model impact for intentional VM stops | Suppressed | VMs in maintenance/stopped state should not drive cluster unhealthy. |
-| Documentation platform | MkDocs Material + mike versioning | Consistent with other AzureLocal repos in this organization. |
+| Documentation platform | VitePress | Explicit repo-owner direction; see ADR 0020. |
 | Diagram tools | draw.io (design) + Mermaid (in-docs) | draw.io for rich design-time diagrams; Mermaid for version-controlled in-doc diagrams. |
 | Dashboard visualization (SCOM) | SquaredUp Dashboard Server (DS) | Best-in-class SCOM dashboard layer. VADA topology maps app dependencies. 60+ integrations extend beyond SCOM. On-premises, installs alongside SCOM. |
 | Dashboard visualization (Azure Monitor) | Azure Monitor Workbooks + SquaredUp Cloud | Workbooks for native Azure portal health model views; SquaredUp Cloud for cross-source unified SCOM+Azure view. |
@@ -618,8 +618,7 @@ https://www.youtube.com/playlist?list=PL9Yal_Kg7hiHPirvvtlb5zQWsWb54Twmu
 
 ## References
 
-> The root [`REFERENCES.md`](REFERENCES.md) is the authoritative source. The MkDocs page at
-> [`docs/references.md`](docs/references.md) is generated from it via the `include-markdown` plugin
-> — there is no hand-edited duplicate. Update only the root file.
+> The root [`REFERENCES.md`](REFERENCES.md) is the authoritative reference library. Update only
+> that file; it remains linked from the VitePress site and repository landing page.
 
 See [REFERENCES.md](REFERENCES.md) for the complete annotated list of all upstream sources.

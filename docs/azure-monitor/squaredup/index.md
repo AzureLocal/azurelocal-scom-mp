@@ -5,12 +5,11 @@ description: Optional SquaredUp Cloud visualization layer for the Azure Local Az
 
 # SquaredUp Cloud (Azure Monitor track)
 
-> [!NOTE]
-> **Optional deliverable — Phase 4**
-> The SquaredUp Cloud workspace is an optional deliverable that ships after the Azure Monitor
-> Health Model reaches GA. Source lives in `src/squaredup/cloud/`. This page is a
-> placeholder; content lands in Phase 4.
->
+::: info Optional Phase 4 deliverable
+The SquaredUp Cloud workspace is planned after the Azure Monitor Health Model reaches general
+availability. Its source will live in `src/squaredup/cloud/`.
+:::
+
 [SquaredUp Cloud](https://squaredup.com) is a SaaS dashboard platform with 80+ integrations.
 For this project, two plugins are relevant:
 

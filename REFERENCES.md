@@ -267,7 +267,8 @@ All upstream sources used in designing and implementing this project. Organized 
 | SCOMathon | https://scomathon.com/ | Community SCOM event run by SquaredUp. |
 | MPViewer | https://github.com/dani3l3/mpviewer | Inspect sealed `.mp` files without VSAE. |
 | Visual Studio Authoring Extensions (VSAE) | *(part of Visual Studio)* | Microsoft's official MP authoring IDE extension. |
-| MkDocs Material | https://squidfunk.github.io/mkdocs-material/ | Documentation platform used in this repo. |
+| VitePress | https://vitepress.dev/ | Documentation platform used in this repo. |
+| VitePress Mermaid plugin | https://github.com/emersonbottero/vitepress-plugin-mermaid | Mermaid rendering for the VitePress site. |
 | draw.io | https://www.drawio.com | Diagramming tool. Source files stored in `diagrams/drawio/`. |
 
 ---
@@ -284,14 +285,14 @@ All upstream sources used in designing and implementing this project. Organized 
 | Onboarding existing repo | `docs/onboarding/adopt-from-existing-repo.md` | **Key file for this repo.** |
 | Reusable workflow patterns | `docs/reusable-workflows/consumer-patterns.md` | Copy-paste patterns per repo type. |
 | Templates overview | `templates/README.md` | 5 variants: ps-module, ts-web-app, iac-solution, migration-runbook, training-site. |
-| `iac-solution` template ⭐ | `templates/iac-solution/` | **This repo's template type.** Bicep/Terraform/ARM + MkDocs. |
+| `iac-solution` template | `templates/iac-solution/` | Original repository template; documentation now uses the explicit VitePress exception in ADR 0020. |
 | `_common/` template files | `templates/_common/` | `.editorconfig`, `.gitignore`, `.azurelocal-platform.yml`, `CHANGELOG.md`, `STANDARDS.md`, `CODEOWNERS`. |
 | Platform metadata schema | https://AzureLocal.github.io/platform/reference/platform-metadata/ | `.azurelocal-platform.yml` schema. |
 | Breaking changes governance | `docs/governance/breaking-changes.md` | Reusable workflow versioning policy. |
 | MAPROOM overview | `docs/maproom/overview.md` | Offline fixture-based testing framework. |
 | TRAILHEAD overview | `docs/trailhead/overview.md` | Live-cluster validation. |
 | Architecture overview | `docs/getting-started/architecture-overview.md` | |
-| MkDocs requirements (pinned) | `requirements-docs.txt` | mkdocs==1.6.1, mkdocs-material==9.5.49, pygments==2.17.2 (pinned), mermaid2==1.2.1. |
+| VitePress dependencies | `docs/package-lock.json` | Reproducible VitePress, Vue, Mermaid, and Mermaid-plugin dependency graph. |
 
 ---
 

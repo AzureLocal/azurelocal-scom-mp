@@ -54,7 +54,7 @@ what "healthy" means, and propagate health the same way. They differ only in imp
 azurelocal-scom-mp/
 ├── decisions/        # ADRs (architectural decision records) for the health model design
 ├── diagrams/         # Mermaid + draw.io source diagrams
-├── docs/             # MkDocs Material site (this site)
+├── docs/             # VitePress site (this site)
 ├── src/              # SCOM MP authoring (VSAE) + Azure Monitor ARM/Bicep + KQL
 ├── PLAN.md           # Full implementation roadmap
 ├── REFERENCES.md     # Annotated link library (~100 references)

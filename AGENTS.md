@@ -10,7 +10,8 @@
 
 ## What this repo is
 
-Documentation repo. Published as a MkDocs Material site, following HCS documentation standards.
+Documentation repo for the Azure Local SCOM Management Pack and Azure Monitor health-model design.
+Its public documentation is published with VitePress.
 
 <!-- One paragraph. What the repo is, why it exists, and what it is not. -->
 

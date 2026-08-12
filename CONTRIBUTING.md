@@ -25,6 +25,16 @@ Do not commit MP signing keys or certificates. See [ADR 0016](docs/design/decisi
 
 All user-facing changes require a `CHANGELOG.md` entry under `[Unreleased]` and a Conventional Commit message so release-please can generate the next version automatically (see [ADR 0017](docs/design/decisions/0017-versioning-and-release.md)).
 
-### Docs
+### Documentation
 
-Documentation lives under `docs/` and is built with MkDocs Material. Run `mkdocs serve` locally to preview before pushing. The CI build runs with `strict: true` — broken links will fail the workflow.
+Documentation lives under `docs/` and is built with VitePress. Preview it before pushing:
+
+```powershell
+Set-Location docs
+npm ci
+npm run docs:dev
+```
+
+Run `npm run docs:build` to perform the same production build used by GitHub Pages. Keep navigation
+in `docs/.vitepress/config.mts` synchronized with the Markdown pages, and use VitePress custom
+containers (`::: info`, `::: tip`, and `::: warning`) for callouts.

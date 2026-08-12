@@ -29,6 +29,7 @@ These are project-scoped ADRs. Org-wide platform standards live in
 | [0017](./0017-versioning-and-release.md) | Versioning & release policy — single repo SemVer, Conventional Commits, mike docs | ✅ Accepted |
 | [0018](./0018-self-observability.md) | Self-observability — monitor the monitoring pipeline as a parallel root branch | ✅ Accepted |
 | [0019](./0019-cost-scale-retention.md) | Cost, scale, and data retention — per-tier ingestion envelopes, sharding, retention policy | ✅ Accepted |
+| [0020](./0020-vitepress-documentation-platform.md) | Documentation platform — VitePress with Mermaid and GitHub Pages | ✅ Accepted |
 
 ## When to write an ADR
 

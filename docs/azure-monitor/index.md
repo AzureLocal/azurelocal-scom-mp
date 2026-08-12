@@ -11,16 +11,17 @@ This section covers **how the design is implemented** as an Azure Monitor Health
 The *design itself* — entity model, signal catalog, rollup policy, customization — is
 track-agnostic and lives in [Design](../design/index.md). Read that first.
 
-> [!TIP]
-> **Start here — Prerequisites**
-> Before building or deploying the health model, work through the [Prerequisites](prerequisites.md)
-> page. The model itself collects nothing — it pulls signals from data that other features (HCI
-> Insights, AMA, DCMA, Resource Health) must already be flowing.
->
-!!! info "Phase 4 — coming after Phase 2 sign-off"
-    Implementation lands in Phase 4 once the [Design ADRs](../design/decisions/index.md)
-    move from Proposed to Accepted. Roadmap in
-    [PLAN.md](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
+::: tip Start with the prerequisites
+Before building or deploying the health model, work through the [prerequisites](prerequisites.md).
+The model itself collects nothing; it consumes signals from HCI Insights, Azure Monitor Agent,
+Telemetry and Diagnostics, and Resource Health.
+:::
+
+::: info Phase 4 has not started
+The shared design and its 20 architecture decisions are accepted. Azure Monitor implementation
+is the Phase 4 deliverable. See the
+[implementation plan](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
+:::
 
 ## What lives here
 

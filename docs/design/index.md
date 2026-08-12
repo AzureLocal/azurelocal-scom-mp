@@ -59,12 +59,12 @@ The choices in this section are guided by five principles:
 
 | Layer | Phase 2 status |
 |---|---|
-| Scope & topology (ADR 0001) | Proposed — locks 3 layers, ~25 entities, infra-only |
-| Health model (ADR 0003) | Proposed — worst-state rollup with documented exceptions |
-| Signal catalog | Drafted — ~60 signals across 3 layers |
-| Customization (ADR 0008) | Proposed — three tiers (Lab / Standard / Strict) |
-| Cross-track parity (ADR 0007) | Proposed — naming convention locked |
-| Decisions 0002–0010 | Proposed — see [Decisions index](decisions/index.md) |
+| Scope & topology (ADR 0001) | Accepted — locks 3 layers, ~25 entities, infra-only |
+| Health model (ADR 0003) | Accepted — worst-state rollup with documented exceptions |
+| Signal catalog | Complete — ~60 signals across 3 layers |
+| Customization (ADR 0008) | Accepted — three tiers (Lab / Standard / Strict) |
+| Cross-track parity (ADR 0007) | Accepted — naming convention locked |
+| Decisions 0001–0020 | Accepted — see [Decisions index](decisions/index.md) |
 
-When all ten ADRs move from **Proposed** to **Accepted** the project enters Phase 3 (SCOM
-authoring) and Phase 4 (Azure Monitor authoring) in parallel.
+Phase 2 is complete. Phase 3 (SCOM authoring) and Phase 4 (Azure Monitor authoring)
+are the next implementation tracks and have not started.

@@ -23,8 +23,8 @@
 - Write and edit files in this repo
 - `git add`, `git commit`, `git push`
 - `gh issue`, `gh pr`, `gh run` CLI commands
-- `mkdocs build` and `mkdocs serve`
-- `pip install` for MkDocs plugins
+- `npm ci` under `docs/`
+- `npm run docs:build`, `npm run docs:dev`, and `npm run docs:preview` under `docs/`
 
 **Always confirm before:**
 - Creating or deleting Azure resources

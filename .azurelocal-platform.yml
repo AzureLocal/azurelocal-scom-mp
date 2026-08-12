@@ -9,7 +9,7 @@ adopts:
   reusableWorkflows:
     - release-please
     - validate-structure
-    - mkdocs-deploy
+    - vitepress-deploy
   maproom: false
   trailhead: false
 

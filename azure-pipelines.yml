@@ -21,7 +21,7 @@ resources:
       name: Platform Engineering/platform
 
 extends:
-  template: .ado/pipelines/reusable/ps-module-ci.yml@platform
+  template: .ado/pipelines/reusable/vitepress-deploy.yml@platform
   parameters:
-    moduleName: 'azurelocal-scom-mp'
-    runMaproomTests: true
+    docsPath: 'docs'
+    nodeVersion: '20.x'
