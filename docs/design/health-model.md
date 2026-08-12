@@ -1,12 +1,12 @@
 # Health Model
 
-> The structural rules that govern how *anything* in this project transitions, rolls up,
+> The shared structural rules that govern how entities across both platform tracks transition, roll up,
 > and reports a health state. Locked by [ADR 0003](decisions/0003-health-rollup-policy.md)
 > (rollup policy) and [ADR 0009](decisions/0009-alert-vs-health-state.md) (alerts vs state).
 
 ## Health dimensions
 
-Every entity in the model carries up to four parallel health dimensions, mirroring the
+Every supported entity carries up to four parallel health dimensions, mirroring the
 SCOM standard aggregate categories and the Azure Monitor Health Model recommended
 breakdown:
 
@@ -17,13 +17,13 @@ breakdown:
 | **Configuration** | Is this thing configured correctly? | Network intent state, RBAC assignments present, secret expiry, DCR associated |
 | **Security** *(L3 only)* | Is this thing secure? | RBAC drift, key/secret rotation overdue, network ACLs |
 
-> **Why four?** Operators reason about cluster health along these axes. Mixing them into a
+> **Why four?** Operators reason about platform health along these axes. Mixing them into a
 > single composite state hides the *kind* of failure. Both tracks expose all four dimensions
 > as separate aggregate monitors / model categories.
 
 ## Health states
 
-Both tracks use the SCOM-standard four-state scheme. Azure Monitor Health Models map cleanly:
+Both platforms use the SCOM-standard four-state scheme. Azure Monitor delivery surfaces map cleanly:
 
 | State | SCOM | Azure Monitor | When |
 |---|---|---|---|
@@ -48,7 +48,7 @@ stateDiagram-v2
 
 ## Rollup policy — worst-state default
 
-**Default rollup is `worst-state`** in both tracks. A cluster node going Unhealthy makes
+**Default rollup is `worst-state`** across applicable delivery surfaces. A cluster node going Unhealthy makes
 the cluster Unhealthy. A volume going Degraded makes the storage pool Degraded.
 
 This is the SCOM dependency monitor default and the Azure Monitor Health Model `Standard`
@@ -104,7 +104,7 @@ states are intentionally separated — see [ADR 0009](decisions/0009-alert-vs-he
 |---|---|---|
 | **Health state** | Monitors set state via condition detection | Health Model entity state via signal threshold |
 | **Alert** | Monitor configured to "generate alert"; severity tunable via override | Separate alert rule on the *signal* (not the state); severity = action group routing |
-| **Why separate?** | Operators don't want every Degraded → Healthy transition to page someone; they want pageable alerts on a small subset of state-bearing signals routed through the right action group |
+| **Why separate?** | Avoid paging on every state transition; alert only on the approved subset | Keep entity state evaluation independent from notification routing |
 
 ## Customer customization touch points
 

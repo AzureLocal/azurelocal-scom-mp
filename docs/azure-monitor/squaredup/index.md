@@ -5,7 +5,7 @@ description: Optional SquaredUp Cloud visualization layer for the Azure Local Az
 
 # SquaredUp Cloud (Azure Monitor track)
 
-::: info Optional Phase 4 deliverable
+::: info Optional post-GA deliverable
 The SquaredUp Cloud workspace is planned after the Azure Monitor Health Model reaches general
 availability. Its source will live in `src/squaredup/cloud/`.
 :::
@@ -26,11 +26,11 @@ For this project, two plugins are relevant:
   live tile without building a full Azure Monitor Workbook.
 - **Hybrid SCOM + Azure Monitor pane** — combine SCOM health states (via the SCOM plugin)
   with Azure Monitor signal data (via the Azure plugin) in one dashboard. This is the
-  key value-add for organizations running both tracks in parallel.
+  key value-add for organizations running both Azure Local delivery surfaces in parallel.
 - **Free tier** — 2 users, 3 data sources, 10 monitors, unlimited dashboards. Sufficient
   for a single-cluster proof-of-concept.
 
-## Planned workspace (Phase 4)
+## Planned workspace
 
 A SquaredUp Cloud workspace export will ship in `src/squaredup/cloud/` covering:
 

@@ -8,3 +8,8 @@
   one high) with no stable VitePress upgrade available that removes all of them.
 - Do not reintroduce `vitepress-plugin-mermaid`; its renderer produced visible syntax-error panels
   for valid diagrams in this site. Use the local `MermaidDiagram.vue` integration.
+- Azure Arc-enabled SCVMM inventory projection is not the same as Azure Arc-enabled Servers guest
+  management. Do not assume inventory resources have Azure Monitor Agent telemetry without proving
+  the guest-management, agent, Data Collection Rule, identity, and networking path.
+- Do not generalize accepted Azure Local ADRs 0001–0020 to Hyper-V. Hyper-V topology and signals
+  require their own research-backed successor ADRs.

@@ -31,10 +31,13 @@ for the org-wide release conventions.
 
 ## Release artifacts
 
-Once Phase 6 ships v1.0.0, releases will include:
+Released product artifacts will be versioned by platform and delivery surface. Depending on the
+accepted packaging ADRs, releases can include:
 
-- The sealed SCOM Management Pack (`.mp`) + override pack (`.xml`)
-- The Azure Monitor health model ARM/Bicep templates
+- Azure Local and Hyper-V sealed SCOM Management Packs plus override packs
+- Azure Local Azure Monitor health-model Bicep templates
 - The KQL signal library
 - The Azure Monitor Workbook JSON
-- A signed `azurelocal-scom-mp-vX.Y.Z.zip` containing all of the above
+- Signed, versioned bundles with explicit platform dependencies
+
+Hyper-V Azure Monitor artifacts are included only if ADR 0023 is accepted with a go decision.

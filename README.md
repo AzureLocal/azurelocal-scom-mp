@@ -1,33 +1,44 @@
-# azurelocal-scom-mp
+# Hybrid infrastructure health monitoring
 
 [![Platform Standards](https://img.shields.io/badge/standards-AzureLocal%2Fplatform-0078D4)](https://github.com/AzureLocal/platform)
 
-> Health monitoring for Azure Local — delivered two ways: a **SCOM Management Pack** and **Azure Monitor Health Models**.
+> SCOM and Azure Monitor health models for **Hyper-V and Azure Local**.
 
-This repo contains everything needed to monitor **Azure Local (HCI) clusters** at the health-model level, not just raw metric thresholds. It is organized into two parallel tracks that share the same conceptual health model and documentation platform.
+This repository defines infrastructure health as an entity model with signals, state, rollup,
+alerts, customization, and lifecycle—not merely a list of metric thresholds.
 
----
+## Platform tracks
 
-## Tracks
-
-| Track | What it is | Target audience |
+| Platform | SCOM Management Pack | Azure Monitor Health Models |
 |---|---|---|
-| **1 — SCOM Management Pack** | Sealed `.mp` + unsealed `.xml` overrides for System Center Operations Manager. Monitors Azure Local clusters, nodes, storage pools, volumes, and VMs using unit/aggregate/dependency monitors and the classic SCOM health rollup tree. | Organizations running SCOM on-premises |
-| **2 — Azure Monitor Health Models** | Service-group-backed health models in Azure Monitor (public preview). Entities, signals, relationships, and health propagation for the same Azure Local resources, surfaced natively in the Azure portal. | Azure-native / cloud-first operations teams |
+| **Azure Local** | Committed | Committed |
+| **Hyper-V** | Committed | Conditional future track through Azure Arc-enabled SCVMM |
 
-**Companion tooling:** [SquaredUp DS](https://ds.squaredup.com) (on-prem SCOM dashboards) and [SquaredUp Cloud](https://squaredup.com) (SaaS — Azure + SCOM plugins) are evaluated as visualization layers on top of both tracks. See [PLAN.md](PLAN.md) for detail.
+The platforms share SCOM authoring patterns and health semantics where appropriate. Their topology,
+discoveries, signals, prerequisites, support matrices, and release boundaries remain explicit.
 
----
+## Prerequisites
+
+To preview or contribute to the documentation, install:
+
+- Git;
+- Node.js 20; and
+- PowerShell 7 or later.
+
+Product implementation prerequisites will be documented per platform and delivery surface after
+the current research and architecture gates complete.
 
 ## Documentation
 
-The `docs/` folder is a [VitePress](https://vitepress.dev/) site covering both tracks, including:
+The `docs/` folder is a [VitePress](https://vitepress.dev/) site published at
+<https://azurelocal.cloud/azurelocal-scom-mp/>. It includes:
 
-- Conceptual health model explanations with **draw.io** and **Mermaid** diagrams
-- SCOM MP authoring guide and fragment reference
-- Azure Monitor health model configuration walkthroughs
-- Side-by-side SCOM ↔ Azure Monitor concept mapping
-- An annotated [reference library](REFERENCES.md) covering the upstream sources
+- separate [Azure Local](docs/azure-local/index.md) and [Hyper-V](docs/hyper-v/index.md) entry points;
+- the shared health-model design, signal catalog, and Architecture Decision Records;
+- Azure Local SCOM and Azure Monitor implementation guidance;
+- the planned Hyper-V SCOM Management Pack;
+- the research-gated Hyper-V Azure Monitor path through Arc-enabled SCVMM; and
+- an Azure DevOps-backed [roadmap](docs/project/roadmap.md) and [implementation plan](PLAN.md).
 
 Preview the site locally:
 
@@ -37,66 +48,46 @@ npm ci
 npm run docs:dev
 ```
 
----
+The configured local URL includes the repository base path:
+`http://localhost:5173/azurelocal-scom-mp/`.
 
-## Repo Structure
+## Delivery hierarchy
 
-```
+- Azure Local monitoring — Epic AB#7313
+  - Azure Local SCOM Management Pack — Feature AB#7315
+  - Azure Local Azure Monitor Health Models — Feature AB#7316
+- Hyper-V monitoring — Epic AB#7314
+  - Hyper-V SCOM Management Pack — Feature AB#7317
+  - Hyper-V Azure Monitor through Arc-enabled SCVMM — conditional Feature AB#7318
+
+Research and implementation Stories are linked in [PLAN.md](PLAN.md).
+
+## Repository structure
+
+```text
 azurelocal-scom-mp/
-├── README.md
-├── PLAN.md                          # Full implementation plan
-├── REFERENCES.md                    # All reference links (raw)
-├── STANDARDS.md                     # Points to AzureLocal/platform standards
-├── CHANGELOG.md                     # Keep-a-Changelog / release-please
-├── CODEOWNERS
-├── .azurelocal-platform.yml         # Platform metadata (repoType: iac-solution)
-├── .editorconfig                    # Canonical AzureLocal editor config
-├── .gitignore
-│
-├── docs/                            # VitePress source and configuration
-│   ├── .vitepress/config.mts
-│   ├── index.md
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── scom-mp/
-│   │   ├── index.md
-│   │   └── diagrams/
-│   ├── azure-monitor/
-│   │   ├── index.md
-│   │   ├── prerequisites.md
-│   │   └── diagrams/
-│   └── comparison/
-│       └── index.md
-│
-├── src/
-│   ├── scom-mp/                     # Management Pack XML source
-│   │   └── fragments/               # Phase 3 placeholders
-│   └── azure-monitor/               # Azure Monitor artifacts
-│       ├── bicep/                    # Phase 4 placeholders
-│       ├── kql/
-│       └── workbooks/
-│
-└── diagrams/                        # Master diagram sources
-    └── drawio/
+├── docs/                    # VitePress content and configuration
+│   ├── azure-local/         # Azure Local platform entry point
+│   ├── hyper-v/             # Hyper-V platform and conditional Arc track
+│   ├── design/              # Shared design, spikes, and ADRs
+│   ├── scom-mp/             # Azure Local SCOM implementation docs
+│   └── azure-monitor/       # Azure Local Azure Monitor docs
+├── diagrams/drawio/         # Editable diagram sources
+├── src/                     # Product implementation placeholders
+├── PLAN.md                  # Executable delivery plan
+├── REFERENCES.md            # Annotated source library
+└── STANDARDS.md             # Governance pointers
 ```
 
----
+The final `src/` boundaries are deliberately deferred until proposed ADR 0022 decides whether the
+two SCOM products share a sealed library or only source-level patterns.
 
-## Quick Links
+## Current status
 
-- [Implementation Plan](PLAN.md)
-- [References](REFERENCES.md)
-- [SCOM MP overview](docs/scom-mp/index.md)
-- [Azure Monitor health models overview](docs/azure-monitor/index.md)
-- [Concept comparison](docs/comparison/index.md)
-
----
-
-## Status
-
-Phases 0–2 are complete: research, documentation scaffolding, health-model design, 19 accepted
-architecture decisions, the signal catalog, and diagrams. SCOM and Azure Monitor implementation
-have not started. See [PLAN.md](PLAN.md) for the full delivery roadmap.
+- The Azure Local design baseline and VitePress site are complete.
+- The platform-first roadmap and Azure DevOps hierarchy are established.
+- SCOM packaging, Hyper-V topology, and Arc-enabled SCVMM feasibility are the next research gates.
+- Product authoring has not started.
 
 ## Contributing
 
@@ -105,4 +96,3 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for authoring, testing, signing, and docu
 ## License
 
 Licensed under the [MIT License](LICENSE).
-

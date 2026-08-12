@@ -5,16 +5,21 @@
 ### Changed
 
 * Migrate the documentation site and deployment pipelines from MkDocs to VitePress while preserving the project logo, banner, and favicon.
+* Rename the public site to Hybrid Infrastructure Health Monitoring and organize it by Azure Local and Hyper-V platform tracks.
+* Replace the phase-only roadmap with Azure DevOps-backed platform Epics, delivery Features, research spikes, and architecture gates.
+
+### Added
+
+* Add the committed Hyper-V SCOM Management Pack track and conditional Azure Monitor track through Arc-enabled SCVMM.
+* Add ADRs 0021–0023 for the platform split, SCOM packaging boundary, and Hyper-V Azure Monitor go/no-go gate.
 
 ## [0.2.1](https://github.com/AzureLocal/azurelocal-scom-mp/compare/azurelocal-scom-mp-v0.2.0...azurelocal-scom-mp-v0.2.1) (2026-05-05)
-
 
 ### Bug Fixes
 
 * Resolve 3 mkdocs strict-mode link errors ([52d9251](https://github.com/AzureLocal/azurelocal-scom-mp/commit/52d9251e4fc0f94ad610672cb7bf107f08222573))
 
 ## [0.2.0](https://github.com/AzureLocal/azurelocal-scom-mp/compare/azurelocal-scom-mp-v0.1.0...azurelocal-scom-mp-v0.2.0) (2026-05-05)
-
 
 ### Features
 

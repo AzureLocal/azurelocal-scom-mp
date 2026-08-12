@@ -1,9 +1,21 @@
 # Scope & Topology
 
-> **Locked by [ADR 0001](decisions/0001-scope-and-topology.md).** This page is the
-> reader-friendly view of that decision.
+> **Azure Local baseline locked by [ADR 0001](decisions/0001-scope-and-topology.md).** Hyper-V
+> scope is intentionally not locked until research story AB#7327 produces a supported topology
+> and successor ADR.
 
-## What we monitor
+## Platform scope
+
+| Platform | Current topology status | Delivery surfaces |
+|---|---|---|
+| **Azure Local** | Accepted three-layer infrastructure model documented below | SCOM and Azure Monitor |
+| **Hyper-V** | Research planned for standalone, failover-clustered, and supported SCVMM-managed variants | SCOM committed; Azure Monitor conditional |
+
+The health dimensions and rollup principles can be shared. The Azure Local entity inventory below
+must not be copied into the Hyper-V Management Pack: Network ATC, Azure Local lifecycle, DCMA, HCI
+registration, and Azure Local resource types are platform-specific.
+
+## What we monitor for Azure Local
 
 **Azure Local infrastructure only** — every component that is deployed *as part of* an
 Azure Local deployment. Three layers, ~25 entities. Workloads (VMs, AKS pods, applications)

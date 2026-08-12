@@ -1,11 +1,11 @@
 ---
-title: Azure Monitor Health Models
-description: Azure Monitor Health Models for Azure Local (HCI) — overview.
+title: Azure Local Azure Monitor Health Models
+description: Azure Monitor Health Models for Azure Local infrastructure.
 ---
 
-# Azure Monitor Health Models
+# Azure Monitor health models for Azure Local
 
-> **Track 2** — Native Azure Monitor health monitoring for Azure Local clusters.
+> **Azure Local / Azure Monitor** — the committed Azure Monitor delivery surface for Azure Local.
 
 This section covers **how the design is implemented** as an Azure Monitor Health Model.
 The *design itself* — entity model, signal catalog, rollup policy, customization — is
@@ -17,11 +17,15 @@ The model itself collects nothing; it consumes signals from HCI Insights, Azure 
 Telemetry and Diagnostics, and Resource Health.
 :::
 
-::: info Phase 4 has not started
-The shared design and its 20 architecture decisions are accepted. Azure Monitor implementation
-is the Phase 4 deliverable. See the
+::: info Implementation has not started
+The Azure Local design baseline is accepted. Current APIs and signal contracts will be revalidated
+in [AB#7323](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7323)
+before implementation under [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7316). See the
 [implementation plan](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
 :::
+
+Hyper-V has a separate, conditional [Azure Monitor roadmap track](../hyper-v/azure-monitor.md)
+through Arc-enabled SCVMM. It is not covered by the Azure Local prerequisites on this page.
 
 ## What lives here
 

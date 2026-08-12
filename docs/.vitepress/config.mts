@@ -5,8 +5,8 @@ const base = '/azurelocal-scom-mp/'
 
 export default defineConfig({
   base,
-  title: 'Azure Local — Health Monitoring',
-  description: 'SCOM Management Pack and Azure Monitor Health Models for Azure Local infrastructure.',
+  title: 'Hybrid infrastructure health monitoring',
+  description: 'SCOM and Azure Monitor health models for Hyper-V and Azure Local.',
   lang: 'en-US',
   cleanUrls: true,
   lastUpdated: true,
@@ -45,15 +45,15 @@ export default defineConfig({
   themeConfig: {
     logo: {
       src: '/assets/images/azurelocal-scom-mp-icon.svg',
-      alt: 'Azure Local health monitoring',
+      alt: 'Hybrid Infrastructure Health Monitoring',
     },
-    siteTitle: 'Azure Local Health Monitoring',
+    siteTitle: 'Hybrid infrastructure health monitoring',
 
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Design', link: '/design/' },
-      { text: 'SCOM MP', link: '/scom-mp/' },
-      { text: 'Azure Monitor', link: '/azure-monitor/' },
+      { text: 'Azure Local', link: '/azure-local/' },
+      { text: 'Hyper-V', link: '/hyper-v/' },
       { text: 'Migration', link: '/comparison/' },
       { text: 'Project', link: '/project/about' },
     ],
@@ -70,6 +70,7 @@ export default defineConfig({
             { text: 'Customization', link: '/design/customization' },
             { text: 'SCOM and Azure Monitor mapping', link: '/design/concept-mapping' },
             { text: 'Health-state flow', link: '/design/diagrams/health-state-flow' },
+            { text: 'Research spikes', link: '/design/research-spikes' },
           ],
         },
         {
@@ -97,14 +98,29 @@ export default defineConfig({
             { text: '0018 — Self-observability', link: '/design/decisions/0018-self-observability' },
             { text: '0019 — Cost, scale, and retention', link: '/design/decisions/0019-cost-scale-retention' },
             { text: '0020 — VitePress documentation', link: '/design/decisions/0020-vitepress-documentation-platform' },
+            { text: '0021 — Platform and delivery tracks', link: '/design/decisions/0021-platform-and-delivery-track-architecture' },
+            { text: '0022 — SCOM packaging boundaries', link: '/design/decisions/0022-scom-management-pack-packaging-boundaries' },
+            { text: '0023 — Hyper-V Azure Monitor gate', link: '/design/decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm' },
             { text: 'ADR template', link: '/design/decisions/template' },
+          ],
+        },
+      ],
+
+      '/azure-local/': [
+        {
+          text: 'Azure Local',
+          items: [
+            { text: 'Track overview', link: '/azure-local/' },
+            { text: 'SCOM Management Pack', link: '/scom-mp/' },
+            { text: 'Azure Monitor Health Models', link: '/azure-monitor/' },
+            { text: 'Azure Monitor prerequisites', link: '/azure-monitor/prerequisites' },
           ],
         },
       ],
 
       '/scom-mp/': [
         {
-          text: 'SCOM Management Pack',
+          text: 'Azure Local / SCOM',
           items: [
             { text: 'Overview', link: '/scom-mp/' },
             { text: 'Health-rollup tree', link: '/scom-mp/diagrams/health-tree' },
@@ -115,12 +131,24 @@ export default defineConfig({
 
       '/azure-monitor/': [
         {
-          text: 'Azure Monitor',
+          text: 'Azure Local / Azure Monitor',
           items: [
             { text: 'Overview', link: '/azure-monitor/' },
             { text: 'Prerequisites', link: '/azure-monitor/prerequisites' },
             { text: 'Entity graph', link: '/azure-monitor/diagrams/entity-graph' },
             { text: 'SquaredUp Cloud', link: '/azure-monitor/squaredup/' },
+          ],
+        },
+      ],
+
+      '/hyper-v/': [
+        {
+          text: 'Hyper-V',
+          items: [
+            { text: 'Track overview', link: '/hyper-v/' },
+            { text: 'SCOM Management Pack', link: '/hyper-v/scom-mp' },
+            { text: 'Azure Monitor roadmap', link: '/hyper-v/azure-monitor' },
+            { text: 'Research spikes', link: '/design/research-spikes' },
           ],
         },
       ],

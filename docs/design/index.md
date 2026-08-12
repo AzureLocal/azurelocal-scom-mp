@@ -1,39 +1,40 @@
 # Design
 
-> The cross-cutting architectural foundation that governs **both** delivery tracks.
+> The cross-cutting architectural foundation for the Azure Local and Hyper-V platform tracks.
 
-This section is *track-agnostic*. Everything here applies equally to the SCOM Management Pack
-and the Azure Monitor Health Model — the two tracks are different *implementations* of the
-same conceptual design.
+This section contains shared health-model rules plus the existing Azure Local design baseline.
+Shared rules apply across platforms; Azure Local-specific topology and signals do not become
+Hyper-V requirements merely because both products use SCOM.
 
 If you're new to the project, read this section first, in order:
 
-1. **[Scope & Topology](scope-topology.md)** — what we monitor and at what granularity. The
-   3-layer, ~25-entity infrastructure model. Workloads are explicitly out of scope.
+1. **[Scope & Topology](scope-topology.md)** — the completed three-layer Azure Local baseline and
+   the research gate for the Hyper-V topology.
 2. **[Health Model](health-model.md)** — how health is structured (dimensions, states, rollup
    policy, impact, suppression).
-3. **[Signal Catalog](signal-catalog.md)** — the master list of every signal that drives a
-   health state, with source, threshold, and parity across both tracks.
+3. **[Signal Catalog](signal-catalog.md)** — the Azure Local signal baseline plus the naming and
+   evidence contract future Hyper-V signals must follow.
 4. **[Customization](customization.md)** — how operators tune thresholds without forking the
    product. Sealed MP + override pack tiers (SCOM); Bicep params + tier files (Azure Monitor).
-5. **[Concept Mapping (SCOM ↔ AzMon)](concept-mapping.md)** — side-by-side translation of every
-   architectural concept across the two tracks. The dual-track Rosetta Stone.
-6. **[Decisions (ADRs)](decisions/index.md)** — the ten Architecture Decision Records that
-   lock down each of the choices above.
+5. **[Concept Mapping (SCOM ↔ AzMon)](concept-mapping.md)** — delivery-surface translation for
+   the Azure Local baseline and future supported platform mappings.
+6. **[Research Spikes](research-spikes.md)** — evidence required before packaging, Hyper-V scope,
+   and the conditional Arc-enabled SCVMM track can be decided.
+7. **[Decisions (ADRs)](decisions/index.md)** — accepted decisions and proposed delivery gates.
 
 ## Why a separate Design section?
 
 Three failure modes this section prevents:
 
-- **Track drift** — without a single source of truth for "what does healthy mean", the SCOM
-  and Azure Monitor implementations would diverge over time. Every threshold and signal in
-  this section has a single canonical name and value, mapped 1:1 across both tracks.
+- **Track drift** — without shared health semantics, platform and delivery implementations would
+  diverge. Equivalent signals use stable logical names, while unsupported parity is documented
+  instead of fabricated.
 - **Buried decisions** — ADRs that live only in a `decisions/` folder on disk are invisible
   to readers who only see the rendered docs. Putting them in the navigation makes the
   reasoning behind every architectural choice discoverable.
 - **Customization as a bolt-on** — treating customization as a documentation afterthought
-  produces forked deployments. By making it a first-class design topic with cross-track
-  parity guaranteed by [ADR 0007](decisions/0007-naming-convention.md) and
+  produces forked deployments. By making it a first-class design topic with equivalent-signal
+  semantics governed by [ADR 0007](decisions/0007-naming-convention.md) and
   [ADR 0008](decisions/0008-customization-strategy.md), customization becomes a *product
   feature*.
 
@@ -41,15 +42,14 @@ Three failure modes this section prevents:
 
 The choices in this section are guided by five principles:
 
-1. **One model, two tracks** — the SCOM MP and Azure Monitor Health Model are different
-   surfaces over the same underlying entity graph, signal catalog, and rollup policy.
-2. **Infrastructure only** — workloads (VMs, AKS pods, applications) are deferred to
-   companion MPs. See [ADR 0001](decisions/0001-scope-and-topology.md).
+1. **Platform first, delivery surface second** — Azure Local and Hyper-V own separate topology and
+   support contracts; SCOM and Azure Monitor are delivery surfaces within those platforms.
+2. **Share semantics, prove implementation parity** — reuse health and authoring patterns, but
+   require evidence before claiming that topology or signals map 1:1.
 3. **Customization without forking** — every threshold and behavior is parameterized.
    Customers ship overrides, not rebuilt MPs.
-4. **Cross-track parity is a hard requirement** — `Volume.FreeSpace.WarnPercent` (SCOM)
-   and `volumeFreeSpaceWarningThresholdPct` (Azure Monitor) are guaranteed to mean the
-   same thing. See [ADR 0007](decisions/0007-naming-convention.md).
+4. **Equivalent signals preserve meaning** — when a platform supports a signal on both surfaces,
+   `Volume.FreeSpace.WarnPercent` and its Azure Monitor parameter retain the same semantics.
 5. **Cite first-party sources** — every signal, threshold, and prerequisite is traced back
    to Microsoft Learn, Azure Local product docs, or a named upstream reference. The
    [REFERENCES](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/REFERENCES.md)
@@ -59,12 +59,14 @@ The choices in this section are guided by five principles:
 
 | Layer | Phase 2 status |
 |---|---|
-| Scope & topology (ADR 0001) | Accepted — locks 3 layers, ~25 entities, infra-only |
+| Azure Local scope & topology (ADR 0001) | Accepted — locks 3 layers, ~25 entities, infra-only |
 | Health model (ADR 0003) | Accepted — worst-state rollup with documented exceptions |
 | Signal catalog | Complete — ~60 signals across 3 layers |
 | Customization (ADR 0008) | Accepted — three tiers (Lab / Standard / Strict) |
 | Cross-track parity (ADR 0007) | Accepted — naming convention locked |
-| Decisions 0001–0020 | Accepted — see [Decisions index](decisions/index.md) |
+| Platform split (ADR 0021) | Accepted — Azure Local and Hyper-V Epics with surface Features |
+| SCOM packaging (ADR 0022) | Proposed — gated by AB#7319 |
+| Hyper-V Azure Monitor (ADR 0023) | Proposed — gated by AB#7331 and AB#7332 |
 
-Phase 2 is complete. Phase 3 (SCOM authoring) and Phase 4 (Azure Monitor authoring)
-are the next implementation tracks and have not started.
+The Azure Local baseline is complete. Shared packaging, Hyper-V topology, and Arc-enabled SCVMM
+feasibility research are the next gates; product authoring has not started.

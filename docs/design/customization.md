@@ -1,29 +1,34 @@
 ---
 title: Customization
-description: How to customize thresholds, alerts, scope, and behavior of the Azure Local health monitoring.
+description: How to customize thresholds, alerts, scope, and behavior across the monitoring products.
 ---
 
 # Customization
 
-Both tracks of `azurelocal-scom-mp` are designed to be **customized without forking** the project. Every threshold,
-every alert, every health rollup decision is parameterized so that operators can adapt the monitoring to local
-operational reality without modifying the sealed MP or the canonical ARM/Bicep templates.
+All delivery surfaces are designed to be **customized without forking** the project. Every threshold,
+alert, and health-rollup decision is parameterized so operators can adapt the monitoring to local
+operational reality without modifying sealed MPs or canonical Bicep templates.
 
 > **First principle:** customer customizations must survive an upgrade. If the customer overrides volume free-space
-> from 10% to 20% and we ship a new MP version, their override stays. This is non-negotiable across both tracks.
+> from 10% to 20% and we ship a new MP version, their override stays. This is non-negotiable for every released product.
 
 ---
 
-## Track 1 — SCOM Management Pack
+## SCOM Management Packs
+
+The pattern applies to both Azure Local and Hyper-V. Exact artifact names and any shared library
+dependency remain proposed in [ADR 0022](decisions/0022-scom-management-pack-packaging-boundaries.md).
 
 ### Override pack pattern
 
-We ship two MPs, not one:
+The established Azure Local pattern uses a sealed product MP and an unsealed override pack.
+The names below are the current Azure Local baseline; ADR 0022 can supersede the exact packaging
+before implementation:
 
 | MP | Sealed? | Edited by | Purpose |
 |---|---|---|---|
-| `AzureLocal.HealthModel.mp` | ✅ Sealed | Project maintainers only | Classes, discoveries, monitors, rules, Distributed Application |
-| `AzureLocal.HealthModel.Overrides.xml` | ❌ Unsealed | Customer | All threshold and behavior overrides; ships with sensible defaults |
+| `AzureLocal.HealthModel.mp` | Yes | Project maintainers only | Classes, discoveries, monitors, rules, Distributed Application |
+| `AzureLocal.HealthModel.Overrides.xml` | No | Customer | All threshold and behavior overrides; ships with sensible defaults |
 
 This is the standard Microsoft pattern. The customer never edits the sealed MP. They edit the unsealed override pack
 (or create their own sibling override pack referencing the sealed one).
@@ -74,7 +79,10 @@ Contoso.AzureLocal.Overrides.xml            ← customer-authored, references ou
 
 ---
 
-## Track 2 — Azure Monitor Health Model
+## Azure Monitor Health Models
+
+This section currently applies to Azure Local. It applies to Hyper-V only if proposed
+[ADR 0023](decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) is accepted with a go decision.
 
 ### Parameterization via Bicep
 
@@ -166,7 +174,7 @@ includes:
 
 - The shipped default threshold value
 - Recommended values per environment tier (lab / standard / strict)
-- Override parameter name (both tracks)
+- Override or parameter name for each applicable delivery surface
 - Whether the signal is enabled by default
 - Operational impact level (Standard / Limited / Suppressed)
 
@@ -189,7 +197,7 @@ Three things our design does intentionally that make SquaredUp work well out of 
 3. **Alert allow-list + auto-resolve** (ADR 0009) — prevents the alert tile from being
    flooded by transient state changes that are only meaningful to the health model.
 
-A SquaredUp dashboard pack is a **Phase 4 optional deliverable** — it ships as a
-separate artefact in `squaredup/` once the SCOM track reaches GA. See
+A SquaredUp dashboard pack is an **optional post-GA deliverable** — it ships as a
+separate artifact after the applicable SCOM product reaches GA. See
 [ADR 0008](decisions/0008-customization-strategy.md#optional-visualization-integrations)
 for the design constraints that enable it.

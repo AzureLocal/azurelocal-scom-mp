@@ -1,8 +1,13 @@
 # Concept Mapping — SCOM ↔ Azure Monitor
 
-> The dual-track Rosetta Stone. Every architectural concept in this project, mapped 1:1
-> across the two delivery tracks. Locked by [ADR 0006](decisions/0006-azmon-entity-model.md)
+> The Azure Local delivery-surface Rosetta Stone. Architectural concepts mapped between SCOM and
+> Azure Monitor. Locked by [ADR 0006](decisions/0006-azmon-entity-model.md)
 > (entity alignment) and [ADR 0007](decisions/0007-naming-convention.md) (naming).
+
+::: info Azure Local baseline
+The entity mapping on this page applies to **Azure Local**. Hyper-V SCOM mapping will follow its
+topology spike. A Hyper-V Azure Monitor column is added only if ADR 0023 records a go decision.
+:::
 
 ## Top-level concepts
 
@@ -24,7 +29,8 @@
 ## Entity / class mapping
 
 Per [ADR 0005](decisions/0005-scom-class-hierarchy.md) and
-[ADR 0006](decisions/0006-azmon-entity-model.md), entities map 1:1 across tracks.
+[ADR 0006](decisions/0006-azmon-entity-model.md), the Azure Local baseline maps equivalent
+entities between delivery surfaces.
 
 | Logical entity | SCOM class | Azure Monitor entity type | ARM resource type (if applicable) |
 |---|---|---|---|
@@ -74,10 +80,11 @@ name, with mechanical translation to each track's idiom:
 | `KeyVault.SecretExpiry.WarnDays` | `KeyVault.SecretExpiry.WarnDays` | `keyVaultSecretExpiryWarningDays` |
 
 The translation is mechanical:
+
 - SCOM key uses dot-separated PascalCase verbatim from the logical name.
 - Bicep param uses camelCase, expands `Pct` → `Pct` and `Days` → `Days`, prefixed by entity.
 
-A round-trip linter validates parity at PR time (planned for Phase 3).
+A round-trip linter will validate applicable Azure Local parity during implementation.
 
 ## Rollup mapping
 
@@ -91,7 +98,7 @@ A round-trip linter validates parity at PR time (planned for Phase 3).
 ## Alert mapping
 
 See [ADR 0009](decisions/0009-alert-vs-health-state.md). Alerts are intentionally separate
-from health state in both tracks.
+from health state in both Azure Local delivery surfaces.
 
 | SCOM | Azure Monitor |
 |---|---|
@@ -105,7 +112,7 @@ from health state in both tracks.
 Because the conceptual model is identical and naming is parity-locked, a customer running
 the SCOM MP today can migrate to the Azure Monitor track without re-learning *what* is
 monitored — only the surface differs. The
-[Migration Guide](../comparison/index.md) (Phase 5) walks through this end-to-end.
+[Migration Guide](../comparison/index.md) will walk through this end-to-end after both Azure Local surfaces ship.
 
 ## References
 

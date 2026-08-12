@@ -5,7 +5,7 @@ description: Optional SquaredUp DS visualization layer for the Azure Local SCOM 
 
 # SquaredUp Dashboard Server (SCOM track)
 
-::: info Optional Phase 3 deliverable
+::: info Optional post-GA deliverable
 The SquaredUp DS dashboard pack is planned after the SCOM Management Pack reaches general
 availability. Its source will live in `src/squaredup/ds/`.
 :::

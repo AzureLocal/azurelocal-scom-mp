@@ -1,7 +1,7 @@
 # Health State Flow — SCOM & Azure Monitor
 
 > Source: `diagrams/mermaid/health-state-flow.md`
-> Applies to both tracks: SCOM uses Green/Yellow/Red; Azure Monitor uses Healthy/Degraded/Unhealthy/Unknown.
+> Applies to every supported delivery surface: SCOM uses Green/Yellow/Red; Azure Monitor uses Healthy/Degraded/Unhealthy/Unknown.
 
 ```mermaid
 stateDiagram-v2

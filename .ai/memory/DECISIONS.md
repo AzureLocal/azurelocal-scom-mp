@@ -6,3 +6,12 @@
   and favicon, and `azurelocal-scom-mp-banner.svg` for the home-page hero.
 - Mermaid fences are rendered by the local VitePress theme component. The third-party wrapper was
   removed after its browser runtime showed syntax-error placeholders for valid diagrams.
+- The public product title is "Hybrid infrastructure health monitoring" with the subtitle "SCOM
+  and Azure Monitor health models for Hyper-V and Azure Local."
+- Planning is platform-first: Azure Local and Hyper-V each have an Azure DevOps Epic, with SCOM and
+  Azure Monitor represented as child Features.
+- Azure Local SCOM and Azure Monitor plus Hyper-V SCOM are committed delivery surfaces. Hyper-V
+  Azure Monitor is conditional on Arc-enabled SCVMM inventory/guest-management and telemetry lab
+  spikes, followed by an accepted go/no-go ADR.
+- Shared health semantics and SCOM engineering patterns are expected, but shared sealed Management
+  Pack dependencies are not approved until proposed ADR 0022 is resolved.

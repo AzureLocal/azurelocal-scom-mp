@@ -4,11 +4,17 @@
 > Management Pack. Each row is a contract: signal name, default state, source, threshold,
 > and dimension.
 >
+> **Platform scope:** the populated catalog below is the accepted **Azure Local** baseline.
+> Hyper-V signals will be added in a separate platform section only after research story AB#7327
+> verifies supported sources and thresholds. Shared names indicate equivalent meaning, not an
+> assumption that every platform exposes the signal.
+>
 > **Default column key:**
+>
 > - **ON** — monitor enabled by default; impacts health state
 > - **OFF** — monitor is authored but ships disabled (`Enabled=false`); operator enables via override pack
 > - **Rule** — data collection rule (perf/event collection only, no health-state change); always active
-
+>
 > **Status:** Drafted in Phase 2. Final values land at Phase 2 sign-off. Thresholds shown
 > are **Standard tier** defaults — see [Customization](customization.md) for Lab/Strict tiers.
 
@@ -267,8 +273,6 @@ Every signal has a stable cross-track name. See [ADR 0007](decisions/0007-naming
 | `StorageReplica.SyncProgress.Percent` | OFF | Performance | 100 | < 100 (syncing) | Stalled | `Get-SRGroup \| .SyncPercentage` | KQL |
 | `StorageReplica.LastSyncAge.Minutes` | OFF | Configuration | < 5 | 5–60 | > 60 | `Get-SRGroup \| .LastSyncTime` | KQL |
 | `StorageReplica.Event.Error` | ON | Availability | 0 | — | ≥ 1 | Event log `Microsoft-Windows-StorageReplica/Operational` Errors | KQL `Event` |
-
-
 
 ## Layer 2 — Cluster-resident platform signals
 

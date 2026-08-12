@@ -6,12 +6,17 @@ Please read the [AzureLocal Contributing Guide](https://github.com/AzureLocal/.g
 
 ### Management Pack authoring
 
-- All class, relationship, monitor, rule, and view names must follow the `AzureLocal.*` namespace defined in [ADR 0005](docs/design/decisions/0005-scom-class-hierarchy.md).
-- The source is split across three MP files per [ADR 0007](docs/design/decisions/0007-mp-file-split.md):
+- Azure Local class, relationship, monitor, rule, and view names follow the `AzureLocal.*`
+  namespace defined in [ADR 0005](docs/design/decisions/0005-scom-class-hierarchy.md).
+- The current Azure Local baseline uses three MP files:
   - `AzureLocal.SCOM.Library.mp` — class and relationship definitions
   - `AzureLocal.SCOM.Monitoring.mp` — monitors, rules, discoveries
   - `AzureLocal.SCOM.Override.xml` — sealed-MP overrides
 - Never edit `AzureLocal.SCOM.Override.xml` directly for new logic — overrides only.
+- Do not create shared Hyper-V/Azure Local sealed dependencies until proposed
+  [ADR 0022](docs/design/decisions/0022-scom-management-pack-packaging-boundaries.md) is accepted.
+- Keep Hyper-V classes, discoveries, and signals platform-specific unless the accepted ADR assigns
+  them to a shared library and defines their namespace.
 
 ### Testing
 

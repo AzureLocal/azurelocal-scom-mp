@@ -1,27 +1,31 @@
 ---
-title: SCOM Management Pack
-description: Track 1 — SCOM Management Pack for Azure Local (HCI) clusters.
+title: Azure Local SCOM Management Pack
+description: SCOM Management Pack for Azure Local infrastructure.
 ---
 
-# SCOM Management Pack
+# Azure Local SCOM Management Pack
 
-> **Track 1** — SCOM health monitoring for Azure Local clusters.
+> **Azure Local / SCOM** — the committed SCOM delivery surface for Azure Local.
 
 This section covers **how the design is implemented** as a SCOM Management Pack. The
 *design itself* — entity model, signal catalog, rollup policy, customization — is
 track-agnostic and lives in [Design](../design/index.md). Read that first.
 
-::: info Phase 3 has not started
-The shared design and its 20 architecture decisions are accepted. Management Pack authoring is
-the next implementation phase. See the
+::: info Authoring has not started
+The Azure Local design baseline is accepted. Shared SCOM packaging is gated by proposed ADR 0022
+and [AB#7319](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7319).
+Delivery is tracked by [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7315). See the
 [implementation plan](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
 :::
+
+Looking for the other SCOM product? See the planned
+[Hyper-V SCOM Management Pack](../hyper-v/scom-mp.md).
 
 ## What lives here
 
 | Page (planned) | Content |
 |---|---|
-| Health model XML overview | The sealed `AzureLocal.HealthModel.mp` structure |
+| Health model XML overview | The sealed Azure Local product structure selected by ADR 0022 |
 | Class hierarchy reference | Implementation of [ADR 0005](../design/decisions/0005-scom-class-hierarchy.md) |
 | Discoveries reference | PowerShell discovery scripts per [ADR 0004](../design/decisions/0004-scom-discovery-strategy.md) |
 | Monitor inventory | Unit / Aggregate / Dependency monitors mapping to the [Signal Catalog](../design/signal-catalog.md) |

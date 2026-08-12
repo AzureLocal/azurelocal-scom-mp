@@ -2,7 +2,7 @@
 
 <!-- What is being worked on right now. Keep it short; update as work moves. -->
 
-_Nothing yet - this repo was just onboarded onto the multi-model standard._
+_No active implementation task. The platform split is published; research and architecture gates are next._
 
 <!--
   Optional advisory model hint the next tool should honour if available.

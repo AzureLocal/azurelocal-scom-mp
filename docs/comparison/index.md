@@ -5,10 +5,10 @@ description: SCOM-to-Azure-Monitor migration guidance for Azure Local health mon
 
 # Migration — SCOM → Azure Monitor
 
-> **Phase 5 deliverable.** End-to-end migration guidance for operators moving from the
-> SCOM track to the Azure Monitor track (or running both side by side).
+> **Planned deliverable.** End-to-end migration guidance for operators moving from the
+> Azure Local SCOM surface to Azure Monitor (or running both side by side).
 
-::: info Phase 5 deliverable
+::: info Planned after both Azure Local surfaces ship
 Migration walkthroughs land after both implementation tracks are authored and validated.
 See the [implementation plan](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
 :::
@@ -26,7 +26,7 @@ it's a track-agnostic foundation, not migration content:
 |---|---|
 | Migration walkthrough | Step-by-step move from SCOM MP to Azure Monitor Health Model |
 | Migration tool output | Auto-migrated vs manual migration items via the Microsoft `MP2AzMon` tool |
-| Side-by-side operation | How to run both tracks against the same Azure Local during transition |
+| Side-by-side operation | How to run both Azure Local delivery surfaces during transition |
 | Cutover checklist | Pre-cutover, cutover day, post-cutover validation |
 | Lessons learned | Common gotchas operators hit during migration |
 
@@ -39,6 +39,5 @@ it's a track-agnostic foundation, not migration content:
 | Custom SCOM MPs already in production | Greenfield Azure Local deployment |
 | Need on-prem alerting independent of Azure | Want Azure-native alerting + Workbooks + Grafana |
 
-The dual-track design of this project means you don't have to choose — both surfaces
-read from the same conceptual model.
-
+For Azure Local, both surfaces use the same conceptual model where supported. Hyper-V migration
+guidance is conditional on the Arc-enabled SCVMM Azure Monitor track passing its research gate.

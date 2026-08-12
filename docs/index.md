@@ -1,15 +1,15 @@
 ---
 layout: home
-title: Azure Local health monitoring
+title: Hybrid infrastructure health monitoring
 titleTemplate: false
-description: SCOM Management Pack and Azure Monitor Health Models for Azure Local infrastructure.
+description: SCOM and Azure Monitor health models for Hyper-V and Azure Local.
 hero:
-  name: Azure Local
+  name: Hybrid Infrastructure
   text: Health monitoring
-  tagline: One infrastructure health model delivered through SCOM and Azure Monitor.
+  tagline: SCOM and Azure Monitor health models for Hyper‑V and Azure Local.
   image:
     src: /assets/images/azurelocal-scom-mp-banner.svg
-    alt: Azure Local SCOM Management Pack and Health Models
+    alt: Hybrid Infrastructure Health Monitoring
   actions:
     - theme: brand
       text: Explore the design
@@ -18,58 +18,49 @@ hero:
       text: View the roadmap
       link: /project/roadmap
 features:
-  - title: SCOM Management Pack
-    details: Planned sealed management packs and upgrade-safe overrides for organizations operating System Center Operations Manager on-premises.
-    link: /scom-mp/
-    linkText: Explore the SCOM track
-  - title: Azure Monitor Health Models
-    details: Planned service-group-backed entities, signals, health propagation, alerts, and workbooks for Azure-native operations teams.
-    link: /azure-monitor/
-    linkText: Explore the Azure Monitor track
-  - title: One shared health model
-    details: A common entity graph, signal catalog, state model, and rollup policy keeps both delivery tracks aligned.
-    link: /design/concept-mapping
-    linkText: Compare the two tracks
+  - title: Azure Local
+    details: A committed SCOM Management Pack and Azure Monitor Health Models for the full Azure Local infrastructure stack.
+    link: /azure-local/
+    linkText: Explore Azure Local
+  - title: Hyper-V
+    details: A committed Hyper-V SCOM Management Pack, with Azure Monitor on the roadmap when Arc-enabled SCVMM research passes its gate.
+    link: /hyper-v/
+    linkText: Explore Hyper-V
+  - title: Shared design
+    details: Common health semantics and SCOM engineering patterns, with platform-specific topology and signals kept explicit.
+    link: /design/
+    linkText: Explore the design
 ---
 
 ## What this project is
 
-This project defines production-grade health monitoring for **Azure Local infrastructure** at the
-health-model level, rather than treating monitoring as a collection of unrelated metric thresholds.
-The design is complete; implementation of the two delivery tracks is the next phase of work.
+This project defines production-grade health monitoring for **Hyper-V and Azure Local
+infrastructure** at the health-model level, rather than treating monitoring as a collection of
+unrelated metric thresholds. Planning is organized by platform first and delivery surface second.
 
 ## Health model components
 
-Both tracks implement the same logical health model for Azure Local:
+Both platforms use the same health-model grammar while retaining their own supported topology:
 
 ```mermaid
 graph TD
-    AzL["Azure Local Cluster"]:::root
-    AzL --> HW["Hardware Layer"]
-    AzL --> Storage["Storage Layer"]
-    AzL --> Network["Network Layer"]
-    AzL --> VM["Virtualization Layer"]
-
-    HW --> Node["Node Health"]
-    HW --> Drive["Drive Health"]
-    Storage --> Pool["Storage Pool"]
-    Storage --> Vol["Volumes"]
-    Network --> NIC["NIC / NIC Team"]
-    Network --> ATC["Network ATC Intent"]
-    VM --> VMGuest["VM Guest Health"]
+    Root["Platform Health"]:::root
+    Root --> HV["Hyper-V"]
+    Root --> AzL["Azure Local"]
+    HV --> HVS["SCOM MP"]
+    HV -. research gate .-> HVA["Azure Monitor via Arc-enabled SCVMM"]
+    AzL --> AzLS["SCOM MP"]
+    AzL --> AzLA["Azure Monitor"]
 
     classDef root fill:#0078D4,color:#fff,stroke:none
 ```
 
 ## Tracks at a glance
 
-| | SCOM Management Pack | Azure Monitor Health Models |
+| Platform | SCOM Management Pack | Azure Monitor Health Models |
 |---|---|---|
-| **Delivery format** | Sealed `.mp` files plus unsealed `.xml` overrides | Bicep, KQL, alert rules, and Azure portal resources |
-| **Health rollup** | Unit → aggregate → dependency | Entity signals → parent entity |
-| **Alerting** | SCOM alert rules | Azure Monitor alert rules and action groups |
-| **Dashboards** | SCOM Health Explorer and SquaredUp DS | Azure portal, Workbooks, and SquaredUp Cloud |
-| **Status** | Phase 3 — not started | Phase 4 — not started |
+| **Azure Local** | Committed — [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7315) | Committed — [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7316) |
+| **Hyper-V** | Committed — [Feature AB#7317](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7317) | Conditional on Arc-enabled SCVMM research — [Feature AB#7318](https://dev.azure.com/hybridcloudsolutions/Azure%20Local%20SCOM%20MP/_workitems/edit/7318) |
 
 ## Companion tooling
 
@@ -78,10 +69,10 @@ visualization layers for the SCOM and Azure Monitor tracks respectively.
 
 ## Project status
 
-::: info Phase 2 is complete
-Research, documentation scaffolding, the shared health-model design, all 20 architecture decisions,
-the signal catalog, and the source diagrams are complete. Management Pack and Azure Monitor authoring
-have not started. See the [project roadmap](/project/roadmap) and
+::: info The platform split is planned
+The original Azure Local design baseline is complete. The roadmap now separates Azure Local and
+Hyper-V into their own Epics and delivery Features. Hyper-V research and the shared SCOM packaging
+decision come before authoring. See the [project roadmap](/project/roadmap) and
 [implementation plan](https://github.com/AzureLocal/azurelocal-scom-mp/blob/main/PLAN.md).
 :::
 
@@ -89,8 +80,8 @@ have not started. See the [project roadmap](/project/roadmap) and
 |---|---|---|
 | 0 | Research and planning | Complete |
 | 1 | Documentation scaffold | Complete |
-| 2 | Health-model design | Complete |
-| 3 | SCOM Management Pack authoring | Not started |
-| 4 | Azure Monitor Health Models | Not started |
-| 5 | Migration guidance | Not started |
-| 6 | Documentation polish and release | Not started |
+| 2 | Azure Local health-model design baseline | Complete |
+| 3 | Platform split, ADO hierarchy, ADR and spike planning | Complete |
+| 4 | Research and architecture gates | Next |
+| 5 | Azure Local and Hyper-V delivery work | Planned |
+| 6 | Validation, documentation, and releases | Planned |
