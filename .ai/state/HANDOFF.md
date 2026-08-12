@@ -26,10 +26,14 @@
 - **Validation:** `npm run docs:build` passed; representative local routes returned HTTP 200;
   markdownlint passed with the repository configuration; `git diff --check`, identity assertions,
   and the secret-pattern scan passed. The HCS Governance MCP build and smoke suite passed.
-- **Remaining verification:** GitHub Pages still reported
-  `http://hybrid-solutions-cloud.github.io/hybrid-health-monitoring/` immediately after transfer;
-  verify the organization custom-domain cutover to `labs.hybridsolutions.cloud`, trigger/verify
-  the target workflow, and configure the old AzureLocal documentation redirect.
+- **Publishing verification:** Product workflow
+  `https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/actions/runs/31629720789`
+  succeeded and the canonical site returned HTTP 200 at
+  `https://labs.hybridsolutions.cloud/hybrid-health-monitoring/`. Azure Local portal workflow
+  `https://github.com/AzureLocal/azurelocal.github.io/actions/runs/31631115407` succeeded; the
+  former URL returned HTTP 200 with a meta-refresh and canonical link to the new site.
+- **Tracking:** AB#7340 was closed after the repository, ADO, registry, site, and compatibility
+  route were verified.
 - **Local cleanup:** Windows would not move the active session folder because the current process
   holds it open. A clean canonical clone was created in the correct location. Remove
   `D:/git/azurelocal/azurelocal-scom-mp` only after that handle is released and after confirming

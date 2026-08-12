@@ -2,8 +2,8 @@
 
 <!-- What is being worked on right now. Keep it short; update as work moves. -->
 
-_Repository, ADO, and governance identity migration is complete. GitHub Pages custom-domain
-activation and the former-site redirect are being verified._
+_No active migration task. The repository, ADO project, governance registry, GitHub Pages site,
+and former-site compatibility redirect are migrated and verified._
 
 <!--
   Optional advisory model hint the next tool should honour if available.
