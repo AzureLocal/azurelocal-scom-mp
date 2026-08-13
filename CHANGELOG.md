@@ -21,6 +21,8 @@
 
 ### Added
 
+* Add a ServiceNow integration roadmap covering separate SCOM and Azure Monitor paths, secure
+  webhook modernization, dual-source authority, research gates, and proof-of-concept outcomes.
 * Add the committed Hyper-V SCOM Management Pack track and conditional Azure Monitor track through Arc-enabled SCVMM.
 * Add ADRs 0021–0023 for the platform split, SCOM packaging boundary, and Hyper-V Azure Monitor go/no-go gate.
 * Add the phase-one Hyper-V SCOM monitoring research plan, exhaustive inventory schema, threshold

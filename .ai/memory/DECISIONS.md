@@ -46,6 +46,9 @@
   before acceptance.
 - Public documentation and repository text must not expose internal work-item identifiers or direct
   board links. Use descriptive public milestones and research-gate names instead.
+- ServiceNow integration is optional and solution-owned. SCOM and Azure Monitor integrations do not
+  become core runtime dependencies, and dual-source forwarding requires an explicit authority or
+  correlation decision. New Azure Monitor work targets Secure Webhook rather than legacy ITSM actions.
 - Product source is platform first and solution second under `src/azure-local/{scom-mp,azure-monitor}`
   and `src/hyper-v/{scom-mp,azure-monitor}`. ADR 0030 is accepted and supersedes obsolete source-path
   examples in ADRs 0013–0015 without changing their substantive decisions. Hyper-V Azure Monitor is

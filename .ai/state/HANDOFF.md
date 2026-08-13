@@ -47,6 +47,10 @@
   Migration to on-premises SCOM-to-Azure-Monitor monitoring migration and clarified that it is not
   workload migration. Removed work-item identifiers and direct board links from all tracked source
   and documentation files so the public site and repository do not expose internal tracking IDs.
+- **ServiceNow roadmap:** Added an Integrations section and a public ServiceNow roadmap covering
+  ServiceNow SCOM Events/Metrics connectors, Azure Monitor Secure Webhook and optional Logic Apps,
+  dual-source authority, CMDB/CI mapping, lifecycle, security, reliability, proof-of-concept gates,
+  and solution-owned deliverables. It is Later work and does not displace committed monitoring.
 - **Validation:** Repository-configured markdownlint passed the architecture set and the subsequent
   17 source-layout Markdown files with zero issues. VitePress 1.6.4 production builds passed,
   including internal-link validation and sitemap generation; only the existing large-chunk advisory

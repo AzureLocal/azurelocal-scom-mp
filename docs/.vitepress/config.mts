@@ -55,6 +55,7 @@ export default defineConfig({
       { text: 'Azure Local', link: '/azure-local/' },
       { text: 'Hyper-V', link: '/hyper-v/' },
       { text: 'SCOM → Azure Monitor', link: '/comparison/' },
+      { text: 'Integrations', link: '/integrations/' },
       { text: 'Project', link: '/project/about' },
     ],
 
@@ -281,12 +282,23 @@ export default defineConfig({
         },
       ],
 
+      '/integrations/': [
+        {
+          text: 'Integrations',
+          items: [
+            { text: 'Overview', link: '/integrations/' },
+            { text: 'ServiceNow', link: '/integrations/servicenow' },
+          ],
+        },
+      ],
+
       '/project/': [
         {
           text: 'Project',
           items: [
             { text: 'About', link: '/project/about' },
             { text: 'Roadmap', link: '/project/roadmap' },
+            { text: 'ServiceNow integration', link: '/integrations/servicenow' },
             { text: 'Changelog', link: '/project/changelog' },
             { text: 'License', link: '/project/license' },
           ],

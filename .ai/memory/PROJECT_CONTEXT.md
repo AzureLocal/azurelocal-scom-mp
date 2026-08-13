@@ -36,3 +36,9 @@ failover cluster or standalone host, refined by topology and DA validation befor
 The source tree enforces the same hierarchy through accepted ADR 0030. Azure Local and Hyper-V are
 top-level source owners, each with `scom-mp` and `azure-monitor` solution roots. The Hyper-V Azure
 Monitor root is reserved but cannot contain deployable implementation before an ADR 0023 go decision.
+
+ServiceNow is a Later optional integration area. SCOM and Azure Monitor have separate integration
+paths and artifacts. The candidate SCOM path uses ServiceNow SCOM Events and optional Metrics
+connectors through a MID Server. The candidate Azure Monitor path uses Secure Webhook action groups
+with the common alert schema, with Logic Apps only when enrichment or orchestration is required.
+Dual-source deployments must prove authoritative-source or correlation behavior before release.

@@ -85,6 +85,46 @@ The Hyper-V Azure Monitor Feature stays deferred until:
 A defer or no-go result is a valid outcome. The roadmap will not promise Azure Monitor parity where
 Microsoft-supported inventory or telemetry cannot provide it.
 
+## Later — ServiceNow integrations
+
+ServiceNow integration is an optional cross-cutting roadmap area with separate paths for each
+monitoring solution. It does not change the independence of the four solution boundaries.
+
+| Source solution | Preferred integration candidate | Commitment |
+|---|---|---|
+| Azure Local SCOM MP | ServiceNow SCOM Events connector through a Windows MID Server | Research and proof of concept |
+| Hyper-V SCOM MP | ServiceNow SCOM Events connector through a Windows MID Server | Research after MP alert contracts stabilize |
+| Azure Local Azure Monitor | Azure Monitor action group using Secure Webhook and the common alert schema | Research and proof of concept |
+| Hyper-V Azure Monitor | Same Azure Monitor pattern | Conditional on the parent Hyper-V Azure Monitor go decision |
+
+The roadmap also evaluates the optional SCOM Metrics connector for ServiceNow Metric Intelligence
+and Azure Logic Apps when enrichment or workflow orchestration is required. New work must not use
+the legacy Azure Monitor ITSM action as its target architecture.
+
+```mermaid
+flowchart LR
+    SCOM[SCOM alerts and optional metrics] --> SNCOM[ServiceNow SCOM connectors]
+    SNCOM --> EM[ServiceNow Event Management]
+
+    AZMON[Azure Monitor alerts] --> AG[Action group<br/>Secure Webhook]
+    AG --> EM
+    AZMON -. enrichment required .-> LA[Logic App]
+    LA -. transformed event .-> EM
+
+    EM --> CORR[CI binding, deduplication,<br/>correlation, and alert lifecycle]
+    CORR --> INC[Incident or remediation workflow]
+```
+
+Before implementation, research must validate licensing, supported product versions, authentication,
+MID Server placement, CMDB/CI mapping, severity conversion, deduplication, maintenance behavior,
+bidirectional state changes, rate limits, failure handling, and audit requirements. Environments
+using SCOM and Azure Monitor together must select an authoritative source for each condition or
+prove a correlation key that prevents duplicate ServiceNow alerts and incidents.
+
+See the [ServiceNow integration roadmap](../integrations/servicenow.md) for the candidate
+architectures, evidence gates, and planned deliverables. This is a **Later** initiative, so no
+committed monitoring work moves or loses capacity in this roadmap update.
+
 ## Cross-cutting release outcomes
 
 Each committed delivery Feature includes:
@@ -97,6 +137,7 @@ Each committed delivery Feature includes:
 - a platform-owned Distributed Application with validated dynamic membership, rollup, operator
   views, reports, dashboards, and SLO targets; and
 - optional SquaredUp visualization guidance where it adds value.
+- connector-friendly alert identity, lifecycle, and context for optional ServiceNow integration.
 
 ## Future companion products
 

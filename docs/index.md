@@ -67,6 +67,9 @@ graph TD
 [SquaredUp DS](https://ds.squaredup.com) and [SquaredUp Cloud](https://squaredup.com) are optional
 visualization layers for the SCOM and Azure Monitor tracks respectively.
 
+[ServiceNow integration](integrations/servicenow.md) is a Later roadmap area with separate SCOM and
+Azure Monitor paths for Event Management, CMDB correlation, and incident workflows.
+
 ## Project status
 
 ::: info Independent platform products are planned
