@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <Manifest>
+    <Identity>
+      <ID>HybridSolutionsCloud.HyperV.Presentation</ID>
+      <Version>{{VERSION}}</Version>
+    </Identity>
+    <Name>Hybrid Solutions Cloud Hyper-V Presentation</Name>
+    <References>
+      <Reference Alias="System">
+        <ID>System.Library</ID>
+        <Version>7.5.8501.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="SC">
+        <ID>Microsoft.SystemCenter.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
+      <Reference Alias="HCSHyperVLibrary">
+        <ID>HybridSolutionsCloud.HyperV.Library</ID>
+        <Version>{{VERSION}}</Version>
+        <PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken>
+      </Reference>
+      <Reference Alias="HCSHyperVMonitoring">
+        <ID>HybridSolutionsCloud.HyperV.Monitoring</ID>
+        <Version>{{VERSION}}</Version>
+        <PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken>
+      </Reference>
+    </References>
+  </Manifest>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Presentation">
+          <Name>Hybrid Solutions Cloud Hyper-V Presentation</Name>
+          <Description>Development foundation for Hyper-V folders, views, diagrams, and operator presentation.</Description>
+        </DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPack>

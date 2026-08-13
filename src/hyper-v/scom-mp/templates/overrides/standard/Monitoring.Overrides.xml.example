@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Standard example. Replace every token and review every setting before import. -->
+<ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <Manifest>
+    <Identity>
+      <ID>{{ORGANIZATION_ID}}.HybridSolutionsCloud.HyperV.Monitoring.Overrides</ID>
+      <Version>{{VERSION}}</Version>
+    </Identity>
+    <Name>{{ORGANIZATION_NAME}} Hyper-V Monitoring Overrides</Name>
+    <References>
+      <Reference Alias="HCSHyperVMonitoring">
+        <ID>HybridSolutionsCloud.HyperV.Monitoring</ID>
+        <Version>{{VERSION}}</Version>
+        <PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken>
+      </Reference>
+    </References>
+  </Manifest>
+  <!-- Evidence-approved Standard monitoring overrides will be generated here. -->
+</ManagementPack>

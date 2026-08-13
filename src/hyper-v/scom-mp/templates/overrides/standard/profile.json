@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0",
+  "profile": "Standard",
+  "status": "AwaitingEvidence",
+  "purpose": "Typical production starting point using evidence-backed defaults.",
+  "discoverySettings": [],
+  "monitoringSettings": [],
+  "activationRule": "No setting is added until the workflow ID, safe range, cost, and lab evidence are accepted."
+}

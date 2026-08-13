@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "namespace": "HybridSolutionsCloud.HyperV",
+  "developmentVersion": "0.1.0.0",
+  "status": "Development",
+  "artifacts": [
+    {
+      "id": "HybridSolutionsCloud.HyperV.Library",
+      "source": "fragments/library/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.HyperV.Library.xml",
+      "releaseForm": "sealed-mp",
+      "required": true
+    },
+    {
+      "id": "HybridSolutionsCloud.HyperV.Discovery",
+      "source": "fragments/discovery/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.HyperV.Discovery.xml",
+      "releaseForm": "sealed-mp",
+      "required": true
+    },
+    {
+      "id": "HybridSolutionsCloud.HyperV.Monitoring",
+      "source": "fragments/monitoring/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.HyperV.Monitoring.xml",
+      "releaseForm": "sealed-mp",
+      "required": true
+    },
+    {
+      "id": "HybridSolutionsCloud.HyperV.Presentation",
+      "source": "fragments/presentation/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.HyperV.Presentation.xml",
+      "releaseForm": "sealed-mp",
+      "required": true
+    },
+    {
+      "id": "HybridSolutionsCloud.HyperV.Reporting",
+      "source": "fragments/reporting/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.HyperV.Reporting.xml",
+      "releaseForm": "optional-sealed-mp",
+      "required": false
+    }
+  ],
+  "prohibitedReferences": [
+    "Microsoft.SystemCenter.VirtualMachineManager.2019",
+    "Microsoft.Windows.HyperV.2019",
+    "HybridSolutionsCloud.AzureLocal"
+  ]
+}

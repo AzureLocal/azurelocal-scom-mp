@@ -25,3 +25,6 @@
   every changed diagram in an actual browser and assert that `.mermaid-diagram svg` is present and
   `.mermaid-error`/`.mermaid-loading` are absent. The local Node-only Mermaid parser can report a
   `DOMPurify.addHook` limitation that does not occur in the browser runtime.
+- Development MP XML output is not a release artifact. Do not call it verified, signed, sealed, or
+  importable until the governed Windows authoring environment has run the Microsoft SDK schema,
+  MPVerify, sealing/signing, and SCOM lab import gates.

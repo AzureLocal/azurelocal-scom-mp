@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0",
+  "profile": "Lab",
+  "status": "AwaitingEvidence",
+  "purpose": "Bounded functional, fault, transition, and diagnostic validation only.",
+  "discoverySettings": [],
+  "monitoringSettings": [],
+  "activationRule": "No setting is added until the workflow ID, safe range, cost, and lab evidence are accepted."
+}

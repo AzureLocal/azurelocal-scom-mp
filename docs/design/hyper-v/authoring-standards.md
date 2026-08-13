@@ -99,12 +99,19 @@ flowchart TD
 - Related workflows expose matching parameters consistently.
 - The guide recommends group-based overrides for policy tiers and explains when class or instance
   targeting is justified.
+- Discovery overrideable parameters are documented separately from monitor/rule overrideable
+  parameters and stored in their corresponding customer-owned override MPs.
+- Lab, Standard, and Strict examples contain only reviewed settings for the matching product
+  version; they never contain customer identity, credentials, or notification destinations.
 - No workflow stores changes in the Default Management Pack.
 - Override compatibility is an explicit upgrade test.
 
 Microsoft's override guidance calls for a separate MP, deliberate `Enabled=False` overrides instead
 of an ambiguous console disable operation, group targeting where practical, and test-environment
 validation. See [Best practices for configuring overrides](https://learn.microsoft.com/en-us/troubleshoot/system-center/scom/best-practices-configure-overrides).
+
+The full parameter, ownership, targeting, template, and lifecycle contract is defined in
+[Override and tuning architecture](override-and-tuning-architecture.md).
 
 ## Module and script standards
 

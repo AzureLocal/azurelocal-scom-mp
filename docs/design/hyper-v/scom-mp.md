@@ -19,7 +19,8 @@ flowchart TB
     MODEL --> DA[Distributed Application]
     FLOW --> HEALTH[Health and alert architecture]
     HEALTH --> DA
-    PKG --> AUTHOR[Authoring standards]
+    PKG --> OVR[Override and tuning architecture]
+    OVR --> AUTHOR[Authoring standards]
     FLOW --> SEC[Security and operability]
     DA --> TEST[Validation and release]
     AUTHOR --> TEST
@@ -29,7 +30,7 @@ flowchart TB
     classDef design fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b
     classDef gate fill:#ecfdf5,stroke:#059669,color:#064e3b
     class ARCH root
-    class PKG,MODEL,FLOW,HEALTH,DA,AUTHOR,SEC design
+    class PKG,MODEL,FLOW,HEALTH,DA,OVR,AUTHOR,SEC design
     class TEST gate
 ```
 
@@ -37,6 +38,7 @@ flowchart TB
 |---|---|
 | [End-to-end architecture](architecture.md) | Requirements, topology variants, runtime planes, data flow, and non-functional requirements |
 | [Management Pack structure](management-pack-structure.md) | Proposed sealed artifacts, dependencies, override boundary, and release bundle |
+| [Override and tuning architecture](override-and-tuning-architecture.md) | Separate customer Discovery/Monitoring overrides, public profile templates, parameters, targeting, and lifecycle |
 | [Class and relationship model](class-and-relationship-model.md) | Stable identity, hosting, containment, reference relationships, and VM mobility |
 | [Discovery and workflow architecture](discovery-and-workflow-architecture.md) | Staged discovery, source selection, execution placement, cookdown, monitors, rules, and tasks |
 | [Health and alert architecture](health-and-alert-architecture.md) | Health dimensions, thresholds, state, alerting, suppression, expected state, and rollup |
@@ -49,9 +51,10 @@ flowchart TB
 
 | ADR | Decision | Status and gate |
 |---|---|---|
-| [0027](../decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Modular sealed Library, Discovery, Monitoring, Presentation, optional Reporting, and customer override MPs | Proposed; evidence required |
+| [0027](../decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Modular sealed artifacts, separate customer Discovery/Monitoring overrides, and optional tuning templates | Proposed; evidence required |
 | [0028](../decisions/0028-hyper-v-object-and-discovery-architecture.md) | Stable boundary identity, mobile VM model, staged discovery, execution placement, and cookdown | Proposed; evidence required |
 | [0029](../decisions/0029-hyper-v-health-alert-and-da-rollup.md) | Evidence-driven health, actionable alerts, topology-aware rollup, and monitoring-pipeline branch | Proposed; evidence required |
+| [0031](../decisions/0031-hyper-v-mp-authoring-toolchain.md) | Tool-neutral XML/fragments, PowerShell build checks, Microsoft verification/sealing, and lab authority | Proposed; build-environment proof required |
 
 These refine accepted ADRs [0022](../decisions/0022-scom-management-pack-packaging-boundaries.md),
 [0025](../decisions/0025-hyper-v-network-management-authority.md), and
@@ -90,3 +93,4 @@ supported SCOM releases.
 - [Phase-one research plan](../../hyper-v/monitoring-research.md)
 - [Monitoring catalog and threshold policy](../../hyper-v/monitoring-catalog.md)
 - [Hyper-V SCOM product page](../../hyper-v/scom-mp.md)
+- [Management Pack administration guide](../../hyper-v/management-pack-guide.md)

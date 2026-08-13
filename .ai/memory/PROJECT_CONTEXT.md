@@ -21,6 +21,11 @@ research, SCOM workflow mapping, threshold engineering, lab/fault validation, fi
 curation, and comprehensive MP/DA architecture validation. Authoring remains gated by this evidence
 and accepted successor Hyper-V ADRs.
 
+The proposed Hyper-V packaging contract includes sealed Library, Discovery, Monitoring,
+Presentation, and optional Reporting artifacts. Customers own separate unsealed Discovery and
+Monitoring override MPs. Optional Lab, Standard, and Strict templates are public starter examples,
+not active product policy, and the Default Management Pack is never a customization target.
+
 The design information architecture is platform first and delivery surface second. It has explicit
 Azure Local/SCOM, Azure Local/Azure Monitor, Hyper-V/SCOM, and conditional Hyper-V/Azure Monitor
 lanes. Shared design is deliberately small; accepted Azure Local ADRs do not silently govern

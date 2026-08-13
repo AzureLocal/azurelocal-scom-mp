@@ -21,6 +21,11 @@
 
 ### Added
 
+* Add separate customer-owned Hyper-V Discovery and Monitoring override contracts, optional Lab,
+  Standard, and Strict starter templates, and a public Management Pack administration guide.
+* Add the initial Hyper-V MP build foundation: five product XML templates, six customer override
+  examples, profile manifests, a deterministic PowerShell build, contract tests, and proposed ADR
+  0031 for the authoring toolchain.
 * Add a ServiceNow integration roadmap covering separate SCOM and Azure Monitor paths, secure
   webhook modernization, dual-source authority, research gates, and proof-of-concept outcomes.
 * Add the committed Hyper-V SCOM Management Pack track and conditional Azure Monitor track through Arc-enabled SCVMM.

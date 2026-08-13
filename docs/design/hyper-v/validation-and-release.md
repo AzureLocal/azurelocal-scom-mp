@@ -18,7 +18,7 @@ flowchart TB
     INTEGRATION[SCOM lab: import, discovery, monitor, alert, DA, views, reports, and tasks]
     FAULT[Fault lab: failure, recovery, stale data, maintenance, migration, and failover]
     SCALE[Scale: workflow cost, cardinality, databases, event volume, and convergence]
-    LIFE[Lifecycle: upgrade, overrides, side-by-side, removal, and rollback procedure]
+    LIFE[Lifecycle: upgrades, two override MPs, profiles, side-by-side, removal, and recovery]
     RELEASE[Release: signing, reproducibility, guide, checksums, and provenance]
 
     STATIC --> UNIT --> INTEGRATION --> FAULT --> SCALE --> LIFE --> RELEASE
@@ -131,8 +131,9 @@ health condition rather than uncontrolled discovery.
 
 ```mermaid
 flowchart TD
-    BASE[Supported previous release installed] --> OVR[Representative customer overrides]
-    OVR --> DATA[Generate topology, health, alerts, and warehouse history]
+    BASE[Supported previous release installed] --> DOVR[Customer Discovery Overrides]
+    DOVR --> MOVR[Customer Monitoring Overrides]
+    MOVR --> DATA[Generate topology, health, alerts, and warehouse history]
     DATA --> UPGRADE[Import candidate higher version]
     UPGRADE --> CHECK[Verify object identity, state, overrides, views, DA, and workflows]
     CHECK --> FAULT[Repeat representative fault and recovery]
@@ -164,5 +165,10 @@ rollback. Microsoft documents dependency and removal constraints in
 - Maximum-scale tests meet approved HealthService, database, and convergence budgets.
 - Side-by-side import proves no runtime dependency on Azure Local or Microsoft Hyper-V 2019 MPs.
 - Upgrade preserves stable identity and representative customer overrides.
+- Separate Discovery and Monitoring override MPs import, export, upgrade, and remove as documented.
+- Lab, Standard, and Strict manifests contain valid references for the matching product version and
+  produce the documented effective configuration.
+- Static and lab checks prove that no product or test workflow writes customization to the Default
+  Management Pack.
 - The release bundle is reproducible and signed only after test artifacts are approved.
 - Published docs contain the exact artifact versions, dependencies, known issues, and tuning advice.

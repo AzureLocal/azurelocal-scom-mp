@@ -18,7 +18,7 @@ for the Hyper-V topology approved by the research and ADR gates.
 | Health | Availability, performance, configuration, and applicable security rollups |
 | Monitoring | Unit, aggregate, and dependency monitors plus event and performance collection rules |
 | Distributed Application | A Hyper-V-owned service root for every supported cluster or standalone host, with dynamic component membership, rollup, views, reports, dashboards, and SLO targeting |
-| Customization | Upgrade-safe override packs with Lab, Standard, and Strict tiers |
+| Customization | Separate customer-owned Discovery and Monitoring override MPs with optional Lab, Standard, and Strict starter templates |
 | Operations | State, alert, performance, and topology views with optional SquaredUp dashboards |
 | Delivery | Sealed, signed, tested, versioned Management Pack artifacts and operator documentation |
 
@@ -36,6 +36,12 @@ The comprehensive proposed design is now available in the
 [Hyper-V SCOM architecture map](../design/hyper-v/scom-mp.md). It covers package decomposition,
 classes and relationships, staged discovery, workflows and cookdown, health and alerts, dynamic DA
 membership and rollup, authoring standards, least privilege, operability, testing, and release.
+
+The design now defines the sealed-versus-unsealed boundary in detail. Discovery and Monitoring each
+have a corresponding customer-owned override MP; the Default Management Pack is never used. Lab,
+Standard, and Strict are optional public starter templates, not automatically imported policy. See
+the [override and tuning architecture](../design/hyper-v/override-and-tuning-architecture.md) and
+the public [Management Pack administration guide](management-pack-guide.md).
 
 The Management Pack will not inherit Azure Local-only assumptions such as solution updates, DCMA,
 or the Azure Local ARM resource model. It will include Network ATC discovery and health for eligible
@@ -58,6 +64,7 @@ validation, final catalog curation, and comprehensive architecture validation.
 - [Monitoring catalog and threshold policy](monitoring-catalog.md)
 - [Comprehensive SCOM architecture](../design/hyper-v/architecture.md)
 - [Distributed Application design](../design/hyper-v/distributed-application.md)
+- [Management Pack administration guide](management-pack-guide.md)
 
 The research records everything technically observable, but only actionable and supportable signals
 will ship enabled by default.

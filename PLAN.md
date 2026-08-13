@@ -50,7 +50,7 @@ Epic — Deliver Hyper-V health monitoring
 │   │   └── Task — Validate the comprehensive MP and DA architecture
 │   ├── Story — Author Hyper-V SCOM classes and discoveries
 │   │   └── Task — Author Hyper-V DA classes and membership
-│   ├── Story — Author Hyper-V SCOM monitoring and overrides
+│   ├── Story — Author Hyper-V SCOM monitoring and separate Discovery/Monitoring overrides
 │   │   └── Task — Author Hyper-V DA rollups and operator surfaces
 │   └── Story — Validate, package, and document the release
 └── Feature — Evaluate Azure Monitor through Arc-enabled SCVMM
@@ -104,7 +104,7 @@ products when that is safer than coupling their public contracts.
 | Hyper-V SCOM discovery strategy | Planned after spike | Select supported discovery providers and hosting relationships | Workflow research |
 | Hyper-V signal and rollup policy | Planned after spike | Lock signal catalog, thresholds, defaults, and exceptions | Signal, threshold, and lab research |
 | [0026](docs/design/decisions/0026-platform-owned-scom-distributed-applications.md) | Accepted | Require a separate platform-owned DA in each SCOM product | Repository-owner decision; refined through platform authoring/research |
-| [0027](docs/design/decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Proposed | Define modular sealed Hyper-V MPs and customer override boundary | Packaging and dependency research |
+| [0027](docs/design/decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Proposed | Define modular sealed Hyper-V MPs, separate customer Discovery/Monitoring overrides, and optional tuning templates | Packaging and dependency research |
 | [0028](docs/design/decisions/0028-hyper-v-object-and-discovery-architecture.md) | Proposed | Define stable identities, relationships, staged discovery, execution, and cookdown | Topology, workflow, and lab research |
 | [0029](docs/design/decisions/0029-hyper-v-health-alert-and-da-rollup.md) | Proposed | Define evidence-driven health, alerting, monitoring freshness, and DA rollup | Threshold, catalog, lab, and DA validation |
 
@@ -202,11 +202,13 @@ Deliver:
 2. Apply the independent product boundary in ADR 0022.
 3. Author approved classes, relationships, discoveries, DA classes, and dynamic membership for
    each supported topology variant.
-4. Author monitors, rules, DA rollups, operator views, reports, SLO targets, and override tiers
-   using Hyper-V evidence.
+4. Author monitors, rules, DA rollups, operator views, reports, SLO targets, separate Discovery and
+   Monitoring override contracts, and optional Lab, Standard, and Strict starter templates using
+   Hyper-V evidence.
 5. Validate standalone, clustered, and approved SCVMM-managed configurations, including DA
    population, topology change, state propagation, coexistence, upgrade, and removal.
-6. Seal, sign, version, package, document, and release independently.
+6. Seal, sign, version, package, publish the administration and override guide, and release
+   independently.
 
 ### Hyper-V Azure Monitor through Arc-enabled SCVMM
 

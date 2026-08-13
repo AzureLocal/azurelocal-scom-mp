@@ -2,10 +2,10 @@
 
 <!-- What is being worked on right now. Keep it short; update as work moves. -->
 
-_Execute the Hyper-V SCOM evidence program using the platform-first source boundary in accepted ADR
-0030. Complete support/topology and signal inventories, then map workflows, thresholds, lab results,
-and curated defaults before resolving proposed ADRs 0027–0029 and authoring only in
-`src/hyper-v/scom-mp/`._
+_Build the evidence-safe Hyper-V SCOM foundation in `src/hyper-v/scom-mp/` while continuing the
+research program. Manifests, package references, override templates, build validation, and tests can
+proceed now; classes, workflows, thresholds, Distributed Application elements, and enabled tuning
+profiles require accepted evidence and ADRs 0027–0029._
 
 <!--
   Optional advisory model hint the next tool should honour if available.

@@ -18,7 +18,7 @@ Hyper-V simply because both products use SCOM or share health terminology.
 | Azure Local platform baseline | ADRs 0001–0003, 0007–0009, and 0014–0018 |
 | Azure Local SCOM | ADRs 0004, 0005, 0011, 0022, and 0026 |
 | Azure Local Azure Monitor | ADRs 0006, 0010, 0012, 0013, and 0019 |
-| Hyper-V platform and SCOM | Accepted ADRs 0022, 0025, and 0026 plus proposed ADRs 0027–0029 for package, object/discovery, and health/DA architecture |
+| Hyper-V platform and SCOM | Accepted ADRs 0022, 0025, and 0026 plus proposed ADRs 0027–0029 and 0031 for package, object/discovery, health/DA, and authoring-toolchain architecture |
 | Hyper-V Azure Monitor | ADR 0023, proposed go/defer/no-go gate |
 
 Cross-cutting lifecycle ADRs can provide reusable patterns, but each platform and delivery lane
@@ -58,6 +58,7 @@ must still validate its applicable topology, dependencies, artifacts, tests, and
 | [0028](./0028-hyper-v-object-and-discovery-architecture.md) | Hyper-V object and discovery architecture — stable mobility identity, staged discovery, and cookdown | Proposed |
 | [0029](./0029-hyper-v-health-alert-and-da-rollup.md) | Hyper-V health, alert, and DA rollup — evidence-driven state, actionable alerts, and topology-aware service health | Proposed |
 | [0030](./0030-platform-first-source-tree.md) | Platform-first source tree — Azure Local and Hyper-V, each split into SCOM and Azure Monitor solution roots | Accepted |
+| [0031](./0031-hyper-v-mp-authoring-toolchain.md) | Hyper-V Management Pack authoring toolchain — canonical XML/fragments, deterministic build, Microsoft verification/sealing, and SCOM lab authority | Proposed |
 
 ## When to write an ADR
 

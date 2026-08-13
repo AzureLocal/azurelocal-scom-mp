@@ -193,16 +193,20 @@ explicit discovered or configured policy, not a guess based on one sample.
 | Monitoring pipeline | Worst state with explicit freshness deadlines | Prevent false confidence when telemetry is absent |
 | Branch to DA root | Impact-weighted dependency monitors | Availability-critical branches may affect root differently from advisory configuration |
 
-## Monitoring profiles
+## Monitoring coverage sets
 
-| Profile | Intended behavior |
+| Coverage set | Intended behavior |
 |---|---|
 | Core | Low-noise availability, data-integrity, and monitoring-pipeline health enabled |
 | Balanced | Core plus validated predictive performance and configuration monitoring |
 | Deep diagnostic | High-cardinality collection and disabled-by-default monitors enabled selectively |
 
-Profiles are documented override recommendations, not separate sealed runtime products. Customer
-changes remain in their unsealed override MP.
+Coverage sets describe which validated workflows are selected. Lab, Standard, and Strict tuning
+templates describe environment posture and the values applied to selected workflows. These are
+orthogonal decisions, not separate sealed runtime products. Discovery changes remain in the
+customer Discovery Overrides MP; monitor, rule, alert, and collection changes remain in the
+customer Monitoring Overrides MP. See
+[Override and tuning architecture](override-and-tuning-architecture.md).
 
 ## Decision gate
 

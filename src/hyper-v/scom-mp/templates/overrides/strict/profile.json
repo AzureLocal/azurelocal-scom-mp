@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0",
+  "profile": "Strict",
+  "status": "AwaitingEvidence",
+  "purpose": "Explicitly designated critical services with tested response capacity.",
+  "discoverySettings": [],
+  "monitoringSettings": [],
+  "activationRule": "No setting is added until the workflow ID, safe range, cost, and lab evidence are accepted."
+}

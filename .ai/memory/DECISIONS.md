@@ -44,6 +44,14 @@
   cookdown. Proposed ADR 0029 defines evidence-driven health, alerts, monitoring freshness, and
   topology-aware DA rollup. The research and architecture validation program must validate all three
   before acceptance.
+- Hyper-V customer customization uses two unsealed, customer-owned MPs: Discovery Overrides for the
+  sealed Discovery MP and Monitoring Overrides for the sealed Monitoring MP. Optional Lab,
+  Standard, and Strict profiles are public starter examples only; they are reviewed and copied into
+  customer-owned files, never imported automatically. The Default Management Pack is prohibited.
+- Proposed ADR 0031 makes tool-neutral XML/templates and PowerShell 7 the canonical Hyper-V MP
+  source/build path. Microsoft SDK verification, MPVerify, sealing/signing, and SCOM lab import are
+  authoritative release gates; Silect authoring tools are optional aids rather than source-of-truth
+  or runtime dependencies.
 - Public documentation and repository text must not expose internal work-item identifiers or direct
   board links. Use descriptive public milestones and research-gate names instead.
 - ServiceNow integration is optional and solution-owned. SCOM and Azure Monitor integrations do not

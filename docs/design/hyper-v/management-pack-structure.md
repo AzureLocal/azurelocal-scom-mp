@@ -7,7 +7,7 @@ description: Proposed sealed package decomposition, reference graph, overrides, 
 
 The Hyper-V product is decomposed by responsibility so its model remains stable while monitoring,
 presentation, and reporting evolve. Microsoft recommends logically grouping custom elements,
-sealing reusable MPs that other MPs reference, and keeping overrides in a separate writable MP.
+sealing reusable MPs that other MPs reference, and keeping overrides in separate writable MPs.
 See [Select a Management Pack file](https://learn.microsoft.com/en-us/system-center/scom/select-management-pack-file?view=sc-om-2025)
 and [Create a Management Pack for overrides](https://learn.microsoft.com/en-us/system-center/scom/manage-mp-create-unsealed-mp?view=sc-om-2025).
 
@@ -23,7 +23,8 @@ any sealed public contract is released.
 | `HybridSolutionsCloud.HyperV.Monitoring` | Sealed `.mp` | Unit and aggregate monitors, rules, diagnostics, recoveries, and tasks | Hyper-V Library and Discovery |
 | `HybridSolutionsCloud.HyperV.Presentation` | Sealed `.mp` | Folder hierarchy, state, alert, performance, event, task, and diagram views | Hyper-V Library and Monitoring |
 | `HybridSolutionsCloud.HyperV.Reporting` | Optional sealed `.mp` or `.mpb` resource | Reports and SLO-oriented presentation content | Hyper-V Library and applicable reporting libraries |
-| `HybridSolutionsCloud.HyperV.Overrides` | Customer-owned unsealed `.xml` | Environment-specific enablement, thresholds, intervals, and severity | Sealed Hyper-V MPs |
+| Customer Discovery Overrides | Customer-owned unsealed `.xml` | Discovery enablement, schedules, timeouts, supported scope, and discovery-targeting groups | Hyper-V Library and Discovery |
+| Customer Monitoring Overrides | Customer-owned unsealed `.xml` | Monitor/rule enablement, thresholds, timing, alerts, collection, and monitoring-targeting groups | Hyper-V Library and Monitoring |
 
 The shipped release may combine tightly coupled sealed content into an `.mpb`, but the logical
 boundaries and dependency direction remain unchanged.
@@ -42,9 +43,10 @@ flowchart BT
     MON --> PRES
     LIB --> REPORT[Hyper-V Reporting]
     MON --> REPORT
-    LIB --> OVR[Customer Overrides]
-    DISC --> OVR
-    MON --> OVR
+    LIB --> DOVR[Customer Discovery Overrides]
+    DISC --> DOVR
+    LIB --> MOVR[Customer Monitoring Overrides]
+    MON --> MOVR
 
     LEGACY[Microsoft Hyper-V 2019 MP] -. prohibited .-> LIB
     AZL[Azure Local SCOM MPs] -. prohibited .-> LIB
@@ -55,7 +57,7 @@ flowchart BT
     classDef blocked fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
     class SYS,WIN,CLU microsoft
     class LIB,DISC,MON,PRES,REPORT product
-    class OVR customer
+    class DOVR,MOVR customer
     class LEGACY,AZL blocked
 ```
 
@@ -90,9 +92,11 @@ monitoring and presentation changes can usually move faster.
 ```mermaid
 flowchart TD
     DEFAULT[Sealed product defaults] --> EFFECTIVE[Effective monitoring configuration]
-    TIER[Documented tuning profile] --> ADMIN[SCOM administrator]
-    ADMIN --> OVR[Customer-owned unsealed override MP]
-    OVR --> EFFECTIVE
+    TIER[Lab, Standard, or Strict example] --> ADMIN[SCOM administrator]
+    ADMIN --> DOVR[Customer Discovery Overrides]
+    ADMIN --> MOVR[Customer Monitoring Overrides]
+    DOVR --> EFFECTIVE
+    MOVR --> EFFECTIVE
     EFFECTIVE --> TARGETS[Classes, groups, and instances]
     TARGETS --> PROD[Production HealthService configuration]
 
@@ -100,14 +104,20 @@ flowchart TD
     classDef customer fill:#fff7ed,stroke:#ea580c,color:#7c2d12
     classDef runtime fill:#ecfdf5,stroke:#059669,color:#064e3b
     class DEFAULT,TIER sealed
-    class ADMIN,OVR customer
+    class ADMIN,DOVR,MOVR customer
     class EFFECTIVE,TARGETS,PROD runtime
 ```
 
 The product never writes to the Default Management Pack and never mutates a customer's override
-MP. Microsoft recommends one separate MP for a sealed product's overrides, group targeting instead
-of individual-instance overrides where practical, documentation of every override, and validation
-in a test environment. See [Best practices for configuring overrides](https://learn.microsoft.com/en-us/troubleshoot/system-center/scom/best-practices-configure-overrides).
+MP. Discovery and Monitoring each have a corresponding customer-owned unsealed override MP.
+Microsoft recommends one unsealed override MP for each sealed MP being customized, group targeting
+instead of individual-instance overrides where practical, documentation of every override, and
+validation in a test environment. See [Best practices for configuring overrides](https://learn.microsoft.com/en-us/troubleshoot/system-center/scom/best-practices-configure-overrides).
+
+Optional Lab, Standard, and Strict templates are public examples only. Customers review, rename,
+and copy selected settings into their own unsealed Discovery and Monitoring override MPs. Template
+files are not signed product dependencies and are not imported automatically. The complete contract
+is defined in [Override and tuning architecture](override-and-tuning-architecture.md).
 
 ## Release bundle
 
@@ -131,7 +141,8 @@ flowchart LR
 Each release bundle must contain:
 
 - sealed and release-signed MPs or MP bundles;
-- an optional empty override template, never a customer-specific override;
+- separate Discovery and Monitoring override starter files for the optional Lab, Standard, and
+  Strict profiles, delivered as non-importable public examples;
 - the Management Pack guide, support matrix, monitoring catalog, and tuning guidance;
 - release notes, dependency/version matrix, checksums, and license;
 - import, upgrade, rollback, and removal instructions; and

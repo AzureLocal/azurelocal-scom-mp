@@ -65,8 +65,10 @@ The complete phase-one Hyper-V breakdown is published in
 1. Validate the [comprehensive architecture](../design/hyper-v/architecture.md), DA boundary,
    membership, and rollup, then resolve proposed ADRs 0027–0029.
 2. Author classes, discoveries, and DA membership.
-3. Author monitoring, DA rollups/operator surfaces, and overrides.
-4. Validate, package, and document the independent release.
+3. Author monitoring, DA rollups/operator surfaces, and separate Discovery/Monitoring override
+   contracts.
+4. Validate Lab, Standard, and Strict starter templates, then publish the administration guide and
+   independent release.
 
 The execution order between the three committed Features will be set after research provides
 credible effort and lab-capacity estimates. Adding Hyper-V does not silently compress the existing
