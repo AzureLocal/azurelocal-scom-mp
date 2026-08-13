@@ -26,7 +26,7 @@ Shared topics include:
 - platform-first ownership and delivery-surface boundaries;
 - common health-state vocabulary and rollup design principles;
 - stable logical naming and customization goals;
-- SCOM packaging boundaries that are still proposed;
+- independent SCOM runtime and packaging boundaries;
 - research evidence and decision gates; and
 - repository, documentation, validation, and release conventions.
 
@@ -35,7 +35,8 @@ Shared topics include:
 The [Azure Local design](azure-local/index.md) is the completed baseline originally developed in
 ADRs 0001–0019. It has two committed delivery lanes:
 
-- [Azure Local SCOM Management Pack design](azure-local/scom-mp.md); and
+- [Azure Local SCOM Management Pack design](azure-local/scom-mp.md), including the
+  [Azure Local Distributed Application](azure-local/distributed-application.md); and
 - [Azure Local Azure Monitor Health Models design](azure-local/azure-monitor.md).
 
 The existing [scope and topology](scope-topology.md), [signal catalog](signal-catalog.md), and most
@@ -46,7 +47,8 @@ of the accepted early ADRs describe Azure Local unless a page says otherwise.
 The [Hyper-V design](hyper-v/index.md) is intentionally separate:
 
 - [Hyper-V SCOM Management Pack design](hyper-v/scom-mp.md) is the active first phase under
-  AB#7327; and
+  AB#7327 and includes a required, research-refined
+  [Hyper-V Distributed Application](hyper-v/distributed-application.md); and
 - [Hyper-V Azure Monitor design](hyper-v/azure-monitor.md) remains conditional on the Arc-enabled
   SCVMM research and ADR 0023.
 

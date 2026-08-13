@@ -16,5 +16,8 @@
 - Microsoft ships an older Hyper-V 2019 Management Pack. Use it to research useful concepts in
   AB#7349, but never make it an import, extension, override target, prerequisite, or runtime
   dependency of this product.
+- Do not create a shared Azure Local/Hyper-V sealed library, base class, namespace, Distributed
+  Application, package, or runtime MP reference. ADR 0022 requires independent products; only
+  research and non-runtime engineering practices may be reused.
 - An exhaustive counter/event/property inventory is intentionally larger than the shipped default
   profile. Keep rejected and collection-only candidates traceable instead of silently deleting them.

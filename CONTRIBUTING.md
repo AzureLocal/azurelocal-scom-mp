@@ -16,10 +16,12 @@ Azure Local ADRs in this repository.
   - `AzureLocal.SCOM.Monitoring.mp` — monitors, rules, discoveries
   - `AzureLocal.SCOM.Override.xml` — sealed-MP overrides
 - Never edit `AzureLocal.SCOM.Override.xml` directly for new logic — overrides only.
-- Do not create shared Hyper-V/Azure Local sealed dependencies until proposed
-  [ADR 0022](docs/design/decisions/0022-scom-management-pack-packaging-boundaries.md) is accepted.
-- Keep Hyper-V classes, discoveries, and signals platform-specific unless the accepted ADR assigns
-  them to a shared library and defines their namespace.
+- Never create shared Hyper-V/Azure Local sealed dependencies, base classes, namespaces, packages,
+  or Distributed Applications. Accepted
+  [ADR 0022](docs/design/decisions/0022-scom-management-pack-packaging-boundaries.md) requires
+  independent runtime products.
+- Research, authoring knowledge, non-runtime templates, build automation, and validation methods may
+  be reused without creating a cross-product MP reference.
 
 ### Testing
 

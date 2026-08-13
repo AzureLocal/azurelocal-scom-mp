@@ -19,7 +19,8 @@ design remains research-gated.
 | Threshold and tuning policy | [AB#7351](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7351) |
 | Lab and fault validation | [AB#7352](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7352) |
 | Curated default catalog | [AB#7353](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7353) |
-| Packaging | [ADR 0022](../decisions/0022-scom-management-pack-packaging-boundaries.md), proposed |
+| Distributed Application | [Hyper-V DA design](distributed-application.md) and [ADR 0026](../decisions/0026-platform-owned-scom-distributed-applications.md) |
+| Packaging | [ADR 0022](../decisions/0022-scom-management-pack-packaging-boundaries.md), accepted independent Hyper-V product |
 
 Network ATC is the preferred networking baseline for eligible Windows Server 2025 Datacenter
 failover clusters unless SCVMM/SDN is the selected authority. Manual and older non-ATC networking
@@ -28,10 +29,15 @@ remain explicit research variants.
 The Microsoft Hyper-V 2019 MP is evidence only. The new MP will not import, extend, override,
 require, or take a runtime dependency on it.
 
+The Hyper-V DA is required. AB#7343, AB#7348, and AB#7350 refine its stable boundary keys, dynamic
+membership, and topology-aware dependency rollups for standalone hosts, failover clusters, and
+approved SCVMM/SDN variants.
+
 ## Research and implementation pages
 
 - [Phase-one research plan](../../hyper-v/monitoring-research.md)
 - [Monitoring catalog and threshold policy](../../hyper-v/monitoring-catalog.md)
+- [Distributed Application design](distributed-application.md)
 - [Hyper-V SCOM product page](../../hyper-v/scom-mp.md)
 
 Successor Hyper-V scope/topology, discovery, and signal/rollup ADRs will be added after the research

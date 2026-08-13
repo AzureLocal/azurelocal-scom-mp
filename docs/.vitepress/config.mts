@@ -75,6 +75,7 @@ export default defineConfig({
           items: [
             { text: 'Platform design', link: '/design/azure-local/' },
             { text: 'SCOM Management Pack', link: '/design/azure-local/scom-mp' },
+            { text: 'Distributed Application', link: '/design/azure-local/distributed-application' },
             { text: 'Azure Monitor Health Models', link: '/design/azure-local/azure-monitor' },
             { text: 'Scope and topology', link: '/design/scope-topology' },
             { text: 'Health model', link: '/design/health-model' },
@@ -88,6 +89,7 @@ export default defineConfig({
           items: [
             { text: 'Platform design', link: '/design/hyper-v/' },
             { text: 'SCOM Management Pack', link: '/design/hyper-v/scom-mp' },
+            { text: 'Distributed Application', link: '/design/hyper-v/distributed-application' },
             { text: 'Azure Monitor Health Models', link: '/design/hyper-v/azure-monitor' },
             { text: 'SCOM monitoring research', link: '/hyper-v/monitoring-research' },
             { text: 'Monitoring catalog policy', link: '/hyper-v/monitoring-catalog' },
@@ -123,6 +125,7 @@ export default defineConfig({
             { text: '0023 — Hyper-V Azure Monitor gate', link: '/design/decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm' },
             { text: '0024 — Repository and publishing identity', link: '/design/decisions/0024-repository-and-publishing-identity' },
             { text: '0025 — Hyper-V network authority', link: '/design/decisions/0025-hyper-v-network-management-authority' },
+            { text: '0026 — Platform-owned SCOM DAs', link: '/design/decisions/0026-platform-owned-scom-distributed-applications' },
             { text: 'ADR template', link: '/design/decisions/template' },
           ],
         },
@@ -135,6 +138,7 @@ export default defineConfig({
             { text: 'Track overview', link: '/azure-local/' },
             { text: 'Platform design', link: '/design/azure-local/' },
             { text: 'SCOM design', link: '/design/azure-local/scom-mp' },
+            { text: 'SCOM Distributed Application', link: '/design/azure-local/distributed-application' },
             { text: 'Azure Monitor design', link: '/design/azure-local/azure-monitor' },
             { text: 'SCOM Management Pack', link: '/scom-mp/' },
             { text: 'Azure Monitor Health Models', link: '/azure-monitor/' },
@@ -149,6 +153,7 @@ export default defineConfig({
           items: [
             { text: 'Overview', link: '/scom-mp/' },
             { text: 'Design', link: '/design/azure-local/scom-mp' },
+            { text: 'Distributed Application', link: '/design/azure-local/distributed-application' },
             { text: 'Health-rollup tree', link: '/scom-mp/diagrams/health-tree' },
             { text: 'SquaredUp Dashboard Server', link: '/scom-mp/squaredup/' },
           ],
@@ -175,6 +180,7 @@ export default defineConfig({
             { text: 'Track overview', link: '/hyper-v/' },
             { text: 'Platform design', link: '/design/hyper-v/' },
             { text: 'SCOM design', link: '/design/hyper-v/scom-mp' },
+            { text: 'SCOM Distributed Application', link: '/design/hyper-v/distributed-application' },
             { text: 'Azure Monitor design', link: '/design/hyper-v/azure-monitor' },
             { text: 'SCOM Management Pack', link: '/hyper-v/scom-mp' },
             { text: 'SCOM monitoring research', link: '/hyper-v/monitoring-research' },

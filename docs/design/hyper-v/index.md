@@ -21,8 +21,12 @@ inherit Azure Local entities, signals, thresholds, cloud dependencies, or accept
   SCVMM/SDN?
 - Which signals should become default monitors, disabled monitors, collection rules, diagnostics,
   or exclusions?
-- Which shared SCOM packaging option, if any, is safe for both platform MPs?
+- Which stable keys and relationships populate each standalone-host or cluster
+  [Distributed Application](distributed-application.md)?
 - Can Arc-enabled SCVMM expose a supportable Azure Monitor entity and telemetry model?
+
+SCOM packaging is no longer an open question. [ADR 0022](../decisions/0022-scom-management-pack-packaging-boundaries.md)
+requires completely independent Azure Local and Hyper-V runtime products.
 
 These questions are resolved through the [research backlog](../research-spikes.md), not by copying
 the Azure Local design.

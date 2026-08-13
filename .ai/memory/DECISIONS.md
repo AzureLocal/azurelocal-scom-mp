@@ -18,8 +18,13 @@
 - Azure Local SCOM and Azure Monitor plus Hyper-V SCOM are committed delivery surfaces. Hyper-V
   Azure Monitor is conditional on Arc-enabled SCVMM inventory/guest-management and telemetry lab
   spikes, followed by an accepted go/no-go ADR.
-- Shared health semantics and SCOM engineering patterns are expected, but shared sealed Management
-  Pack dependencies are not approved until proposed ADR 0022 is resolved.
+- Azure Local and Hyper-V are completely independent SCOM runtime products. Accepted ADR 0022
+  prohibits shared sealed libraries, classes, namespaces, Distributed Applications, packages,
+  versions, or cross-product MP dependencies. Research and non-runtime engineering practices may
+  be reused.
+- Each SCOM product must ship its own platform-owned Distributed Application. ADR 0026 requires an
+  Azure Local deployment DA and separate Hyper-V cluster/standalone-host DAs with dynamic
+  membership, tested rollup, operator views, reports, dashboards, and SLO targeting.
 - Hyper-V SCOM research preserves a complete raw capability inventory separately from the curated
   default monitoring catalog. Technically collectable does not mean enabled or health-impacting.
 - A 75% host-memory-used threshold is not accepted as a standalone default. Default memory health

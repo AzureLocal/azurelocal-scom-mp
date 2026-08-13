@@ -14,11 +14,11 @@ Hyper-V simply because both products use SCOM or share health terminology.
 | Design lane | Governing decisions |
 |---|---|
 | Shared portfolio architecture | ADRs 0020, 0021, and 0024 |
-| Shared SCOM packaging boundary | ADR 0022, proposed |
+| Shared SCOM product boundaries | ADR 0022 requires independent runtime products; ADR 0026 requires platform-owned DAs |
 | Azure Local platform baseline | ADRs 0001–0003, 0007–0009, and 0014–0018 |
-| Azure Local SCOM | ADRs 0004, 0005, and 0011; ADR 0022 remains a packaging gate |
+| Azure Local SCOM | ADRs 0004, 0005, 0011, 0022, and 0026 |
 | Azure Local Azure Monitor | ADRs 0006, 0010, 0012, 0013, and 0019 |
-| Hyper-V platform and SCOM | ADR 0025 plus successor topology, discovery, signal, threshold, and rollup ADRs after AB#7327 |
+| Hyper-V platform and SCOM | ADRs 0022, 0025, and 0026 plus successor topology, discovery, signal, threshold, and rollup ADRs after AB#7327 |
 | Hyper-V Azure Monitor | ADR 0023, proposed go/defer/no-go gate |
 
 Cross-cutting lifecycle ADRs can provide reusable patterns, but each platform and delivery lane
@@ -49,10 +49,11 @@ must still validate its applicable topology, dependencies, artifacts, tests, and
 | [0019](./0019-cost-scale-retention.md) | Cost, scale, and data retention — per-tier ingestion envelopes, sharding, retention policy | Accepted |
 | [0020](./0020-vitepress-documentation-platform.md) | Documentation platform — VitePress with Mermaid and GitHub Pages | Accepted |
 | [0021](./0021-platform-and-delivery-track-architecture.md) | Platform-first architecture — Azure Local and Hyper-V, split by SCOM and Azure Monitor delivery surfaces | Accepted |
-| [0022](./0022-scom-management-pack-packaging-boundaries.md) | SCOM packaging boundaries — shared sealed library vs separate platform libraries | Proposed |
+| [0022](./0022-scom-management-pack-packaging-boundaries.md) | Independent SCOM packaging — no shared runtime MP dependencies | Accepted |
 | [0023](./0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) | Hyper-V Azure Monitor through Arc-enabled SCVMM — go, defer, or no-go gate | Proposed |
 | [0024](./0024-repository-and-publishing-identity.md) | Repository and publishing identity — Hybrid Solutions Cloud and labs.hybridsolutions.cloud | Accepted |
 | [0025](./0025-hyper-v-network-management-authority.md) | Hyper-V network-management authority — prefer Network ATC when eligible; distinguish SCVMM/SDN and manual paths | Accepted |
+| [0026](./0026-platform-owned-scom-distributed-applications.md) | Platform-owned SCOM Distributed Applications — separate Azure Local and Hyper-V service roots | Accepted |
 
 ## When to write an ADR
 

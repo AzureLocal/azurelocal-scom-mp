@@ -19,6 +19,8 @@ forcing them to share unsupported topology, signals, binaries, or release behavi
    Monitor artifacts use deployment parameters and tier files.
 5. **Conditional work stays conditional.** Hyper-V Azure Monitor is not a committed implementation
    until ADR 0023 records a go decision.
+6. **Share research, not runtime.** Azure Local and Hyper-V have independent SCOM namespaces,
+   packages, classes, Distributed Applications, versions, and support lifecycles.
 
 ## Shared pages and decisions
 
@@ -28,7 +30,8 @@ forcing them to share unsupported topology, signals, binaries, or release behavi
 | [Customization](../customization.md) | Shared product goal; exact artifacts and defaults remain lane-specific |
 | [Research spikes](../research-spikes.md) | Evidence contract and cross-lane decision gates |
 | [ADR 0021](../decisions/0021-platform-and-delivery-track-architecture.md) | Platform-first product structure |
-| [ADR 0022](../decisions/0022-scom-management-pack-packaging-boundaries.md) | Proposed shared-versus-separate SCOM packaging decision |
+| [ADR 0022](../decisions/0022-scom-management-pack-packaging-boundaries.md) | Accepted independent SCOM packaging and runtime boundary |
+| [ADR 0026](../decisions/0026-platform-owned-scom-distributed-applications.md) | A separate platform-owned Distributed Application in each SCOM product |
 | [ADR 0020](../decisions/0020-vitepress-documentation-platform.md) | Documentation platform |
 | [ADR 0024](../decisions/0024-repository-and-publishing-identity.md) | Repository and publishing identity |
 
@@ -39,4 +42,5 @@ forcing them to share unsupported topology, signals, binaries, or release behavi
 - Azure Local lifecycle, registration, DCMA, and Azure resource dependencies;
 - Hyper-V standalone-host and general failover-cluster behavior;
 - Network ATC eligibility or SCVMM/SDN ownership in a particular topology; and
-- Management Pack binaries or sealed dependencies before ADR 0022 is accepted.
+- Management Pack binaries, sealed dependencies, classes, or Distributed Applications across the
+  two platform products.

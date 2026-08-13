@@ -39,10 +39,22 @@
 - **Architecture:** Added accepted ADR 0025 for Hyper-V network-management authority. It preserves
   accepted ADR 0021 as an immutable historical record while superseding its Network ATC
   implication.
-- **Validation:** VitePress production build passed and rendered all eight new design pages plus
-  ADR 0025. Markdownlint passed across all changed Markdown, `git diff --check` passed, and the
-  changed-file secret scan found no matches. The scoped navigation-title CSS also passed a fresh
-  VitePress production build.
+- **Independent SCOM products:** Accepted ADR 0022 with no shared Azure Local/Hyper-V sealed
+  library, class, namespace, package, Distributed Application, release, or runtime dependency.
+  Research and non-runtime engineering practices may still be reused.
+- **Distributed Applications:** Added accepted ADR 0026 and dedicated Azure Local and Hyper-V DA
+  design pages. Azure Local owns its deployment DA; Hyper-V owns a separate DA per supported
+  failover cluster or standalone host. Both require dynamic membership, tested health propagation,
+  operator views, reports, dashboards, and SLO targeting.
+- **DA backlog:** Created AB#7354–AB#7357 for Azure Local and Hyper-V DA classes/membership and
+  rollups/operator surfaces. Updated Features AB#7315 and AB#7317 plus AB#7319, AB#7320, AB#7321,
+  AB#7327, AB#7328, AB#7329, AB#7343, and AB#7350 to enforce independent packaging and DA
+  delivery/research requirements.
+- **Validation:** VitePress production build passed and rendered both DA pages plus ADRs 0022 and
+  0026. Markdownlint passed across all changed Markdown, `git diff --check` passed, and the
+  changed-file secret scan found no matches. Governance validation found its global markdownlint
+  and lychee executables unavailable; the repository-configured markdownlint and VitePress internal
+  link/build checks ran successfully instead.
 - **Branch:** `main`.
 - **Next steps:** Run AB#7343 and the raw inventory Tasks AB#7344–AB#7349. Preserve raw enumeration
   output even when a signal is later rejected. Do not author AB#7328 or AB#7329 until AB#7353 and

@@ -21,9 +21,9 @@ The Azure Local SCOM MP is designed with SquaredUp integration in mind:
 
 1. **Consistent `AzureLocal.*` class prefix** — all tiles can target Azure Local entities
    by class prefix without per-class configuration.
-2. **Distributed Application at the root** — the DS DA tile renders the full 3-layer
-   health rollup tree (`Infrastructure` → `Platform` → `AzureServices` component groups)
-   automatically.
+2. **Distributed Application at the root** — the DS DA tile renders the Azure Local service root
+   with `Infrastructure`, `Platform`, `AzureServices`, and `MonitoringPipeline` branches
+   automatically. See the [DA design](../../design/azure-local/distributed-application.md).
 3. **Alert allow-list + auto-resolve** (per [ADR 0009](../../design/decisions/0009-alert-vs-health-state.md))
    — prevents the alert tile from flooding the dashboard with transient state changes.
 

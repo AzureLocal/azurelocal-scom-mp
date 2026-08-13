@@ -69,10 +69,11 @@ visualization layers for the SCOM and Azure Monitor tracks respectively.
 
 ## Project status
 
-::: info The platform split is planned
+::: info Independent platform products are planned
 The original Azure Local design baseline is complete. The roadmap now separates Azure Local and
-Hyper-V into their own Epics and delivery Features. Hyper-V research and the shared SCOM packaging
-decision come before authoring. See the [project roadmap](/project/roadmap) and
+Hyper-V into their own Epics and delivery Features. Accepted ADRs require independent SCOM runtime
+products and a platform-owned Distributed Application in each. Hyper-V topology, signal, and DA
+membership research comes before authoring. See the [project roadmap](/project/roadmap) and
 [implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
 :::
 

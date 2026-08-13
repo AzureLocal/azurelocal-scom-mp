@@ -38,7 +38,7 @@ These items unblock safe implementation:
 
 | Item | Outcome | Dependency |
 |---|---|---|
-| [Shared SCOM packaging spike — AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319) | Decide common library versus separate platform libraries | Feeds ADR 0022 and both SCOM Features |
+| [Independent SCOM packaging contract — AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319) | Validate independent namespaces, artifacts, signing, coexistence, upgrade, and removal behavior | Implements accepted ADR 0022 for both SCOM Features |
 | [Hyper-V SCOM monitoring research — AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327) | Exhaustive signal inventory, MP gap analysis, workflow/threshold research, lab validation, and curated defaults through AB#7343–AB#7353 | Active; gates Hyper-V authoring |
 | [Azure Local Health Models revalidation — AB#7323](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7323) | Revalidate APIs, preview limits, identity, and signal contracts | Gates Azure Local Azure Monitor authoring |
 | [Arc-enabled SCVMM inventory spike — AB#7331](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7331) | Prove inventory and guest-management boundaries | Precedes telemetry proof |
@@ -52,9 +52,9 @@ The complete phase-one Hyper-V breakdown is published in
 
 ### Azure Local SCOM Management Pack
 
-1. Author classes and discoveries — [AB#7320](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7320).
-2. Author monitoring and overrides — [AB#7321](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7321).
-3. Validate, package, and document the release — [AB#7322](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7322).
+1. Author classes, discoveries, and DA membership — [AB#7320](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7320) and [AB#7354](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7354).
+2. Author monitoring, DA rollups/operator surfaces, and overrides — [AB#7321](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7321) and [AB#7355](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7355).
+3. Validate, package, and document the independent release — [AB#7322](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7322).
 
 ### Azure Local Azure Monitor
 
@@ -64,9 +64,10 @@ The complete phase-one Hyper-V breakdown is published in
 
 ### Hyper-V SCOM Management Pack
 
-1. Author classes and discoveries — [AB#7328](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7328).
-2. Author monitoring and overrides — [AB#7329](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7329).
-3. Validate, package, and document the release — [AB#7330](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7330).
+1. Complete DA boundary, membership, and rollup evidence in AB#7327.
+2. Author classes, discoveries, and DA membership — [AB#7328](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7328) and [AB#7356](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7356).
+3. Author monitoring, DA rollups/operator surfaces, and overrides — [AB#7329](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7329) and [AB#7357](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7357).
+4. Validate, package, and document the independent release — [AB#7330](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7330).
 
 The execution order between the three committed Features will be set after research provides
 credible effort and lab-capacity estimates. Adding Hyper-V does not silently compress the existing
@@ -93,7 +94,9 @@ Each committed delivery Feature includes:
 - support, prerequisite, security, cost, scale, upgrade, and removal guidance;
 - versioned artifacts and release notes;
 - upgrade-safe customization;
-- monitoring-pipeline self-observability; and
+- monitoring-pipeline self-observability;
+- a platform-owned Distributed Application with validated dynamic membership, rollup, operator
+  views, reports, dashboards, and SLO targets; and
 - optional SquaredUp visualization guidance where it adds value.
 
 ## Future companion products
@@ -102,6 +105,9 @@ Application and guest-workload monitoring remains separate from the infrastructu
 Potential companion products include VM workloads, AKS Arc workloads, SQL Managed Instance, and
 Azure Virtual Desktop. Their health can depend on the appropriate Hyper-V or Azure Local platform
 model without expanding the platform MPs into application monitoring suites.
+
+A combined Azure Local and Hyper-V fleet DA is also a possible companion product. It must be an
+optional third MP that depends on both platform products; neither platform MP depends on it.
 
 ## How to suggest a roadmap addition
 

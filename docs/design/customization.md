@@ -12,7 +12,7 @@ operational reality without modifying sealed MPs or canonical Bicep templates.
 ::: info Design-lane scope
 Customization without forking is a shared product goal. The concrete MP names, override keys,
 Bicep parameters, and tier defaults below are the Azure Local baseline. Hyper-V SCOM adopts its
-concrete surface only after AB#7327 and ADR 0022; Hyper-V Azure Monitor parameters exist only after
+concrete surface only after AB#7327; Hyper-V Azure Monitor parameters exist only after
 an ADR 0023 go decision.
 :::
 
@@ -23,14 +23,15 @@ an ADR 0023 go decision.
 
 ## SCOM Management Packs
 
-The pattern applies to both Azure Local and Hyper-V. Exact artifact names and any shared library
-dependency remain proposed in [ADR 0022](decisions/0022-scom-management-pack-packaging-boundaries.md).
+The customization pattern applies to both Azure Local and Hyper-V, but their override packs and
+sealed targets are independent. [ADR 0022](decisions/0022-scom-management-pack-packaging-boundaries.md)
+prohibits a shared runtime library or cross-product override dependency.
 
 ### Override pack pattern
 
-The established Azure Local pattern uses a sealed product MP and an unsealed override pack.
-The names below are the current Azure Local baseline; ADR 0022 can supersede the exact packaging
-before implementation:
+The established Azure Local pattern uses a sealed product MP and an unsealed override pack. The
+names below are the current Azure Local baseline. Hyper-V will use its own namespace, sealed MPs,
+and override pack:
 
 | MP | Sealed? | Edited by | Purpose |
 |---|---|---|---|

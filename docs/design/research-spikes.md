@@ -8,8 +8,8 @@ when it merely collects links.
 
 | Spike | Platform / surface | Required evidence | Work item |
 |---|---|---|---|
-| Shared SCOM packaging boundaries | Shared SCOM foundation | Type-ownership matrix, dependency alternatives, versioning and upgrade analysis, artifact naming recommendation | [AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319) |
-| Hyper-V SCOM monitoring catalog | Hyper-V / SCOM | Complete raw signal inventory, incumbent-MP gap analysis, SCOM workflow mapping, threshold evidence, lab validation, curated defaults, and successor ADR inputs | [AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327) |
+| Independent SCOM packaging contract | Both SCOM products | Separate artifact/namespace ownership, no-dependency reference graphs, signing, coexistence, upgrade, and removal evidence | [AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319) |
+| Hyper-V SCOM monitoring catalog and DA refinement | Hyper-V / SCOM | Complete raw signal inventory, prior-MP research, SCOM workflow mapping, DA boundary/membership/rollup inputs, threshold evidence, lab validation, curated defaults, and successor ADR inputs | [AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327) |
 | Azure Local Health Models API and signal revalidation | Azure Local / Azure Monitor | Current API versions, preview limits, identity and RBAC contract, signal-source delta report | [AB#7323](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7323) |
 | Arc-enabled SCVMM inventory and guest management | Hyper-V / Azure Monitor | ARM resource map, Arc Resource Bridge behavior, guest-management distinction, support and network matrix, repeatable lab steps | [AB#7331](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7331) |
 | Hyper-V telemetry and Health Models feasibility | Hyper-V / Azure Monitor | Minimum viable entity graph, supported signals, fault-injection result, identity, latency, scale and cost findings | [AB#7332](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7332) |
@@ -18,8 +18,9 @@ when it merely collects links.
 
 ```mermaid
 flowchart LR
-    P[Platform split decision<br/>ADR 0021] --> S1[Shared packaging spike<br/>AB#7319]
-    S1 --> Pkg[Packaging decision<br/>ADR 0022]
+    P[Platform split decision<br/>ADR 0021] --> Pkg[Independent packaging decision<br/>ADR 0022]
+    Pkg --> S1[Packaging contract validation<br/>AB#7319]
+    Pkg --> DA[Platform-owned DAs<br/>ADR 0026]
     P --> S2[Hyper-V SCOM catalog research<br/>AB#7327]
     P --> Net[Hyper-V network authority<br/>ADR 0025]
     Net --> S2
@@ -36,14 +37,14 @@ shown on the [Hyper-V monitoring research](../hyper-v/monitoring-research.md) pa
 
 | Work item | Focus |
 |---|---|
-| [AB#7343](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7343) | Support matrix and topology |
+| [AB#7343](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7343) | Support matrix, topology, DA boundary keys, and candidate membership |
 | [AB#7344](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7344) | Windows Server host and platform signals |
 | [AB#7345](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7345) | Hyper-V, hypervisor, and VM signals |
 | [AB#7346](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7346) | Failover Cluster, quorum, and CSV signals |
 | [AB#7347](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7347) | Storage, VHD/VHDX, and Replica signals |
 | [AB#7348](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7348) | Network ATC, manual, and SCVMM/SDN Hyper-V networking signals |
 | [AB#7349](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7349) | Existing Microsoft MP research inputs; no runtime dependency or reuse of its package |
-| [AB#7350](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7350) | Supported SCOM workflow mapping and cost |
+| [AB#7350](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7350) | Supported SCOM workflow, dynamic DA membership, rollup mapping, and cost |
 | [AB#7351](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7351) | Threshold, duration, recovery, and tuning policy |
 | [AB#7352](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7352) | Lab source, fault, latency, recovery, and overhead validation |
 | [AB#7353](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7353) | Final Must/Should/Could/collect-only/excluded catalog |

@@ -26,3 +26,9 @@ Azure Local/SCOM, Azure Local/Azure Monitor, Hyper-V/SCOM, and conditional Hyper
 lanes. Shared design is deliberately small; accepted Azure Local ADRs do not silently govern
 Hyper-V. ADR 0025 establishes Network ATC as the preferred eligible Hyper-V cluster baseline while
 requiring separate handling for SCVMM/SDN and non-ATC network-management paths.
+
+ADRs 0022 and 0026 establish the SCOM product boundary: Azure Local and Hyper-V share research and
+non-runtime engineering practices only. They own independent MP namespaces, packages, classes,
+monitoring, overrides, Distributed Applications, releases, and support lifecycles. Azure Local uses
+the deployment DA defined by ADR 0005/0018. Hyper-V requires a separate DA instance per supported
+failover cluster or standalone host, refined by AB#7327 before authoring.

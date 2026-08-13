@@ -20,6 +20,7 @@ baseline. The topology and signal evidence in ADRs 0001–0019 was developed for
 - [Signal catalog](../signal-catalog.md)
 - [Customization](../customization.md)
 - [SCOM and Azure Monitor concept mapping](../concept-mapping.md)
+- [Azure Local Distributed Application](distributed-application.md)
 
 Network ATC is important to Azure Local, but it is not unique to Azure Local. Eligible Windows
 Server 2025 Datacenter Hyper-V failover clusters can also use it. Azure Local remains distinct

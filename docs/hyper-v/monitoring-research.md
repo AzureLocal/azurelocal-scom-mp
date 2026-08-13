@@ -29,14 +29,14 @@ from duplicate or low-value noise.
 
 | Phase | Research spike | Required outcome |
 |---|---|---|
-| Scope | [AB#7343 — support matrix and topology](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7343) | Supported versions, topology variants, entities, relationships, keys, and exclusions |
+| Scope | [AB#7343 — support matrix and topology](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7343) | Supported versions, topology variants, entities, relationships, DA boundary keys, candidate component membership, and exclusions |
 | Inventory | [AB#7344 — Windows Server host signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7344) | OS, services, CPU, memory, disks, volumes, NICs, time, reliability, and Windows-exposed platform data |
 | Inventory | [AB#7345 — Hyper-V, hypervisor, and VM signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7345) | Host, scheduler, VM, integration service, checkpoint, metering, and migration signals |
 | Inventory | [AB#7346 — Failover Cluster, quorum, and CSV signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7346) | Cluster, node, quorum, group, resource, network, clustered VM role, CSV, and CSV cache signals |
 | Inventory | [AB#7347 — storage, VHD, and Replica signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7347) | Host and virtual storage, VHD/VHDX, checkpoint chains, QoS, latency, errors, capacity, and Replica |
 | Inventory | [AB#7348 — network-management signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7348) | Network ATC intent health for eligible clusters; manual and SCVMM/SDN alternatives; physical NIC through vSwitch, port, and VM adapter; QoS, offloads, drops, errors, queues, and saturation |
 | Reference analysis | [AB#7349 — existing MP research](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7349) | Reusable monitoring ideas, topology, signals, thresholds, and operational knowledge from Microsoft MPs without taking a runtime dependency |
-| Engineering | [AB#7350 — SCOM workflow mapping](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7350) | Target, discovery/monitor/rule type, interval, cookdown, permissions, cardinality, and estimated cost |
+| Engineering | [AB#7350 — SCOM workflow mapping](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7350) | Target, discovery/monitor/rule type, dynamic DA membership and relationships, rollup, interval, cookdown, permissions, cardinality, and estimated cost |
 | Engineering | [AB#7351 — thresholds and tuning](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7351) | Evidence-backed conditions, durations, hysteresis, recovery, missing-data behavior, and override tiers |
 | Validation | [AB#7352 — lab and fault validation](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7352) | Repeatable fixtures, captures, faults, latency, recovery, duplicate-event, overhead, and negative results |
 | Synthesis | [AB#7353 — default monitoring catalog](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7353) | Must/Should/Could/collect-only/excluded decisions and authoring-ready signal contracts |
@@ -98,5 +98,7 @@ AB#7327 can close only when:
 - default behavior and threshold evidence are explicit;
 - useful Microsoft MP behavior is captured and revalidated without creating a runtime dependency;
 - unknown, missing, maintenance, dependency, and recovery behavior are defined;
+- standalone-host and cluster DA boundaries, component membership, VM expected-state behavior, and
+  rollup inputs are defined;
 - rejected candidates remain traceable with a reason; and
-- successor scope/topology, discovery, and signal/rollup ADRs are ready for approval.
+- successor scope/topology, discovery, signal/rollup, and DA-refinement ADRs are ready for approval.

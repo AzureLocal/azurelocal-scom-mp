@@ -25,6 +25,10 @@
   separated into SCOM and Azure Monitor design lanes.
 * Add ADR 0025 for Hyper-V network-management authority and the Network ATC, SCVMM/SDN, and manual
   networking variants.
+* Accept ADR 0022 with completely independent Azure Local and Hyper-V SCOM runtime packaging.
+* Add ADR 0026 plus explicit Azure Local and Hyper-V Distributed Application design contracts,
+  implementation tasks AB#7354–AB#7357, dynamic membership, rollup, views, reports, dashboards,
+  SLO targets, and validation requirements.
 
 ## [0.2.1](https://github.com/AzureLocal/azurelocal-scom-mp/compare/azurelocal-scom-mp-v0.2.0...azurelocal-scom-mp-v0.2.1) (2026-05-05)
 

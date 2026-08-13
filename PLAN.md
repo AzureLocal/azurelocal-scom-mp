@@ -1,8 +1,9 @@
 # Implementation plan — Hybrid Infrastructure Health Monitoring
 
-> Last updated: August 12, 2026
+> Last updated: August 13, 2026
 >
-> Status: Platform split planned; research and architecture gates are next
+> Status: Independent SCOM packaging and platform-owned Distributed Applications accepted;
+> Hyper-V research active
 > Published roadmap: <https://labs.hybridsolutions.cloud/hybrid-health-monitoring/project/roadmap>
 
 ## Objective
@@ -15,9 +16,10 @@ platform first and monitoring surface second:
 | **Azure Local** | Committed | Committed |
 | **Hyper-V** | Committed | Conditional future track through Azure Arc-enabled SCVMM |
 
-The product shares health semantics and reusable engineering patterns across tracks. It does not
-assume that platform topology, discoveries, signals, binaries, support matrices, or release cadence
-are interchangeable.
+The product can reuse research, health terminology, authoring knowledge, and non-runtime engineering
+tooling. Azure Local and Hyper-V remain completely independent SCOM runtime products; they do not
+share classes, binaries, Distributed Applications, namespaces, dependencies, packages, versions,
+or support lifecycles.
 
 ## Product hierarchy
 
@@ -26,9 +28,11 @@ Azure DevOps is the delivery system of record:
 ```text
 Epic AB#7313 — Deliver Azure Local health monitoring
 ├── Feature AB#7315 — Deliver the Azure Local SCOM Management Pack
-│   ├── Story AB#7319 — Decide shared SCOM library and packaging boundaries
+│   ├── Story AB#7319 — Define independent SCOM packaging and coexistence contract
 │   ├── Story AB#7320 — Author Azure Local SCOM classes and discoveries
+│   │   └── Task AB#7354 — Author Azure Local DA classes and membership
 │   ├── Story AB#7321 — Author Azure Local SCOM monitoring and overrides
+│   │   └── Task AB#7355 — Author Azure Local DA rollups and operator surfaces
 │   └── Story AB#7322 — Validate, package, and document the release
 └── Feature AB#7316 — Deliver Azure Monitor health models for Azure Local
     ├── Story AB#7323 — Validate APIs and signal contracts
@@ -44,7 +48,9 @@ Epic AB#7314 — Deliver Hyper-V health monitoring
 │   │   ├── Task AB#7352 — Lab and fault validation
 │   │   └── Task AB#7353 — Curate the authoring-ready default catalog
 │   ├── Story AB#7328 — Author Hyper-V SCOM classes and discoveries
+│   │   └── Task AB#7356 — Author Hyper-V DA classes and membership
 │   ├── Story AB#7329 — Author Hyper-V SCOM monitoring and overrides
+│   │   └── Task AB#7357 — Author Hyper-V DA rollups and operator surfaces
 │   └── Story AB#7330 — Validate, package, and document the release
 └── Feature AB#7318 — Evaluate Azure Monitor through Arc-enabled SCVMM
     ├── Story AB#7331 — Research inventory and guest management
@@ -55,7 +61,7 @@ Epic AB#7314 — Deliver Hyper-V health monitoring
 
 Parent-child and predecessor links in Azure DevOps enforce the research and implementation gates.
 
-## Shared architecture
+## Reusable research and engineering practices
 
 ### Reuse across both platforms
 
@@ -69,6 +75,8 @@ Parent-child and predecessor links in Azure DevOps enforce the research and impl
 - self-observability for the monitoring pipeline; and
 - documentation and optional dashboard patterns.
 
+These are design and engineering practices, not shared Management Pack runtime elements.
+
 ### Keep platform-specific
 
 - entity and class inventory;
@@ -76,22 +84,25 @@ Parent-child and predecessor links in Azure DevOps enforce the research and impl
 - signal sources, thresholds, and support evidence;
 - product prerequisites and supported-version matrix;
 - Azure resource and identity dependencies;
-- artifacts and namespaces until ADR 0022 decides packaging; and
+- artifacts, namespaces, sealed libraries, monitoring packs, override packs, Distributed
+  Applications, signing identities, versions, and support lifecycles; and
 - release cadence where platform dependencies differ.
 
-This distinction prevents a superficially convenient shared MP from creating incorrect discovery,
-health rollup, upgrade, or support behavior.
+Accepted [ADR 0022](docs/design/decisions/0022-scom-management-pack-packaging-boundaries.md)
+prohibits cross-product runtime dependencies. Similar implementation source may exist in both
+products when that is safer than coupling their public contracts.
 
 ## Architecture decision plan
 
 | ADR | Status | Purpose | Gate |
 |---|---|---|---|
 | [0021](docs/design/decisions/0021-platform-and-delivery-track-architecture.md) | Accepted | Establish platform-first planning with separate delivery surfaces | Repository-owner decision |
-| [0022](docs/design/decisions/0022-scom-management-pack-packaging-boundaries.md) | Proposed | Decide shared library versus separate platform MP dependencies | AB#7319 |
+| [0022](docs/design/decisions/0022-scom-management-pack-packaging-boundaries.md) | Accepted | Require independent Azure Local and Hyper-V SCOM runtime products | Repository-owner decision; AB#7319 validates the contract |
 | [0023](docs/design/decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) | Proposed | Decide whether the conditional Hyper-V Azure Monitor track proceeds | AB#7331 and AB#7332 |
 | Hyper-V scope and topology | Planned after spike | Lock supported topology, entity inventory, exclusions, and version matrix | AB#7327 |
 | Hyper-V SCOM discovery strategy | Planned after spike | Select supported discovery providers and hosting relationships | AB#7327 |
 | Hyper-V signal and rollup policy | Planned after spike | Lock signal catalog, thresholds, defaults, and exceptions | AB#7327 |
+| [0026](docs/design/decisions/0026-platform-owned-scom-distributed-applications.md) | Accepted | Require a separate platform-owned DA in each SCOM product | Repository-owner decision; refined through platform authoring/research |
 
 Accepted ADRs 0001–0020 continue to govern the Azure Local baseline unless a successor ADR explicitly
 supersedes one. They must not be silently generalized to Hyper-V.
@@ -101,15 +112,15 @@ supersedes one. They must not be silently generalized to Hyper-V.
 All spikes follow the evidence contract in
 [`docs/design/research-spikes.md`](docs/design/research-spikes.md).
 
-### Spike A — SCOM packaging boundaries (AB#7319)
+### Spike A — Independent SCOM packaging contract (AB#7319)
 
 Deliver:
 
-- class and relationship ownership matrix;
-- dependency graphs for shared-library and separate-library options;
-- import, upgrade, coexistence, and removal analysis;
-- namespace, artifact, signing, and versioning recommendation; and
-- updated ADR 0022.
+- independent class, relationship, namespace, artifact, signing, and version ownership;
+- dependency graphs proving no cross-product runtime reference;
+- side-by-side import, upgrade, coexistence, and removal analysis;
+- allowed non-runtime research and tooling reuse; and
+- evidence that each platform owns its Distributed Application and complete support contract.
 
 ### Spike B — Hyper-V SCOM monitoring catalog (AB#7327)
 
@@ -121,8 +132,9 @@ Deliver:
 - Network ATC as the preferred eligible-cluster baseline plus manual and SCVMM/SDN alternatives;
 - useful signal and monitor concepts from the Microsoft Hyper-V 2019 MP, treated as research only
   with no package, class, or runtime dependency;
-- lab fixtures and negative cases; and
-- proposed scope, discovery, and signal ADRs.
+- lab fixtures and negative cases;
+- stable standalone-host and cluster DA keys, component membership, and rollup inputs; and
+- proposed scope, discovery, signal/rollup, and DA-refinement ADRs.
 
 AB#7327 is now an active umbrella Story with child research spikes AB#7343–AB#7353. The child work
 first inventories everything observable, then maps acquisition and threshold behavior, validates it
@@ -163,11 +175,12 @@ Deliver:
 
 ### Azure Local SCOM Management Pack
 
-1. Accept ADR 0022.
-2. Author the approved library, relationships, and discoveries.
-3. Author monitors, rules, rollups, views, and override tiers.
-4. Validate with offline fixtures and a pre-production SCOM management group.
-5. Seal, sign, version, package, document, and release.
+1. Apply the independent product boundary in ADR 0022.
+2. Author the Azure Local library, relationships, discoveries, DA classes, and dynamic membership.
+3. Author monitors, rules, DA rollups, operator views, reports, SLO targets, and override tiers.
+4. Validate with offline fixtures and a pre-production SCOM management group, including DA
+   population, state propagation, coexistence, upgrade, and removal.
+5. Seal, sign, version, package, document, and release independently.
 
 ### Azure Local Azure Monitor
 
@@ -179,13 +192,16 @@ Deliver:
 
 ### Hyper-V SCOM Management Pack
 
-1. Complete the topology/support spike and accept the resulting ADRs.
-2. Accept ADR 0022.
-3. Author approved classes, relationships, and discoveries for each supported topology variant.
-4. Author monitors, rules, rollups, views, and override tiers using Hyper-V evidence.
-5. Validate standalone, clustered, and approved SCVMM-managed configurations.
-6. Seal, sign, version, package, document, and release independently or through the dependency
-   structure selected by ADR 0022.
+1. Complete the topology/support spike, including per-cluster and per-standalone-host DA boundaries,
+   and accept the resulting ADRs.
+2. Apply the independent product boundary in ADR 0022.
+3. Author approved classes, relationships, discoveries, DA classes, and dynamic membership for
+   each supported topology variant.
+4. Author monitors, rules, DA rollups, operator views, reports, SLO targets, and override tiers
+   using Hyper-V evidence.
+5. Validate standalone, clustered, and approved SCVMM-managed configurations, including DA
+   population, topology change, state propagation, coexistence, upgrade, and removal.
+6. Seal, sign, version, package, document, and release independently.
 
 ### Hyper-V Azure Monitor through Arc-enabled SCVMM
 
@@ -196,7 +212,7 @@ where supported Azure telemetry does not exist.
 
 ## Planned repository shape
 
-The final source layout depends on ADR 0022. The intended separation is:
+The source layout preserves the independent runtime boundary:
 
 ```text
 docs/
@@ -207,17 +223,18 @@ docs/
 └── azure-monitor/          # Existing Azure Local Azure Monitor implementation docs
 
 src/
-├── shared/                 # Only if ADR 0022 approves shared source or artifacts
 ├── azure-local/
 │   ├── scom-mp/
 │   └── azure-monitor/
 └── hyper-v/
     ├── scom-mp/
     └── azure-monitor/      # Created only after an ADR 0023 go decision
+
+tools/                      # Non-runtime build and validation automation only
 ```
 
-Moving current source placeholders into this shape is deferred until the packaging decision avoids
-locking in the wrong dependency model.
+Research remains in documentation and evidence artifacts. No shared Management Pack runtime source
+tree or sealed library is planned.
 
 ## Validation gates
 
@@ -236,6 +253,8 @@ locking in the wrong dependency model.
 - best-practice analysis with reviewed warnings;
 - Pester discovery and workflow fixtures;
 - clean import, discovery, health-state transition, upgrade, and removal tests;
+- deterministic DA population, relationship, rollup, view, report, and SLO tests;
+- side-by-side installation with no cross-product classes, references, or dependencies;
 - no unexpected Health Service Modules events; and
 - signed artifacts and reproducible package contents.
 

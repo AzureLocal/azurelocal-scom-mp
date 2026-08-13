@@ -1,44 +1,66 @@
-# ADR 0022 — SCOM Management Pack packaging boundaries
+# ADR 0022 — Independent SCOM Management Pack packaging
 
-**Status:** Proposed  
-**Date:** 2026-08-12  
-**Decision gate:** Research spike [AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319)
+**Status:** Accepted
+
+**Date:** 2026-08-13
+
+**Decision owners:** Repository owner and maintainers
 
 ## Context
 
-The Azure Local and Hyper-V SCOM surfaces can reuse authoring conventions and may share some base
-types. Sharing source patterns is low risk; sharing sealed Management Pack dependencies creates a
-long-lived versioning and upgrade contract. The correct artifact boundary must be chosen before
-either implementation establishes public class names or references.
+Azure Local and Hyper-V use SCOM, but they have different support contracts, topology, discovery,
+signals, thresholds, Distributed Applications, and release risks. A shared sealed library would
+create a permanent import, version, signing, upgrade, removal, and support dependency between two
+products that must be independently installable and maintainable.
 
-## Decision drivers
+Research and engineering practices can be reused without putting shared runtime elements into a
+customer management group.
 
-- stable public class and relationship contracts;
-- independent platform release and support cadence;
-- upgrade and side-by-side compatibility;
-- sealing and strong-name key dependencies;
-- operator import, upgrade, and removal experience;
-- avoidance of circular or unnecessary references;
-- ability to reuse test fixtures and authoring fragments; and
-- future companion Management Packs.
+## Decision
 
-## Options under evaluation
+Package Azure Local and Hyper-V as completely independent SCOM Management Pack products. Neither
+product may import, extend, override, or require an MP shipped by the other product. They must own
+separate namespaces, sealed libraries, monitoring packs, presentation content, override guidance,
+Distributed Applications, signing identities, packages, versions, and support lifecycles.
 
-1. A small shared sealed library referenced by separate Azure Local and Hyper-V libraries.
-2. Completely separate platform libraries with source-level reuse only.
-3. A Hyper-V base library extended by Azure Local-specific libraries.
+Source research, authoring knowledge, non-runtime templates, build automation, validation tooling,
+and test methodology may be reused. Reuse must not introduce a compiled or sealed runtime
+dependency between the products.
 
-No option is selected yet. In particular, Azure Local must not inherit a generic Hyper-V type
-hierarchy until the spike proves that doing so preserves correct discovery, hosting, health rollup,
-versioning, and support behavior.
+If a combined estate view is required later, implement it as a third optional integration MP that
+explicitly references both products. Neither platform MP will depend on that integration MP.
 
-## Acceptance gate
+## Consequences
 
-This ADR can be accepted only after the spike produces:
+- Azure Local and Hyper-V can be installed, upgraded, removed, and supported independently.
+- Both products can coexist in one SCOM management group without sharing public classes or sealed
+  dependencies.
+- Each platform owns its complete class, relationship, discovery, monitor, rule, view, override,
+  and Distributed Application contract.
+- Similar runtime XML may exist in both products; avoiding cross-product coupling is more important
+  than eliminating that duplication.
+- AB#7319 now validates independent artifact names, reference graphs, signing, coexistence, upgrade,
+  and removal behavior instead of choosing a shared-library option.
 
-- a class and relationship ownership matrix;
-- example reference graphs for all options;
-- import, upgrade, coexistence, and removal analysis;
-- artifact names and namespace conventions;
-- signing and versioning consequences; and
-- a recommendation supported by lab validation where feasible.
+## Alternatives considered
+
+### Shared sealed base library
+
+Rejected because it couples release, import, upgrade, signing, and removal behavior across products.
+
+### Hyper-V base library extended by Azure Local
+
+Rejected because Azure Local is not an extension of the Hyper-V monitoring product and must not
+inherit its support contract or type hierarchy.
+
+### Source-generated shared runtime elements
+
+Rejected as a product boundary because identical generated elements can still create namespace,
+identity, ownership, and servicing ambiguity. Non-runtime templates and automation remain allowed.
+
+## Related work
+
+- Packaging contract Story
+  [AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319)
+- [ADR 0021](0021-platform-and-delivery-track-architecture.md)
+- [ADR 0026](0026-platform-owned-scom-distributed-applications.md)
