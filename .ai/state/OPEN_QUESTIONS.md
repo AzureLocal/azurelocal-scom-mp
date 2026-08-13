@@ -9,12 +9,11 @@
   alternatives? Resolve in the research program.
 - Which candidate thresholds are safe defaults after duration, recovery, dependency, and lab
   evidence are included? Resolve in the research program.
-- What final `HybridSolutionsCloud.HyperV` namespace, sealed artifact set, Microsoft library
-  dependencies/versions, reporting package, language strategy, and signing identities should ADR
-  0027 accept? Resolve through packaging, dependency, and architecture validation.
-- Which exact base classes, stable keys, workflow execution points, cookdown groups, and supported
-  PowerShell execution runtime should ADR 0028 accept? Resolve through topology, workflow, and lab
-  research.
-- Which VM expected-state policy, population/redundancy rollups, stale-data impact, threshold bands,
-  alert severity mapping, and scale budgets should ADR 0029 accept? Resolve through threshold,
-  catalog, DA, and lab validation.
+- Which exact official sealed dependency-MP versions should the first release support? Export them
+  from each target SCOM release and run `Test-HyperVManagementPacksWithSdk.ps1`.
+- Does the target SCOM HealthService and supported Windows Server matrix execute every embedded
+  PowerShell provider workflow consistently, including Hyper-V, FailoverClusters, and Network ATC
+  modules? Prove in the standalone and clustered labs.
+- Do stable VM identity, multi-node topology contributions, DA population/rollup, maintenance,
+  migration/failover, recovery, upgrade, and removal behave as designed in SCOM?
+- What release signing identity and governed sealing pipeline will produce the first signed bundle?

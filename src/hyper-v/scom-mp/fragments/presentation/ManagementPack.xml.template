@@ -1,42 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <Manifest>
-    <Identity>
-      <ID>HybridSolutionsCloud.HyperV.Presentation</ID>
-      <Version>{{VERSION}}</Version>
-    </Identity>
+    <Identity><ID>HybridSolutionsCloud.HyperV.Presentation</ID><Version>{{VERSION}}</Version></Identity>
     <Name>Hybrid Solutions Cloud Hyper-V Presentation</Name>
     <References>
-      <Reference Alias="System">
-        <ID>System.Library</ID>
-        <Version>7.5.8501.0</Version>
-        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
-      </Reference>
-      <Reference Alias="SC">
-        <ID>Microsoft.SystemCenter.Library</ID>
-        <Version>7.0.8433.0</Version>
-        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
-      </Reference>
-      <Reference Alias="HCSHyperVLibrary">
-        <ID>HybridSolutionsCloud.HyperV.Library</ID>
-        <Version>{{VERSION}}</Version>
-        <PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken>
-      </Reference>
-      <Reference Alias="HCSHyperVMonitoring">
-        <ID>HybridSolutionsCloud.HyperV.Monitoring</ID>
-        <Version>{{VERSION}}</Version>
-        <PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken>
-      </Reference>
+      <Reference Alias="System"><ID>System.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="SC"><ID>Microsoft.SystemCenter.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="HCSHyperVLibrary"><ID>HybridSolutionsCloud.HyperV.Library</ID><Version>{{VERSION}}</Version><PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken></Reference>
+      <Reference Alias="HCSHyperVMonitoring"><ID>HybridSolutionsCloud.HyperV.Monitoring</ID><Version>{{VERSION}}</Version><PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken></Reference>
     </References>
   </Manifest>
-  <LanguagePacks>
-    <LanguagePack ID="ENU" IsDefault="true">
-      <DisplayStrings>
-        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Presentation">
-          <Name>Hybrid Solutions Cloud Hyper-V Presentation</Name>
-          <Description>Development foundation for Hyper-V folders, views, diagrams, and operator presentation.</Description>
-        </DisplayString>
-      </DisplayStrings>
-    </LanguagePack>
-  </LanguagePacks>
+  <Presentation>
+    <Views>
+      <View ID="HybridSolutionsCloud.HyperV.Service.State.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria><InMaintenanceMode>false</InMaintenanceMode></Criteria></View>
+      <View ID="HybridSolutionsCloud.HyperV.Host.State.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.HyperV.VirtualMachine.State.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.HyperV.ClusterSharedVolume.State.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.HyperV.VirtualSwitch.State.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.HyperV.NetworkAtcIntent.State.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.HyperV.MonitoringPipeline.State.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.HyperV.ActiveAlerts.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" TypeID="SC!Microsoft.SystemCenter.AlertViewType" Visible="true"><Category>Operations</Category><Criteria><ResolutionState><StateRange Operator="NotEquals">255</StateRange></ResolutionState></Criteria></View>
+      <View ID="HybridSolutionsCloud.HyperV.Performance.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" TypeID="SC!Microsoft.SystemCenter.PerformanceViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.HyperV.Event.View" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" TypeID="SC!Microsoft.SystemCenter.EventViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+    </Views>
+    <Folders>
+      <Folder ID="HybridSolutionsCloud.HyperV.Root.Folder" Accessibility="Public" ParentFolder="SC!Microsoft.SystemCenter.Monitoring.ViewFolder.Root" />
+      <Folder ID="HybridSolutionsCloud.HyperV.Health.Folder" Accessibility="Public" ParentFolder="HybridSolutionsCloud.HyperV.Root.Folder" />
+      <Folder ID="HybridSolutionsCloud.HyperV.Inventory.Folder" Accessibility="Public" ParentFolder="HybridSolutionsCloud.HyperV.Root.Folder" />
+      <Folder ID="HybridSolutionsCloud.HyperV.Operations.Folder" Accessibility="Public" ParentFolder="HybridSolutionsCloud.HyperV.Root.Folder" />
+    </Folders>
+    <FolderItems>
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.Service.State.View" ID="HybridSolutionsCloud.HyperV.Service.State.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Health.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.Host.State.View" ID="HybridSolutionsCloud.HyperV.Host.State.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Health.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.VirtualMachine.State.View" ID="HybridSolutionsCloud.HyperV.VirtualMachine.State.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.ClusterSharedVolume.State.View" ID="HybridSolutionsCloud.HyperV.ClusterSharedVolume.State.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.VirtualSwitch.State.View" ID="HybridSolutionsCloud.HyperV.VirtualSwitch.State.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.NetworkAtcIntent.State.View" ID="HybridSolutionsCloud.HyperV.NetworkAtcIntent.State.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.MonitoringPipeline.State.View" ID="HybridSolutionsCloud.HyperV.MonitoringPipeline.State.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.ActiveAlerts.View" ID="HybridSolutionsCloud.HyperV.ActiveAlerts.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Operations.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.Performance.View" ID="HybridSolutionsCloud.HyperV.Performance.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Operations.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.HyperV.Event.View" ID="HybridSolutionsCloud.HyperV.Event.View.FolderItem" Folder="HybridSolutionsCloud.HyperV.Operations.Folder" />
+    </FolderItems>
+  </Presentation>
+  <LanguagePacks><LanguagePack ID="ENU" IsDefault="true"><DisplayStrings>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Presentation"><Name>Hybrid Solutions Cloud Hyper-V Presentation</Name><Description>Operator folders and views for Hyper-V health services, hosts, inventory, alerts, events, and performance.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Root.Folder"><Name>Hybrid Solutions Cloud - Hyper-V</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Health.Folder"><Name>Health services</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Inventory.Folder"><Name>Inventory</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Operations.Folder"><Name>Operations</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Service.State.View"><Name>Hyper-V service health</Name><Description>Distributed Application roots for cluster and standalone Hyper-V boundaries.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.State.View"><Name>Hyper-V hosts</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.VirtualMachine.State.View"><Name>Virtual machines</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.ClusterSharedVolume.State.View"><Name>Cluster Shared Volumes</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.VirtualSwitch.State.View"><Name>Virtual switches</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.NetworkAtcIntent.State.View"><Name>Network ATC intents</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.MonitoringPipeline.State.View"><Name>Monitoring pipeline</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.ActiveAlerts.View"><Name>Active alerts</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Performance.View"><Name>Performance</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Event.View"><Name>Events</Name></DisplayString>
+  </DisplayStrings></LanguagePack></LanguagePacks>
 </ManagementPack>

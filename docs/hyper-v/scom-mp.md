@@ -1,6 +1,6 @@
 ---
 title: Hyper-V SCOM Management Pack
-description: Planned SCOM Management Pack for standalone, clustered, and supported SCVMM-managed Hyper-V environments.
+description: SCOM Management Pack for standalone, clustered, and supported SCVMM-managed Hyper-V environments.
 ---
 
 # Hyper-V SCOM Management Pack
@@ -9,9 +9,9 @@ The Hyper-V SCOM Management Pack is the committed delivery surface for this plat
 reuse research and engineering practices, but its runtime health model is authored independently
 for the Hyper-V topology approved by the research and ADR gates.
 
-## Planned scope
+## Implemented development scope
 
-| Capability | Planned outcome |
+| Capability | Development implementation |
 |---|---|
 | Topology | Stable classes and relationships for approved standalone, clustered, and SCVMM-managed configurations |
 | Discovery | Supported PowerShell and CIM/WMI discovery workflows with offline fixtures |
@@ -22,15 +22,17 @@ for the Hyper-V topology approved by the research and ADR gates.
 | Operations | State, alert, performance, and topology views with optional SquaredUp dashboards |
 | Delivery | Sealed, signed, tested, versioned Management Pack artifacts and operator documentation |
 
-## Delivery gate
+## Delivery state
 
-Authoring starts after these decisions are complete:
+The design and functional XML authoring are complete for the initial development baseline. Release
+certification now requires:
 
-1. Research and define the Hyper-V SCOM monitoring catalog.
-2. Apply the independent packaging boundary in accepted [ADR 0022](../design/decisions/0022-scom-management-pack-packaging-boundaries.md).
-3. Refine the required [Hyper-V Distributed Application](../design/hyper-v/distributed-application.md)
-   membership and rollup contract through the topology and workflow spikes.
-4. Accept a Hyper-V scope/topology successor ADR based on the spike results.
+1. verify all generated MPs with the Microsoft SDK and official dependency MPs;
+2. test-seal the Library, Discovery, Monitoring, Presentation, and optional Reporting MPs;
+3. clean-import into representative standalone and clustered SCOM labs;
+4. validate discovery, migration/failover identity, monitoring, recovery, DA population and rollup,
+   views, overrides, scale, upgrade, and removal; and
+5. seal, sign, version, and publish the certified artifacts.
 
 The comprehensive proposed design is now available in the
 [Hyper-V SCOM architecture map](../design/hyper-v/scom-mp.md). It covers package decomposition,
@@ -52,10 +54,11 @@ The Microsoft Hyper-V 2019 Management Pack is a research reference only. This pr
 import, extend, override, or require it; useful monitoring ideas must be revalidated and implemented
 independently in this project's own Management Pack.
 
-## Phase one — monitoring research
+## Phase one — implemented catalog and continuing research
 
-The active first phase is not MP XML authoring. It is the exhaustive inventory and evidence gate
-described in the [monitoring research plan](monitoring-research.md).
+The first functional MP is authored. The exhaustive inventory and evidence program continues to
+refine released defaults, add lower-cardinality object monitoring, and decide which broader
+candidates belong in later releases.
 Twelve child Tasks separate topology, Windows Server, Hyper-V/VM, clustering/CSV, storage/Replica,
 networking, prior Microsoft MP research, SCOM workflow mapping, threshold engineering, lab
 validation, final catalog curation, and comprehensive architecture validation.

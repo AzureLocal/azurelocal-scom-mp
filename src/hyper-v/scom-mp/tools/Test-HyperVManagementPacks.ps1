@@ -1,4 +1,17 @@
 #Requires -Version 7.0
+<#
+.SYNOPSIS
+    Runs structural and product-boundary checks against the Hyper-V Management Pack source.
+
+.DESCRIPTION
+    Builds all development artifacts in an isolated temporary directory and asserts identities,
+    dependencies, workflow coverage, override ownership, and release-safety metadata.
+
+.NOTES
+    Author: Kristopher Turner
+    Contact: kris@hybridsolutions.cloud
+    Version: 1.1.0
+#>
 
 [CmdletBinding()]
 param()
@@ -63,6 +76,101 @@ try {
         Assert-True (-not ($sourceText -match '\{\{[A-Z_]+\}\}')) "Unresolved token in $filePath"
     }
 
+    [xml]$libraryXml = Get-Content -LiteralPath (Join-Path $tempRoot 'HybridSolutionsCloud.HyperV.Library.xml') -Raw
+    $classTypes = @($libraryXml.SelectNodes('/ManagementPack/TypeDefinitions/EntityTypes/ClassTypes/ClassType'))
+    $relationshipTypes = @($libraryXml.SelectNodes('/ManagementPack/TypeDefinitions/EntityTypes/RelationshipTypes/RelationshipType'))
+    Assert-True ($classTypes.Count -eq 13) 'The Library MP must define the thirteen approved development classes.'
+    Assert-True ($relationshipTypes.Count -eq 20) 'The Library MP must define the twenty topology and DA relationships.'
+    $libraryDisplayStrings = @($libraryXml.SelectNodes('/ManagementPack/LanguagePacks/LanguagePack/DisplayStrings/DisplayString'))
+    foreach ($classType in $classTypes) {
+        foreach ($property in @($classType.Property)) {
+            $localizedProperty = @($libraryDisplayStrings | Where-Object {
+                    $_.GetAttribute('ElementID') -eq $classType.ID -and
+                    $_.GetAttribute('SubElementID') -eq $property.ID
+                })
+            Assert-True ($localizedProperty.Count -eq 1) "Missing display string for $($classType.ID).$($property.ID)."
+        }
+    }
+    foreach ($relationshipType in $relationshipTypes) {
+        $localizedRelationship = @($libraryDisplayStrings | Where-Object ElementID -eq $relationshipType.ID)
+        Assert-True ($localizedRelationship.Count -eq 1) "Missing display string for relationship $($relationshipType.ID)."
+    }
+
+    $vmClass = $libraryXml.SelectSingleNode("/ManagementPack/TypeDefinitions/EntityTypes/ClassTypes/ClassType[@ID='HybridSolutionsCloud.HyperV.VirtualMachine']")
+    Assert-True ($null -ne $vmClass) 'The boundary-scoped virtual machine class is missing.'
+    Assert-True ($vmClass.Hosted -eq 'false') 'Virtual machines must not be hosted by their current Hyper-V host.'
+    $vmKeys = @($vmClass.Property | Where-Object Key -eq 'true' | ForEach-Object ID)
+    Assert-True ($vmKeys.Count -eq 2 -and $vmKeys -contains 'BoundaryId' -and $vmKeys -contains 'VMId') 'Virtual machine identity must use BoundaryId plus VMId.'
+
+    [xml]$discoveryXml = Get-Content -LiteralPath (Join-Path $tempRoot 'HybridSolutionsCloud.HyperV.Discovery.xml') -Raw
+    $discoveries = @($discoveryXml.SelectNodes('/ManagementPack/Monitoring/Discoveries/Discovery'))
+    Assert-True ($discoveries.Count -eq 2) 'Discovery MP must contain the host seed and staged topology discoveries.'
+    $discoveryText = $discoveryXml.OuterXml
+    foreach ($requiredCommand in @('Get-VMHost', 'Get-VM', 'Get-ClusterSharedVolume', 'Get-VMSwitch', 'Get-NetIntent')) {
+        Assert-True ($discoveryText.Contains($requiredCommand)) "Topology discovery is missing required provider command: $requiredCommand"
+    }
+    Assert-True ($discoveryText.Contains('HybridSolutionsCloud.HyperV.Service')) 'Topology discovery must create Hyper-V Distributed Application service roots.'
+    $discoveryDisplayStrings = @($discoveryXml.SelectNodes('/ManagementPack/LanguagePacks/LanguagePack/DisplayStrings/DisplayString'))
+    foreach ($publicElement in $discoveryXml.SelectNodes('//*[@Accessibility="Public"]')) {
+        $publicId = $publicElement.GetAttribute('ID')
+        if (-not [string]::IsNullOrWhiteSpace($publicId)) {
+            Assert-True (@($discoveryDisplayStrings | Where-Object ElementID -eq $publicId).Count -eq 1) "Missing display string for public discovery element $publicId."
+        }
+    }
+
+    [xml]$monitoringXml = Get-Content -LiteralPath (Join-Path $tempRoot 'HybridSolutionsCloud.HyperV.Monitoring.xml') -Raw
+    $unitMonitors = @($monitoringXml.SelectNodes('/ManagementPack/Monitoring/Monitors/UnitMonitor'))
+    $dependencyMonitors = @($monitoringXml.SelectNodes('/ManagementPack/Monitoring/Monitors/DependencyMonitor'))
+    $rules = @($monitoringXml.SelectNodes('/ManagementPack/Monitoring/Rules/Rule'))
+    $tasks = @($monitoringXml.SelectNodes('/ManagementPack/Monitoring/Tasks/Task'))
+    Assert-True ($unitMonitors.Count -eq 9) 'Monitoring MP must contain nine host health monitors.'
+    Assert-True ($dependencyMonitors.Count -eq 10) 'Monitoring MP must contain ten topology-aware DA dependency monitors.'
+    $performanceRules = @($rules | Where-Object Category -eq 'PerformanceCollection')
+    $alertRules = @($rules | Where-Object Category -eq 'Alert')
+    Assert-True ($rules.Count -eq 16) 'Monitoring MP must contain the sixteen approved development rules.'
+    Assert-True ($performanceRules.Count -eq 12) 'Monitoring MP must contain twelve performance-collection rules.'
+    Assert-True ($alertRules.Count -eq 4) 'Monitoring MP must contain four high-confidence event-alert rules.'
+    Assert-True ($tasks.Count -eq 1) 'Monitoring MP must contain the read-only diagnostic summary task.'
+    Assert-True (@($unitMonitors | Where-Object { $_.AlertSettings.AutoResolve -ne 'true' }).Count -eq 0) 'Every stateful monitor alert must auto-resolve.'
+    $knowledgeArticles = @($monitoringXml.SelectNodes('/ManagementPack/LanguagePacks/LanguagePack/KnowledgeArticles/KnowledgeArticle'))
+    Assert-True ($knowledgeArticles.Count -eq 13) 'Every health monitor and event-alert rule must contain operational knowledge.'
+    foreach ($alertRule in $alertRules) {
+        Assert-True (@($knowledgeArticles | Where-Object ElementID -eq $alertRule.ID).Count -eq 1) "Missing operational knowledge for $($alertRule.ID)."
+    }
+    $monitoringDisplayStrings = @($monitoringXml.SelectNodes('/ManagementPack/LanguagePacks/LanguagePack/DisplayStrings/DisplayString'))
+    foreach ($publicElement in $monitoringXml.SelectNodes('//*[@Accessibility="Public"]')) {
+        $publicId = $publicElement.GetAttribute('ID')
+        if (-not [string]::IsNullOrWhiteSpace($publicId)) {
+            Assert-True (@($monitoringDisplayStrings | Where-Object ElementID -eq $publicId).Count -ge 1) "Missing display string for public monitoring element $publicId."
+        }
+    }
+    $disabledCollectionIds = @($performanceRules | Where-Object Enabled -eq 'false' | ForEach-Object ID)
+    foreach ($disabledId in @(
+            'HybridSolutionsCloud.HyperV.Host.VirtualProcessor.Collection.Rule',
+            'HybridSolutionsCloud.HyperV.Host.RootVirtualProcessor.Collection.Rule',
+            'HybridSolutionsCloud.HyperV.Host.VirtualNetworkBytes.Collection.Rule',
+            'HybridSolutionsCloud.HyperV.Host.PhysicalDiskReadQueue.Collection.Rule',
+            'HybridSolutionsCloud.HyperV.Host.PhysicalDiskWriteQueue.Collection.Rule'
+        )) {
+        Assert-True ($disabledCollectionIds -contains $disabledId) "High-cardinality collection must be disabled by default: $disabledId"
+    }
+
+    $unitMonitorIds = @($unitMonitors | ForEach-Object ID)
+    foreach ($shortId in @('VMMS', 'Cluster', 'VirtualMachines', 'Replication', 'NetworkATC', 'Memory', 'Cpu', 'Csv', 'Pipeline')) {
+        Assert-True ($unitMonitorIds -contains "HybridSolutionsCloud.HyperV.Host.$shortId.Monitor") "Missing host health monitor: $shortId"
+    }
+
+    [xml]$presentationXml = Get-Content -LiteralPath (Join-Path $tempRoot 'HybridSolutionsCloud.HyperV.Presentation.xml') -Raw
+    $views = @($presentationXml.SelectNodes('/ManagementPack/Presentation/Views/View'))
+    Assert-True ($views.Count -eq 10) 'Presentation MP must contain ten health, inventory, alert, event, and performance views.'
+    $presentationDisplayStrings = @($presentationXml.SelectNodes('/ManagementPack/LanguagePacks/LanguagePack/DisplayStrings/DisplayString'))
+    foreach ($publicElement in $presentationXml.SelectNodes('//*[@Accessibility="Public"]')) {
+        $publicId = $publicElement.GetAttribute('ID')
+        if (-not [string]::IsNullOrWhiteSpace($publicId)) {
+            Assert-True (@($presentationDisplayStrings | Where-Object ElementID -eq $publicId).Count -eq 1) "Missing display string for public presentation element $publicId."
+        }
+    }
+
     $profileRoot = Join-Path $sourceRoot 'templates/overrides'
     foreach ($profileName in @('lab', 'standard', 'strict')) {
         $profilePath = Join-Path $profileRoot $profileName
@@ -71,7 +179,9 @@ try {
 
         $profileManifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
         Assert-True ($profileManifest.profile.ToLowerInvariant() -eq $profileName) "Profile name mismatch in $manifestPath"
-        Assert-True ($profileManifest.status -eq 'AwaitingEvidence') "Profile must remain evidence-gated: $manifestPath"
+        Assert-True ($profileManifest.status -eq 'DevelopmentStarter') "Profile must be identified as a development starter: $manifestPath"
+        Assert-True ($profileManifest.discoverySettings.Count -gt 0) "Profile must define discovery settings: $manifestPath"
+        Assert-True ($profileManifest.monitoringSettings.Count -gt 0) "Profile must define monitoring settings: $manifestPath"
 
         foreach ($kind in @('Discovery', 'Monitoring')) {
             $examplePath = Join-Path $profilePath "$kind.Overrides.xml.example"
@@ -81,6 +191,16 @@ try {
             Assert-True ($exampleText -match '\{\{PUBLIC_KEY_TOKEN\}\}') "Override example must retain the signing-token placeholder: $examplePath"
             Assert-True (-not ($exampleText -match 'Default Management Pack')) "Override example references the Default Management Pack: $examplePath"
         }
+
+        $overrideOutput = Join-Path $tempRoot "overrides-$profileName"
+        $overrideGenerator = Join-Path $PSScriptRoot 'New-HyperVOverrideManagementPacks.ps1'
+        & $overrideGenerator -TuningProfile $profileName -OrganizationId 'Contoso' -OrganizationName 'Contoso' -Version '0.1.0.0' -PublicKeyToken '0123456789abcdef' -OutputPath $overrideOutput
+        $generatedDiscovery = Join-Path $overrideOutput 'Contoso.HybridSolutionsCloud.HyperV.Discovery.Overrides.xml'
+        $generatedMonitoring = Join-Path $overrideOutput 'Contoso.HybridSolutionsCloud.HyperV.Monitoring.Overrides.xml'
+        [xml]$discoveryOverridesXml = Get-Content -LiteralPath $generatedDiscovery -Raw
+        [xml]$monitoringOverridesXml = Get-Content -LiteralPath $generatedMonitoring -Raw
+        Assert-True (@($discoveryOverridesXml.SelectNodes('/ManagementPack/Monitoring/Overrides/*')).Count -gt 0) "Generated $profileName Discovery Overrides MP is empty."
+        Assert-True (@($monitoringOverridesXml.SelectNodes('/ManagementPack/Monitoring/Overrides/*')).Count -gt 0) "Generated $profileName Monitoring Overrides MP is empty."
     }
 
     Write-Output 'Hyper-V Management Pack contract tests passed.'

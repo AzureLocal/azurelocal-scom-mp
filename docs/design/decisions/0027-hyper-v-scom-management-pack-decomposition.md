@@ -1,6 +1,6 @@
 # ADR 0027 — Hyper-V SCOM Management Pack decomposition
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Date:** 2026-08-13
 
@@ -17,7 +17,7 @@ ADR 0022 already requires an independent Hyper-V runtime product with no depende
 or the Microsoft Hyper-V 2019 MP. Microsoft guidance recommends logically grouping custom elements,
 sealing reusable MPs, and storing customer overrides separately.
 
-## Proposed decision
+## Decision
 
 Use the working namespace `HybridSolutionsCloud.HyperV` and decompose the product into sealed
 Library, Discovery, Monitoring, and Presentation MPs, with Reporting as an optional sealed artifact.
@@ -32,7 +32,7 @@ signed product dependencies or automatically imported policy. Customers review a
 settings into their own unsealed override MPs, which remain customer-owned for their full lifecycle.
 No product or customer setting is stored in the Default Management Pack.
 
-The final namespace, exact Microsoft dependencies, Reporting packaging, language resources, and
+Release-specific Microsoft dependency versions, Reporting packaging, language resources, and
 signing identities remain open until the packaging and dependency research provides evidence.
 
 ## Options considered

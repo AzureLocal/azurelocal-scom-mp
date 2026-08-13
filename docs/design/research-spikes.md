@@ -1,7 +1,7 @@
 # Research spikes
 
 Research is tracked as time-boxed research workstreams. Each spike must produce evidence,
-update the relevant proposed ADR, and identify executable follow-up work. A spike is not complete
+update the relevant decision or release evidence, and identify executable follow-up work. A spike is not complete
 when it merely collects links.
 
 ## Current spike backlog
@@ -24,9 +24,9 @@ flowchart LR
     P --> S2[Hyper-V SCOM catalog research]
     P --> Net[Hyper-V network authority<br/>ADR 0025]
     Net --> S2
-    S2 --> MP[MP decomposition<br/>ADR 0027 proposed]
-    S2 --> OBJ[Object and discovery architecture<br/>ADR 0028 proposed]
-    S2 --> HEALTH[Health and DA rollup<br/>ADR 0029 proposed]
+    S2 --> MP[MP decomposition<br/>ADR 0027 accepted]
+    S2 --> OBJ[Object and discovery architecture<br/>ADR 0028 accepted]
+    S2 --> HEALTH[Health and DA rollup<br/>ADR 0029 accepted]
     P --> S3[Arc-enabled SCVMM spike]
     S3 --> S4[Telemetry proof]
     S4 --> Arc[Go / defer / no-go<br/>ADR 0023]
@@ -37,7 +37,7 @@ flowchart LR
 The Hyper-V SCOM research program is divided into bounded spikes that can execute in the dependency
 order shown on the [Hyper-V monitoring research](../hyper-v/monitoring-research.md) page.
 
-Their evidence validates the proposed
+Their evidence validates and refines the accepted
 [MP decomposition](decisions/0027-hyper-v-scom-management-pack-decomposition.md),
 [object/discovery architecture](decisions/0028-hyper-v-object-and-discovery-architecture.md), and
 [health/DA rollup](decisions/0029-hyper-v-health-alert-and-da-rollup.md) decisions.
@@ -55,7 +55,7 @@ Their evidence validates the proposed
 | Threshold engineering | Threshold, duration, recovery, and tuning policy |
 | Lab validation | Lab source, fault, latency, recovery, and overhead validation |
 | Catalog curation | Final Must/Should/Could/collect-only/excluded catalog |
-| Architecture validation | Trace all architecture contracts to the research evidence and resolve proposed ADRs 0027–0029 |
+| Architecture validation | Trace all architecture contracts to evidence and raise successor ADRs for any material change |
 
 ## Spike completion contract
 

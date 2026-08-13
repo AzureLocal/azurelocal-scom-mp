@@ -2,10 +2,10 @@
 
 <!-- What is being worked on right now. Keep it short; update as work moves. -->
 
-_Build the evidence-safe Hyper-V SCOM foundation in `src/hyper-v/scom-mp/` while continuing the
-research program. Manifests, package references, override templates, build validation, and tests can
-proceed now; classes, workflows, thresholds, Distributed Application elements, and enabled tuning
-profiles require accepted evidence and ADRs 0027–0029._
+_Complete and certify the functional Hyper-V SCOM Management Pack in `src/hyper-v/scom-mp/`.
+Library, discovery, monitoring, Distributed Application rollups, presentation, override generation,
+build validation, and tests are implemented. Remaining release gates are official dependency-MP
+SDK verification, sealing/signing, and representative SCOM lab lifecycle certification._
 
 <!--
   Optional advisory model hint the next tool should honour if available.

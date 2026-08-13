@@ -1,6 +1,6 @@
 # ADR 0029 — Hyper-V health, alert, and DA rollup
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Date:** 2026-08-13
 
@@ -14,7 +14,7 @@ redundant cluster nodes, maintenance, migration, backup/checkpoint activity, dep
 and missing telemetry. The DA must show service impact without producing duplicate root and child
 alerts or remaining Healthy when monitoring is broken.
 
-## Proposed decision
+## Decision
 
 Use unit monitors to establish current health on the narrowest actionable class, standard SCOM
 Availability, Configuration, Performance, and Security aggregate dimensions, and dependency
@@ -27,8 +27,9 @@ sample count, explicit recovery bands/hysteresis, missing-data behavior, and saf
 Cluster redundancy and VM expected-state/population use topology-aware rollups rather than
 unconditional worst-state. Each DA includes a root-impacting Monitoring pipeline branch.
 
-Exact thresholds, severity mappings, expected-state rules, population algorithms, and branch impact
-remain provisional until threshold, lab, catalog, and DA validation is complete.
+The development defaults and expected-state rules are published as overrideable starter policy.
+Exact released values remain subject to threshold, lab, catalog, scale, and DA validation without
+changing this health-and-rollup architecture decision.
 
 ## Options considered
 

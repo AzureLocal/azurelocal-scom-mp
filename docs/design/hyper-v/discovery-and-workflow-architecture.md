@@ -210,4 +210,4 @@ sequenceDiagram
 ## Research gates
 
 Workflow and lab research must validate source semantics, execution placement, cookdown, timeout,
-cardinality, failure behavior, and recovery before ADR 0028 is accepted or authoring begins.
+cardinality, failure behavior, and recovery before the first signed release.

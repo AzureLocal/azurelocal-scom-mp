@@ -15,5 +15,5 @@
       </Reference>
     </References>
   </Manifest>
-  <!-- Evidence-approved Standard discovery overrides will be generated here. -->
+  <!-- Structural example only. Use New-HyperVOverrideManagementPacks.ps1 to render the Standard profile. -->
 </ManagementPack>

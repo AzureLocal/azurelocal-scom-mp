@@ -2,8 +2,8 @@
 
 > Last updated: August 13, 2026
 >
-> Status: Independent SCOM packaging and platform-owned Distributed Applications accepted;
-> Hyper-V research active
+> Status: Hyper-V functional SCOM MP and Distributed Application authored; release certification
+> requires SDK dependencies, sealing/signing, and representative SCOM lab validation
 > Published roadmap: <https://labs.hybridsolutions.cloud/hybrid-health-monitoring/project/roadmap>
 
 ## Objective
@@ -104,9 +104,9 @@ products when that is safer than coupling their public contracts.
 | Hyper-V SCOM discovery strategy | Planned after spike | Select supported discovery providers and hosting relationships | Workflow research |
 | Hyper-V signal and rollup policy | Planned after spike | Lock signal catalog, thresholds, defaults, and exceptions | Signal, threshold, and lab research |
 | [0026](docs/design/decisions/0026-platform-owned-scom-distributed-applications.md) | Accepted | Require a separate platform-owned DA in each SCOM product | Repository-owner decision; refined through platform authoring/research |
-| [0027](docs/design/decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Proposed | Define modular sealed Hyper-V MPs, separate customer Discovery/Monitoring overrides, and optional tuning templates | Packaging and dependency research |
-| [0028](docs/design/decisions/0028-hyper-v-object-and-discovery-architecture.md) | Proposed | Define stable identities, relationships, staged discovery, execution, and cookdown | Topology, workflow, and lab research |
-| [0029](docs/design/decisions/0029-hyper-v-health-alert-and-da-rollup.md) | Proposed | Define evidence-driven health, alerting, monitoring freshness, and DA rollup | Threshold, catalog, lab, and DA validation |
+| [0027](docs/design/decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Accepted | Define modular sealed Hyper-V MPs, separate customer Discovery/Monitoring overrides, and optional tuning templates | Implemented; packaging certification pending |
+| [0028](docs/design/decisions/0028-hyper-v-object-and-discovery-architecture.md) | Accepted | Define stable identities, relationships, staged discovery, execution, and cookdown | Implemented; lab lifecycle validation pending |
+| [0029](docs/design/decisions/0029-hyper-v-health-alert-and-da-rollup.md) | Accepted | Define evidence-driven health, alerting, monitoring freshness, and DA rollup | Implemented; threshold and DA lab validation pending |
 
 Accepted ADRs 0001–0020 continue to govern the Azure Local baseline unless a successor ADR explicitly
 supersedes one. They must not be silently generalized to Hyper-V.
@@ -197,8 +197,8 @@ Deliver:
 
 ### Hyper-V SCOM Management Pack
 
-1. Complete the topology/support spike, including per-cluster and per-standalone-host DA boundaries,
-   and resolve proposed ADRs 0027–0029 using the research and lab evidence.
+1. Continue topology/support evidence, including per-cluster and per-standalone-host DA boundaries,
+   and raise successor ADRs if lab results invalidate accepted ADRs 0027–0029.
 2. Apply the independent product boundary in ADR 0022.
 3. Author approved classes, relationships, discoveries, DA classes, and dynamic membership for
    each supported topology variant.

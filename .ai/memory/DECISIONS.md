@@ -37,18 +37,16 @@
 - The Microsoft Hyper-V 2019 Management Pack is a research input only. The new Hyper-V MP will not
   import, extend, override, require, or take a runtime dependency on it. Useful concepts must be
   revalidated and implemented independently in this project's namespaces and workflows.
-- The comprehensive Hyper-V SCOM architecture is a proposed implementation baseline, not permission
-  to begin XML authoring. Proposed ADR 0027 decomposes the product into Library, Discovery,
-  Monitoring, Presentation, optional Reporting, and customer-owned Overrides artifacts. Proposed
-  ADR 0028 defines stable boundary identity, VM mobility, staged discovery, workflow placement, and
-  cookdown. Proposed ADR 0029 defines evidence-driven health, alerts, monitoring freshness, and
-  topology-aware DA rollup. The research and architecture validation program must validate all three
-  before acceptance.
+- The comprehensive Hyper-V SCOM architecture and ADRs 0027–0029 are accepted and implemented as a
+  functional development baseline: Library, Discovery, Monitoring, Presentation, optional
+  Reporting, and customer-owned override generation; stable boundary identity and mobile VM
+  identity; staged discovery and cookdown; evidence-driven health, alerts, pipeline health, and
+  topology-aware DA rollup. SDK, sealing/signing, and SCOM lab evidence remain release gates.
 - Hyper-V customer customization uses two unsealed, customer-owned MPs: Discovery Overrides for the
   sealed Discovery MP and Monitoring Overrides for the sealed Monitoring MP. Optional Lab,
   Standard, and Strict profiles are public starter examples only; they are reviewed and copied into
   customer-owned files, never imported automatically. The Default Management Pack is prohibited.
-- Proposed ADR 0031 makes tool-neutral XML/templates and PowerShell 7 the canonical Hyper-V MP
+- Accepted ADR 0031 makes tool-neutral XML/templates and PowerShell 7 the canonical Hyper-V MP
   source/build path. Microsoft SDK verification, MPVerify, sealing/signing, and SCOM lab import are
   authoritative release gates; Silect authoring tools are optional aids rather than source-of-truth
   or runtime dependencies.

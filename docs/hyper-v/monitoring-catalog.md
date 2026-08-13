@@ -5,9 +5,49 @@ description: Research schema, prioritization policy, and threshold principles fo
 
 # Hyper-V monitoring catalog policy
 
-This page is the phase-one contract for building the Hyper-V signal catalog. It is not yet the
-completed catalog. Candidate rows are promoted only after the applicable inventory, workflow,
-threshold, and lab spikes provide evidence.
+This page is both the phase-one signal policy and the development implementation catalog. The
+authored catalog below is complete for the first functional build. The broader candidate inventory
+remains open because “technically observable” is intentionally larger than “safe to enable by
+default.” Lab evidence can still change defaults before a signed release.
+
+## Authored development catalog
+
+All nine stateful monitors target the discovered Hyper-V host role and share one parameter-identical
+probe for SCOM cookdown. Their alerts auto-resolve. `NotApplicable` is healthy only for explicitly
+inapplicable topology, such as CSV on a standalone host or Network ATC where another network
+authority is selected.
+
+| Monitor | Dimension | Default | Starting policy |
+|---|---|---|---|
+| VMMS service | Availability | On | Critical when `vmms` is not running |
+| Failover-cluster node membership | Availability | On | Critical when any cluster node is not Up; N/A on standalone hosts |
+| Expected VM state | Availability | On | Critical when an automatic-start VM is unexpectedly stopped or failed |
+| Hyper-V Replica | Availability | On | Worst reported Replica health; warning does not become critical |
+| Network ATC intent | Configuration | On | Critical for unsuccessful intent status; N/A for manual or SCVMM/SDN authority |
+| Available host memory | Performance | On | 4096 MB warning, 2048 MB critical; absolute reserve, not percent used |
+| Hypervisor processor | Performance | On | 80% warning, 90% critical |
+| CSV health and capacity | Availability | On | Offline/redirected is critical; 15%/10% free-space bands |
+| Monitoring pipeline | Availability | On | Critical when the shared probe fails or returns invalid data |
+
+The Monitoring MP also provides ten non-alerting dependency monitors. They roll host state into
+Compute, Virtual Machines, Storage, Network, and Monitoring Pipeline components and then roll each
+component into the platform-owned Hyper-V service Distributed Application.
+
+| Performance collection | Default |
+|---|---|
+| Hyper-V logical processor total run time; host available memory; Dynamic Memory balancer available memory; memory pages input/sec; physical network bytes/sec; physical-disk read/write latency | On |
+| Per-VM virtual processor, root virtual processor, virtual-network-adapter bytes/sec, and physical-disk read/write queue length | Off because these are high-cardinality or topology-sensitive |
+
+Four enabled event rules cover Failover Clustering events 5120 and 5142 for CSV access loss, event
+1135 for node removal, and events 1069/1205 for resource or role failure. A read-only diagnostic
+task returns host, VM, switch, and Replica summary data. Ten views cover service health, host and
+object inventory, alerts, performance, and events.
+
+::: warning Development defaults
+These values are starter policy, not a signed support contract. They are overrideable and must pass
+representative fault, recovery, noise, data-volume, maintenance, migration, and failover testing
+before release.
+:::
 
 ## Required coverage
 

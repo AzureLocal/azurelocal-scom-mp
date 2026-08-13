@@ -7,8 +7,8 @@ description: Hyper-V SCOM Distributed Application service model, dynamic members
 
 The Hyper-V SCOM product ships a Hyper-V-owned Distributed Application (DA) with no dependency on
 the Azure Local MP. One DA represents one operational failure boundary: a failover cluster or a
-standalone Hyper-V host. The working root is `HybridSolutionsCloud.HyperV.Deployment`; ADR 0028 must
-accept its final namespace, stable key, and class hierarchy before authoring.
+standalone Hyper-V host. The implemented root is `HybridSolutionsCloud.HyperV.Service`, keyed by
+the stable cluster-or-host boundary ID and derived from the SCOM Service Designer service class.
 
 A DA organizes and presents health. It does not replace correctly targeted unit, aggregate, and
 dependency monitors. Microsoft describes Distributed Applications as grouped monitored objects
@@ -256,9 +256,9 @@ The product provides DA-oriented guidance and validates the selected target in p
 - import, empty-topology, population, move, failover, fault, recovery, scale, upgrade, coexistence,
   and removal tests.
 
-## Acceptance gates
+## Release-validation gates
 
-Before DA authoring, the research and proposed ADRs must prove:
+The DA is authored. Before release, lab evidence must prove:
 
 1. stable cluster and standalone-host root keys;
 2. deterministic membership and execution placement across HealthServices;

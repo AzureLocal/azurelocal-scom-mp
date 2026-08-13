@@ -208,9 +208,10 @@ customer Discovery Overrides MP; monitor, rule, alert, and collection changes re
 customer Monitoring Overrides MP. See
 [Override and tuning architecture](override-and-tuning-architecture.md).
 
-## Decision gate
+## Release-default gate
 
-ADR 0029 cannot be accepted until threshold and lab research provides threshold evidence,
-fault/recovery results, noise assessment, VM expected-state policy, and final
+The architecture is accepted. Released defaults cannot be certified until threshold and lab
+research provides threshold evidence, fault/recovery results, noise assessment, VM expected-state
+policy, and final
 Must/Should/Could/Collect/Diagnostic
 classification.

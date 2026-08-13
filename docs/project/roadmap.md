@@ -26,18 +26,18 @@ flowchart TD
 |---|---|---|---|
 | Azure Local monitoring | Azure Local SCOM MP | Committed | Planned |
 | Azure Local monitoring | Azure Local Azure Monitor | Committed | Planned |
-| Hyper-V monitoring | Hyper-V SCOM MP | Committed | Comprehensive architecture proposed; evidence research active |
+| Hyper-V monitoring | Hyper-V SCOM MP | Committed | Functional development MP authored; release certification active |
 | Hyper-V monitoring | Hyper-V Azure Monitor through Arc-enabled SCVMM | Conditional | Research gate; future roadmap |
 
-## Now — foundation and decision gates
+## Now — certification and evidence gates
 
 These items unblock safe implementation:
 
 | Item | Outcome | Dependency |
 |---|---|---|
 | Independent SCOM packaging contract | Validate independent namespaces, artifacts, signing, coexistence, upgrade, and removal behavior | Implements accepted ADR 0022 for both SCOM Features |
-| Hyper-V SCOM monitoring research | Validate proposed ADRs 0027–0029 through exhaustive signal inventory, workflow/threshold research, lab evidence, and curated defaults | Active; gates Hyper-V authoring |
-| Hyper-V SCOM architecture validation | Trace the comprehensive package, object, discovery, workflow, health, alert, DA, security, scale, and release design to spike evidence | Resolves ADRs 0027–0029 |
+| Hyper-V SCOM monitoring research | Validate and extend the implemented catalog through exhaustive signal inventory, workflow/threshold research, lab evidence, and curated defaults | Active; gates released defaults and later coverage |
+| Hyper-V SCOM release certification | Verify dependencies and schema, test-seal, import in standalone/cluster labs, exercise fault/recovery and lifecycle, then sign | Gates the first public MP release |
 | Azure Local Health Models revalidation | Revalidate APIs, preview limits, identity, and signal contracts | Gates Azure Local Azure Monitor authoring |
 | Arc-enabled SCVMM inventory spike | Prove inventory and guest-management boundaries | Precedes telemetry proof |
 | Hyper-V Health Models feasibility spike | Prove or disprove a useful supported entity and signal model | Precedes go/no-go ADR |
@@ -62,13 +62,13 @@ The complete phase-one Hyper-V breakdown is published in
 
 ### Hyper-V SCOM Management Pack
 
-1. Validate the [comprehensive architecture](../design/hyper-v/architecture.md), DA boundary,
-   membership, and rollup, then resolve proposed ADRs 0027–0029.
-2. Author classes, discoveries, and DA membership.
-3. Author monitoring, DA rollups/operator surfaces, and separate Discovery/Monitoring override
-   contracts.
-4. Validate Lab, Standard, and Strict starter templates, then publish the administration guide and
-   independent release.
+1. Supply official SCOM dependency MPs and run Microsoft SDK verification.
+2. Test-seal and clean-import the authored Library, Discovery, Monitoring, Presentation, and
+   optional Reporting artifacts.
+3. Validate standalone/cluster topology, DA membership/rollup, state, alert, performance, event,
+   task, override, maintenance, failover, scale, upgrade, and removal behavior.
+4. Certify Lab, Standard, and Strict starter templates, then sign and publish the independent
+   release.
 
 The execution order between the three committed Features will be set after research provides
 credible effort and lab-capacity estimates. Adding Hyper-V does not silently compress the existing

@@ -1,6 +1,6 @@
 # ADR 0028 — Hyper-V object and discovery architecture
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Date:** 2026-08-13
 
@@ -14,7 +14,7 @@ keys can delete and recreate objects during migration, lose health continuity, m
 and break DA membership. Discovery must also avoid repeated expensive provider queries and must not
 interpret access denied or timeout as object absence.
 
-## Proposed decision
+## Decision
 
 Use staged discovery beginning with a cheap Hyper-V role seed, followed by role/version, topology
 classification, selected network authority, approved child entities, relationships/DA membership,
@@ -27,8 +27,9 @@ Prefer native event, service, performance, registry, and CIM providers; use Powe
 the best supported authoritative topology source. Use shared module types and proven cookdown for
 expensive multi-instance acquisition.
 
-Exact classes, base classes, keys, discovery providers, execution locations, schedules, and script
-runtime remain provisional until the topology, workflow, and lab research confirms them.
+The development baseline implements the stable boundary key, a mobile non-hosted VM keyed by
+boundary plus VM GUID, hosted host-local objects, a registry role seed, and staged topology
+discovery. Provider behavior, scale, and lifecycle semantics remain release-validation gates.
 
 ## Options considered
 

@@ -1,6 +1,6 @@
 ---
 title: Hyper-V class and relationship model
-description: Proposed Hyper-V SCOM classes, stable keys, hosting boundaries, containment, reference relationships, and VM mobility behavior.
+description: Hyper-V SCOM classes, stable keys, hosting boundaries, containment, reference relationships, and VM mobility behavior.
 ---
 
 # Hyper-V class and relationship model
@@ -10,8 +10,8 @@ object's identity. A VM can move between cluster nodes; its SCOM identity must s
 A host adapter cannot move between computers; its identity can be hosted by the host. This distinction
 drives class keys, hosting, relationship discovery, workflow placement, and upgrade safety.
 
-The final class IDs and base classes remain gated by topology research and ADR 0028. The names on this page are
-working design identifiers in the `HybridSolutionsCloud.HyperV` namespace.
+ADR 0028 accepts the namespace and identity strategy. The functional development Library MP now
+implements the first-release model; lab migration, scale, and upgrade tests remain release gates.
 
 ## Conceptual object model
 
@@ -222,9 +222,9 @@ flowchart TB
     class SH,SVM,SNET,SSTO,CC,CH,CVM,CCSV,CNET member
 ```
 
-## Research gates
+## Release-validation gates
 
-Before ADR 0028 is accepted, topology and lab research must prove:
+Before the first signed release, topology and lab research must prove:
 
 1. the stable key for every supported entity;
 2. the appropriate Microsoft base class and library dependency;

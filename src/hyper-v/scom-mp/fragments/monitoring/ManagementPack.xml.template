@@ -1,42 +1,291 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <Manifest>
-    <Identity>
-      <ID>HybridSolutionsCloud.HyperV.Monitoring</ID>
-      <Version>{{VERSION}}</Version>
-    </Identity>
+    <Identity><ID>HybridSolutionsCloud.HyperV.Monitoring</ID><Version>{{VERSION}}</Version></Identity>
     <Name>Hybrid Solutions Cloud Hyper-V Monitoring</Name>
     <References>
-      <Reference Alias="System">
-        <ID>System.Library</ID>
-        <Version>7.5.8501.0</Version>
-        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
-      </Reference>
-      <Reference Alias="Health">
-        <ID>System.Health.Library</ID>
-        <Version>7.0.8433.0</Version>
-        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
-      </Reference>
-      <Reference Alias="HCSHyperVLibrary">
-        <ID>HybridSolutionsCloud.HyperV.Library</ID>
-        <Version>{{VERSION}}</Version>
-        <PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken>
-      </Reference>
-      <Reference Alias="HCSHyperVDiscovery">
-        <ID>HybridSolutionsCloud.HyperV.Discovery</ID>
-        <Version>{{VERSION}}</Version>
-        <PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken>
-      </Reference>
+      <Reference Alias="System"><ID>System.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="Windows"><ID>Microsoft.Windows.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="Health"><ID>System.Health.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="Perf"><ID>System.Performance.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="SC"><ID>Microsoft.SystemCenter.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="MSDL"><ID>Microsoft.SystemCenter.DataWarehouse.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="HCSHyperVLibrary"><ID>HybridSolutionsCloud.HyperV.Library</ID><Version>{{VERSION}}</Version><PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken></Reference>
     </References>
   </Manifest>
-  <LanguagePacks>
-    <LanguagePack ID="ENU" IsDefault="true">
-      <DisplayStrings>
-        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Monitoring">
-          <Name>Hybrid Solutions Cloud Hyper-V Monitoring</Name>
-          <Description>Development foundation for Hyper-V monitors, rules, diagnostics, recoveries, and tasks.</Description>
-        </DisplayString>
-      </DisplayStrings>
-    </LanguagePack>
-  </LanguagePacks>
+  <TypeDefinitions>
+    <ModuleTypes>
+      <DataSourceModuleType ID="HybridSolutionsCloud.HyperV.HostHealth.DataSource" Accessibility="Internal" Batching="false">
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" minOccurs="1" />
+          <xsd:element name="SyncTime" type="xsd:string" minOccurs="0" />
+          <xsd:element name="TimeoutSeconds" type="xsd:integer" minOccurs="1" />
+          <xsd:element name="CpuWarningPercent" type="xsd:double" minOccurs="1" />
+          <xsd:element name="CpuCriticalPercent" type="xsd:double" minOccurs="1" />
+          <xsd:element name="MemoryWarningMB" type="xsd:double" minOccurs="1" />
+          <xsd:element name="MemoryCriticalMB" type="xsd:double" minOccurs="1" />
+          <xsd:element name="CsvWarningPercentFree" type="xsd:double" minOccurs="1" />
+          <xsd:element name="CsvCriticalPercentFree" type="xsd:double" minOccurs="1" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" />
+          <OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="CpuWarningPercent" Selector="$Config/CpuWarningPercent$" ParameterType="double" />
+          <OverrideableParameter ID="CpuCriticalPercent" Selector="$Config/CpuCriticalPercent$" ParameterType="double" />
+          <OverrideableParameter ID="MemoryWarningMB" Selector="$Config/MemoryWarningMB$" ParameterType="double" />
+          <OverrideableParameter ID="MemoryCriticalMB" Selector="$Config/MemoryCriticalMB$" ParameterType="double" />
+          <OverrideableParameter ID="CsvWarningPercentFree" Selector="$Config/CsvWarningPercentFree$" ParameterType="double" />
+          <OverrideableParameter ID="CsvCriticalPercentFree" Selector="$Config/CsvCriticalPercentFree$" ParameterType="double" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Scheduler" TypeID="System!System.Scheduler">
+                <Scheduler><SimpleReccuringSchedule><Interval Unit="Seconds">$Config/IntervalSeconds$</Interval><SyncTime>$Config/SyncTime$</SyncTime></SimpleReccuringSchedule><ExcludeDates /></Scheduler>
+              </DataSource>
+              <ProbeAction ID="Probe" TypeID="Windows!Microsoft.Windows.PowerShellPropertyBagTriggerOnlyProbe">
+                <ScriptName>HybridSolutionsCloud.HyperV.HostHealth.Probe.ps1</ScriptName>
+                <ScriptBody><![CDATA[
+param($CpuWarningPercent, $CpuCriticalPercent, $MemoryWarningMB, $MemoryCriticalMB, $CsvWarningPercentFree, $CsvCriticalPercentFree)
+
+$ErrorActionPreference = 'Stop'
+$api = New-Object -ComObject 'MOM.ScriptAPI'
+$bag = $api.CreatePropertyBag()
+
+function Set-State {
+    param([string]$Name, [string]$State, [string]$Detail)
+    $bag.AddValue($Name, $State)
+    $bag.AddValue($Name + 'Detail', $Detail)
+}
+
+try {
+    Import-Module Hyper-V -ErrorAction Stop
+
+    $vmms = Get-Service -Name vmms -ErrorAction Stop
+    Set-State 'VMMSState' $(if ($vmms.Status -eq 'Running') { 'Good' } else { 'Critical' }) ('Service status: ' + $vmms.Status)
+
+    $memory = Get-CimInstance Win32_OperatingSystem -ErrorAction Stop
+    $availableMemoryMB = [math]::Round($memory.FreePhysicalMemory / 1024, 0)
+    $bag.AddValue('AvailableMemoryMB', $availableMemoryMB)
+    $memoryState = if ($availableMemoryMB -le [double]$MemoryCriticalMB) { 'Critical' } elseif ($availableMemoryMB -le [double]$MemoryWarningMB) { 'Warning' } else { 'Good' }
+    Set-State 'MemoryState' $memoryState ("Available memory: {0} MB" -f $availableMemoryMB)
+
+    $cpuValue = 0
+    try { $cpuValue = [math]::Round((Get-Counter '\Hyper-V Hypervisor Logical Processor(_Total)\% Total Run Time' -ErrorAction Stop).CounterSamples[0].CookedValue, 2) } catch {
+        $cpuValue = [math]::Round((Get-CimInstance Win32_Processor | Measure-Object LoadPercentage -Average).Average, 2)
+    }
+    $bag.AddValue('HypervisorCpuPercent', $cpuValue)
+    $cpuState = if ($cpuValue -ge [double]$CpuCriticalPercent) { 'Critical' } elseif ($cpuValue -ge [double]$CpuWarningPercent) { 'Warning' } else { 'Good' }
+    Set-State 'CpuState' $cpuState ("Hypervisor CPU: {0}%" -f $cpuValue)
+
+    $vms = @(Get-VM -ErrorAction Stop)
+    $unexpected = @($vms | Where-Object { $_.AutomaticStartAction -eq 'Start' -and $_.State -notin @('Running','Starting','Stopping','Saving','Pausing','Resuming') })
+    $vmState = if ($unexpected.Count -gt 0) { 'Critical' } else { 'Good' }
+    Set-State 'VirtualMachineState' $vmState ("Unexpected VM states: {0}; total VMs: {1}" -f $unexpected.Count, $vms.Count)
+    $bag.AddValue('VirtualMachineCount', $vms.Count)
+    $bag.AddValue('UnexpectedVirtualMachineCount', $unexpected.Count)
+
+    $replications = @(Get-VMReplication -ErrorAction SilentlyContinue)
+    $criticalReplication = @($replications | Where-Object { [string]$_.Health -eq 'Critical' })
+    $warningReplication = @($replications | Where-Object { [string]$_.Health -eq 'Warning' })
+    $replicationState = if ($criticalReplication.Count -gt 0) { 'Critical' } elseif ($warningReplication.Count -gt 0) { 'Warning' } else { 'Good' }
+    Set-State 'ReplicationState' $replicationState ("Critical: {0}; warning: {1}; relationships: {2}" -f $criticalReplication.Count, $warningReplication.Count, $replications.Count)
+
+    $clusterState = 'NotApplicable'
+    $csvState = 'NotApplicable'
+    try {
+        Import-Module FailoverClusters -ErrorAction Stop
+        $cluster = Get-Cluster -ErrorAction Stop
+        $nodes = @(Get-ClusterNode -Cluster $cluster -ErrorAction Stop)
+        $downNodes = @($nodes | Where-Object State -ne 'Up')
+        $clusterState = if ($downNodes.Count -gt 0) { 'Critical' } else { 'Good' }
+        Set-State 'ClusterState' $clusterState ("Nodes not Up: {0}; total nodes: {1}" -f $downNodes.Count, $nodes.Count)
+
+        $csvs = @(Get-ClusterSharedVolume -Cluster $cluster -ErrorAction SilentlyContinue)
+        $csvCritical = 0
+        $csvWarning = 0
+        $lowestFree = 100
+        foreach ($csv in $csvs) {
+            $partition = $csv.SharedVolumeInfo.Partition
+            if ($partition.Size -gt 0) {
+                $percentFree = ($partition.FreeSpace / $partition.Size) * 100
+                $lowestFree = [math]::Min($lowestFree, $percentFree)
+                if ($percentFree -le [double]$CsvCriticalPercentFree) { $csvCritical++ }
+                elseif ($percentFree -le [double]$CsvWarningPercentFree) { $csvWarning++ }
+            }
+            if ($csv.State -ne 'Online' -or $csv.SharedVolumeInfo.RedirectedAccess) { $csvCritical++ }
+        }
+        $csvState = if ($csvCritical -gt 0) { 'Critical' } elseif ($csvWarning -gt 0) { 'Warning' } else { 'Good' }
+        Set-State 'CsvState' $csvState ("Critical conditions: {0}; warning conditions: {1}; lowest free: {2:N2}%" -f $csvCritical, $csvWarning, $lowestFree)
+        $bag.AddValue('CsvLowestPercentFree', [math]::Round($lowestFree, 2))
+    } catch {
+        Set-State 'ClusterState' 'NotApplicable' 'Failover Clustering is not present or this is a standalone host.'
+        Set-State 'CsvState' 'NotApplicable' 'Cluster Shared Volumes are not applicable.'
+    }
+
+    if (Get-Command Get-NetIntentStatus -ErrorAction SilentlyContinue) {
+        $intentStatus = @(Get-NetIntentStatus -ErrorAction SilentlyContinue)
+        $failedIntent = @($intentStatus | Where-Object { [string]$_.ConfigurationStatus -notin @('Success','Provisioning') })
+        $atcState = if ($failedIntent.Count -gt 0) { 'Critical' } else { 'Good' }
+        Set-State 'NetworkAtcState' $atcState ("Unsuccessful intents: {0}; total intents: {1}" -f $failedIntent.Count, $intentStatus.Count)
+    } else {
+        Set-State 'NetworkAtcState' 'NotApplicable' 'Network ATC is not the networking authority on this host.'
+    }
+
+    Set-State 'PipelineState' 'Good' ('Probe completed at ' + [DateTime]::UtcNow.ToString('o'))
+} catch {
+    Set-State 'VMMSState' 'Critical' $_.Exception.Message
+    Set-State 'CpuState' 'Critical' $_.Exception.Message
+    Set-State 'MemoryState' 'Critical' $_.Exception.Message
+    Set-State 'VirtualMachineState' 'Critical' $_.Exception.Message
+    Set-State 'ReplicationState' 'Critical' $_.Exception.Message
+    Set-State 'ClusterState' 'Critical' $_.Exception.Message
+    Set-State 'CsvState' 'Critical' $_.Exception.Message
+    Set-State 'NetworkAtcState' 'Critical' $_.Exception.Message
+    Set-State 'PipelineState' 'Critical' $_.Exception.ToString()
+    $api.LogScriptEvent('HybridSolutionsCloud.HyperV.HostHealth.Probe.ps1', 8201, 1, $_.Exception.ToString())
+}
+
+$bag
+]]></ScriptBody>
+                <Parameters>
+                  <Parameter><Name>CpuWarningPercent</Name><Value>$Config/CpuWarningPercent$</Value></Parameter>
+                  <Parameter><Name>CpuCriticalPercent</Name><Value>$Config/CpuCriticalPercent$</Value></Parameter>
+                  <Parameter><Name>MemoryWarningMB</Name><Value>$Config/MemoryWarningMB$</Value></Parameter>
+                  <Parameter><Name>MemoryCriticalMB</Name><Value>$Config/MemoryCriticalMB$</Value></Parameter>
+                  <Parameter><Name>CsvWarningPercentFree</Name><Value>$Config/CsvWarningPercentFree$</Value></Parameter>
+                  <Parameter><Name>CsvCriticalPercentFree</Name><Value>$Config/CsvCriticalPercentFree$</Value></Parameter>
+                </Parameters>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition><Node ID="Probe"><Node ID="Scheduler" /></Node></Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+      </DataSourceModuleType>
+      <WriteActionModuleType ID="HybridSolutionsCloud.HyperV.DiagnosticSummary.WriteAction" Accessibility="Internal" Batching="false">
+        <Configuration><xsd:element name="TimeoutSeconds" type="xsd:integer" minOccurs="1" /></Configuration>
+        <OverrideableParameters><OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" /></OverrideableParameters>
+        <ModuleImplementation Isolation="Any"><Composite><MemberModules>
+          <WriteAction ID="PowerShell" TypeID="Windows!Microsoft.Windows.PowerShellWriteAction">
+            <ScriptName>HybridSolutionsCloud.HyperV.DiagnosticSummary.Task.ps1</ScriptName>
+            <ScriptBody><![CDATA[
+$ErrorActionPreference = 'Stop'
+Import-Module Hyper-V -ErrorAction Stop
+$hostData = Get-VMHost
+$vms = @(Get-VM)
+$switches = @(Get-VMSwitch)
+[pscustomobject]@{
+    Computer = $env:COMPUTERNAME
+    HyperVVersion = $hostData.HyperVVersion
+    VirtualMachines = $vms.Count
+    RunningVirtualMachines = @($vms | Where-Object State -eq 'Running').Count
+    VirtualSwitches = $switches.Count
+    ReplicationWarnings = @(Get-VMReplication -ErrorAction SilentlyContinue | Where-Object Health -ne 'Normal').Count
+} | Format-List | Out-String
+]]></ScriptBody><Parameters /><TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+          </WriteAction>
+        </MemberModules><Composition><Node ID="PowerShell" /></Composition></Composite></ModuleImplementation>
+        <OutputType>System!System.BaseData</OutputType><InputType>System!System.BaseData</InputType>
+      </WriteActionModuleType>
+    </ModuleTypes>
+    <MonitorTypes>
+      <UnitMonitorType ID="HybridSolutionsCloud.HyperV.PropertyBag.ThreeState.MonitorType" Accessibility="Internal">
+        <MonitorTypeStates><MonitorTypeState ID="Good" NoDetection="false" /><MonitorTypeState ID="Warning" NoDetection="false" /><MonitorTypeState ID="Critical" NoDetection="false" /></MonitorTypeStates>
+        <Configuration>
+          <xsd:element name="PropertyName" type="xsd:string" minOccurs="1" />
+          <xsd:element name="IntervalSeconds" type="xsd:integer" minOccurs="1" /><xsd:element name="SyncTime" type="xsd:string" minOccurs="0" /><xsd:element name="TimeoutSeconds" type="xsd:integer" minOccurs="1" />
+          <xsd:element name="CpuWarningPercent" type="xsd:double" minOccurs="1" /><xsd:element name="CpuCriticalPercent" type="xsd:double" minOccurs="1" /><xsd:element name="MemoryWarningMB" type="xsd:double" minOccurs="1" /><xsd:element name="MemoryCriticalMB" type="xsd:double" minOccurs="1" /><xsd:element name="CsvWarningPercentFree" type="xsd:double" minOccurs="1" /><xsd:element name="CsvCriticalPercentFree" type="xsd:double" minOccurs="1" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" /><OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" /><OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="CpuWarningPercent" Selector="$Config/CpuWarningPercent$" ParameterType="double" /><OverrideableParameter ID="CpuCriticalPercent" Selector="$Config/CpuCriticalPercent$" ParameterType="double" /><OverrideableParameter ID="MemoryWarningMB" Selector="$Config/MemoryWarningMB$" ParameterType="double" /><OverrideableParameter ID="MemoryCriticalMB" Selector="$Config/MemoryCriticalMB$" ParameterType="double" /><OverrideableParameter ID="CsvWarningPercentFree" Selector="$Config/CsvWarningPercentFree$" ParameterType="double" /><OverrideableParameter ID="CsvCriticalPercentFree" Selector="$Config/CsvCriticalPercentFree$" ParameterType="double" />
+        </OverrideableParameters>
+        <MonitorImplementation><MemberModules>
+          <DataSource ID="DataSource" TypeID="HybridSolutionsCloud.HyperV.HostHealth.DataSource"><IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds><SyncTime>$Config/SyncTime$</SyncTime><TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds><CpuWarningPercent>$Config/CpuWarningPercent$</CpuWarningPercent><CpuCriticalPercent>$Config/CpuCriticalPercent$</CpuCriticalPercent><MemoryWarningMB>$Config/MemoryWarningMB$</MemoryWarningMB><MemoryCriticalMB>$Config/MemoryCriticalMB$</MemoryCriticalMB><CsvWarningPercentFree>$Config/CsvWarningPercentFree$</CsvWarningPercentFree><CsvCriticalPercentFree>$Config/CsvCriticalPercentFree$</CsvCriticalPercentFree></DataSource>
+          <ConditionDetection ID="GoodFilter" TypeID="System!System.ExpressionFilter"><Expression><Or><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">Property[@Name='$Config/PropertyName$']</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Good</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">Property[@Name='$Config/PropertyName$']</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">NotApplicable</Value></ValueExpression></SimpleExpression></Expression></Or></Expression></ConditionDetection>
+          <ConditionDetection ID="WarningFilter" TypeID="System!System.ExpressionFilter"><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">Property[@Name='$Config/PropertyName$']</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Warning</Value></ValueExpression></SimpleExpression></Expression></ConditionDetection>
+          <ConditionDetection ID="CriticalFilter" TypeID="System!System.ExpressionFilter"><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">Property[@Name='$Config/PropertyName$']</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Critical</Value></ValueExpression></SimpleExpression></Expression></ConditionDetection>
+        </MemberModules><RegularDetections><RegularDetection MonitorTypeStateID="Good"><Node ID="GoodFilter"><Node ID="DataSource" /></Node></RegularDetection><RegularDetection MonitorTypeStateID="Warning"><Node ID="WarningFilter"><Node ID="DataSource" /></Node></RegularDetection><RegularDetection MonitorTypeStateID="Critical"><Node ID="CriticalFilter"><Node ID="DataSource" /></Node></RegularDetection></RegularDetections></MonitorImplementation>
+      </UnitMonitorType>
+    </MonitorTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Rules>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.Cpu.Collection.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>% Total Run Time</CounterName><ObjectName>Hyper-V Hypervisor Logical Processor</ObjectName><InstanceName>_Total</InstanceName><AllInstances>false</AllInstances><Frequency>300</Frequency><Tolerance>2</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.AvailableMemory.Collection.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Available MBytes</CounterName><ObjectName>Memory</ObjectName><InstanceName /><AllInstances>false</AllInstances><Frequency>300</Frequency><Tolerance>128</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.DynamicMemoryAvailable.Collection.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Available Memory</CounterName><ObjectName>Hyper-V Dynamic Memory Balancer</ObjectName><InstanceName>System Balancer</InstanceName><AllInstances>false</AllInstances><Frequency>300</Frequency><Tolerance>128</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.VirtualProcessor.Collection.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>% Total Run Time</CounterName><ObjectName>Hyper-V Hypervisor Virtual Processor</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>2</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.RootVirtualProcessor.Collection.Rule" Enabled="false" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>% Total Run Time</CounterName><ObjectName>Hyper-V Hypervisor Root Virtual Processor</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>2</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.PagesInput.Collection.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Pages Input/sec</CounterName><ObjectName>Memory</ObjectName><InstanceName /><AllInstances>false</AllInstances><Frequency>300</Frequency><Tolerance>1</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.NetworkBytes.Collection.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Bytes Total/sec</CounterName><ObjectName>Network Interface</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1048576</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.VirtualNetworkBytes.Collection.Rule" Enabled="false" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Bytes/sec</CounterName><ObjectName>Hyper-V Virtual Network Adapter</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1048576</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.PhysicalDiskReadLatency.Collection.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Avg. Disk sec/Read</CounterName><ObjectName>PhysicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>0.005</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.PhysicalDiskWriteLatency.Collection.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Avg. Disk sec/Write</CounterName><ObjectName>PhysicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>0.005</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.PhysicalDiskReadQueue.Collection.Rule" Enabled="false" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Avg. Disk Read Queue Length</CounterName><ObjectName>PhysicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.Host.PhysicalDiskWriteQueue.Collection.Rule" Enabled="false" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Avg. Disk Write Queue Length</CounterName><ObjectName>PhysicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.CsvAccessFailure.Alert.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="true" Remotable="true" Priority="High" DiscardLevel="100"><Category>Alert</Category><DataSources><DataSource ID="Event" TypeID="Windows!Microsoft.Windows.EventProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><LogName>System</LogName><Expression><And><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">5120</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">PublisherName</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Microsoft-Windows-FailoverClustering</Value></ValueExpression></SimpleExpression></Expression></And></Expression></DataSource></DataSources><WriteActions><WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert"><Priority>2</Priority><Severity>2</Severity><AlertName /><AlertDescription /><AlertOwner /><AlertMessageId>$MPElement[Name="HybridSolutionsCloud.HyperV.CsvAccessFailure.Alert.Rule.Message"]$</AlertMessageId><AlertParameters><AlertParameter1>$Data/EventDescription$</AlertParameter1></AlertParameters><Suppression><SuppressionValue>$Data/Params/Param[1]$</SuppressionValue></Suppression><Custom1 /><Custom2 /><Custom3 /><Custom4 /><Custom5 /><Custom6 /><Custom7 /><Custom8 /><Custom9 /><Custom10 /></WriteAction></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.ClusterNodeRemoved.Alert.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="true" Remotable="true" Priority="High" DiscardLevel="100"><Category>Alert</Category><DataSources><DataSource ID="Event" TypeID="Windows!Microsoft.Windows.EventProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><LogName>System</LogName><Expression><And><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">1135</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">PublisherName</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Microsoft-Windows-FailoverClustering</Value></ValueExpression></SimpleExpression></Expression></And></Expression></DataSource></DataSources><WriteActions><WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert"><Priority>2</Priority><Severity>2</Severity><AlertName /><AlertDescription /><AlertOwner /><AlertMessageId>$MPElement[Name="HybridSolutionsCloud.HyperV.ClusterNodeRemoved.Alert.Rule.Message"]$</AlertMessageId><AlertParameters><AlertParameter1>$Data/EventDescription$</AlertParameter1></AlertParameters><Suppression><SuppressionValue>$Data/Params/Param[1]$</SuppressionValue></Suppression><Custom1 /><Custom2 /><Custom3 /><Custom4 /><Custom5 /><Custom6 /><Custom7 /><Custom8 /><Custom9 /><Custom10 /></WriteAction></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.CsvNoLongerAccessible.Alert.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="true" Remotable="true" Priority="High" DiscardLevel="100"><Category>Alert</Category><DataSources><DataSource ID="Event" TypeID="Windows!Microsoft.Windows.EventProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><LogName>System</LogName><Expression><And><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">5142</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">PublisherName</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Microsoft-Windows-FailoverClustering</Value></ValueExpression></SimpleExpression></Expression></And></Expression></DataSource></DataSources><WriteActions><WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert"><Priority>2</Priority><Severity>2</Severity><AlertName /><AlertDescription /><AlertOwner /><AlertMessageId>$MPElement[Name="HybridSolutionsCloud.HyperV.CsvNoLongerAccessible.Alert.Rule.Message"]$</AlertMessageId><AlertParameters><AlertParameter1>$Data/EventDescription$</AlertParameter1></AlertParameters><Suppression><SuppressionValue>$Data/Params/Param[1]$</SuppressionValue></Suppression><Custom1 /><Custom2 /><Custom3 /><Custom4 /><Custom5 /><Custom6 /><Custom7 /><Custom8 /><Custom9 /><Custom10 /></WriteAction></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.HyperV.ClusterRoleFailure.Alert.Rule" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="true" Remotable="true" Priority="High" DiscardLevel="100"><Category>Alert</Category><DataSources><DataSource ID="Event" TypeID="Windows!Microsoft.Windows.EventProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><LogName>System</LogName><Expression><And><Expression><Or><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">1069</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">1205</Value></ValueExpression></SimpleExpression></Expression></Or></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">PublisherName</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Microsoft-Windows-FailoverClustering</Value></ValueExpression></SimpleExpression></Expression></And></Expression></DataSource></DataSources><WriteActions><WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert"><Priority>2</Priority><Severity>2</Severity><AlertName /><AlertDescription /><AlertOwner /><AlertMessageId>$MPElement[Name="HybridSolutionsCloud.HyperV.ClusterRoleFailure.Alert.Rule.Message"]$</AlertMessageId><AlertParameters><AlertParameter1>$Data/EventDescription$</AlertParameter1></AlertParameters><Suppression><SuppressionValue>$Data/Params/Param[1]$</SuppressionValue></Suppression><Custom1 /><Custom2 /><Custom3 /><Custom4 /><Custom5 /><Custom6 /><Custom7 /><Custom8 /><Custom9 /><Custom10 /></WriteAction></WriteActions></Rule>
+    </Rules>
+    <Tasks><Task ID="HybridSolutionsCloud.HyperV.DiagnosticSummary.Task" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" Timeout="180" Remotable="true"><Category>Maintenance</Category><WriteAction ID="Diagnostic" TypeID="HybridSolutionsCloud.HyperV.DiagnosticSummary.WriteAction"><TimeoutSeconds>120</TimeoutSeconds></WriteAction></Task></Tasks>
+    <Monitors>
+      <!-- All host monitors use identical acquisition configuration. This is intentional cookdown. -->
+      {{HOST_MONITORS}}
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.Service.Compute.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsComputeComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.Service.VirtualMachines.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsVirtualMachineComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.Service.Storage.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsStorageComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.Service.Network.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsNetworkComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.Service.Monitoring.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsMonitoringComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.Compute.Hosts.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ComputeComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ComputeComponentContainsHostRole" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.VirtualMachines.Hosts.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponentContainsHostRole" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.Storage.Hosts.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponentContainsHostRole" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.Network.Hosts.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponentContainsHostRole" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.HyperV.Monitoring.Hosts.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponentContainsHostRole" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+    </Monitors>
+  </Monitoring>
+  <Presentation><StringResources>{{STRING_RESOURCES}}<StringResource ID="HybridSolutionsCloud.HyperV.CsvAccessFailure.Alert.Rule.Message" /><StringResource ID="HybridSolutionsCloud.HyperV.ClusterNodeRemoved.Alert.Rule.Message" /><StringResource ID="HybridSolutionsCloud.HyperV.CsvNoLongerAccessible.Alert.Rule.Message" /><StringResource ID="HybridSolutionsCloud.HyperV.ClusterRoleFailure.Alert.Rule.Message" /></StringResources></Presentation>
+  <LanguagePacks><LanguagePack ID="ENU" IsDefault="true"><DisplayStrings>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Monitoring"><Name>Hybrid Solutions Cloud Hyper-V Monitoring</Name><Description>Health, alert, performance collection, diagnostic task, and Distributed Application rollup workflows for Hyper-V.</Description></DisplayString>
+    {{MONITOR_DISPLAY_STRINGS}}
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Service.Compute.Availability.Dependency.Monitor"><Name>Roll up Compute availability to the Hyper-V service</Name><Description>Propagates the worst Compute component availability state to its owning Hyper-V Distributed Application.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Service.VirtualMachines.Availability.Dependency.Monitor"><Name>Roll up Virtual Machines availability to the Hyper-V service</Name><Description>Propagates the worst Virtual Machines component availability state to its owning Hyper-V Distributed Application.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Service.Storage.Availability.Dependency.Monitor"><Name>Roll up Storage availability to the Hyper-V service</Name><Description>Propagates the worst Storage component availability state to its owning Hyper-V Distributed Application.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Service.Network.Availability.Dependency.Monitor"><Name>Roll up Network availability to the Hyper-V service</Name><Description>Propagates the worst Network component availability state to its owning Hyper-V Distributed Application.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Service.Monitoring.Availability.Dependency.Monitor"><Name>Roll up Monitoring Pipeline availability to the Hyper-V service</Name><Description>Propagates the worst Monitoring Pipeline component availability state to its owning Hyper-V Distributed Application.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Compute.Hosts.Availability.Dependency.Monitor"><Name>Roll up host availability to Compute</Name><Description>Propagates the worst member Hyper-V host availability state to the Compute component.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.VirtualMachines.Hosts.Availability.Dependency.Monitor"><Name>Roll up host availability to Virtual Machines</Name><Description>Propagates the worst member Hyper-V host availability state to the Virtual Machines component.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Storage.Hosts.Availability.Dependency.Monitor"><Name>Roll up host availability to Storage</Name><Description>Propagates the worst member Hyper-V host availability state to the Storage component.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Network.Hosts.Availability.Dependency.Monitor"><Name>Roll up host availability to Network</Name><Description>Propagates the worst member Hyper-V host availability state to the Network component.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Monitoring.Hosts.Availability.Dependency.Monitor"><Name>Roll up host availability to Monitoring Pipeline</Name><Description>Propagates the worst member Hyper-V host availability state to the Monitoring Pipeline component.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.Cpu.Collection.Rule"><Name>Collect Hyper-V hypervisor logical processor total run time</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.AvailableMemory.Collection.Rule"><Name>Collect host available memory</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.DynamicMemoryAvailable.Collection.Rule"><Name>Collect Hyper-V Dynamic Memory balancer available memory</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.VirtualProcessor.Collection.Rule"><Name>Collect Hyper-V virtual processor total run time</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.RootVirtualProcessor.Collection.Rule"><Name>Collect Hyper-V root virtual processor total run time (disabled by default)</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.PagesInput.Collection.Rule"><Name>Collect host memory pages input per second</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.NetworkBytes.Collection.Rule"><Name>Collect physical network interface bytes per second</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.VirtualNetworkBytes.Collection.Rule"><Name>Collect Hyper-V virtual network adapter bytes per second (disabled by default)</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.PhysicalDiskReadLatency.Collection.Rule"><Name>Collect physical disk average read latency</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.PhysicalDiskWriteLatency.Collection.Rule"><Name>Collect physical disk average write latency</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.PhysicalDiskReadQueue.Collection.Rule"><Name>Collect physical disk average read queue length (disabled by default)</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.Host.PhysicalDiskWriteQueue.Collection.Rule"><Name>Collect physical disk average write queue length (disabled by default)</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.CsvAccessFailure.Alert.Rule"><Name>Cluster Shared Volume access failure event</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.CsvAccessFailure.Alert.Rule.Message"><Name>Cluster Shared Volume access failure</Name><Description>Failover Clustering reported event 5120. Event details: {0}</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.ClusterNodeRemoved.Alert.Rule"><Name>Cluster node removed from active membership event</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.ClusterNodeRemoved.Alert.Rule.Message"><Name>Cluster node removed from active membership</Name><Description>Failover Clustering reported event 1135. Event details: {0}</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.CsvNoLongerAccessible.Alert.Rule"><Name>Cluster Shared Volume no longer accessible event</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.CsvNoLongerAccessible.Alert.Rule.Message"><Name>Cluster Shared Volume no longer accessible</Name><Description>Failover Clustering reported event 5142. Event details: {0}</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.ClusterRoleFailure.Alert.Rule"><Name>Cluster resource or role failure event</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.ClusterRoleFailure.Alert.Rule.Message"><Name>Cluster resource or role failed</Name><Description>Failover Clustering reported event 1069 or 1205. Event details: {0}</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.HyperV.DiagnosticSummary.Task"><Name>Collect Hyper-V diagnostic summary</Name><Description>Returns a read-only summary of host, VM, switch, and replication state.</Description></DisplayString>
+  </DisplayStrings><KnowledgeArticles>{{KNOWLEDGE_ARTICLES}}
+    <KnowledgeArticle ElementID="HybridSolutionsCloud.HyperV.CsvAccessFailure.Alert.Rule" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Summary</maml:title><maml:para>Failover Clustering event 5120 reports that I/O access to a Cluster Shared Volume is no longer available through the normal path.</maml:para><maml:title>Operator response</maml:title><maml:para>Review the event text, CSV state and ownership, redirected I/O reason, storage paths, network paths, recent maintenance, and related storage latency. Restore supported paths before manually closing this event-based alert.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+    <KnowledgeArticle ElementID="HybridSolutionsCloud.HyperV.ClusterNodeRemoved.Alert.Rule" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Summary</maml:title><maml:para>Failover Clustering event 1135 reports that a node was removed from active cluster membership.</maml:para><maml:title>Operator response</maml:title><maml:para>Confirm whether the node was intentionally drained or maintained. Review cluster, network, heartbeat, quorum, and system events on all nodes. Confirm stable membership before manually closing this event-based alert.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+    <KnowledgeArticle ElementID="HybridSolutionsCloud.HyperV.CsvNoLongerAccessible.Alert.Rule" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Summary</maml:title><maml:para>Failover Clustering event 5142 reports that a Cluster Shared Volume is no longer accessible from a cluster node.</maml:para><maml:title>Operator response</maml:title><maml:para>Protect affected workloads, review the event text and CSV state from every node, validate storage and network paths, and correlate events 5120 and 1069. Confirm access is restored before manually closing this event-based alert.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+    <KnowledgeArticle ElementID="HybridSolutionsCloud.HyperV.ClusterRoleFailure.Alert.Rule" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Summary</maml:title><maml:para>Failover Clustering event 1069 or 1205 reports a resource failure or a clustered role that could not be brought fully online.</maml:para><maml:title>Operator response</maml:title><maml:para>Identify the failed resource and role, review dependency and resource-host events, check current ownership and failover policy, and correct the underlying resource condition before manually closing this event-based alert.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+  </KnowledgeArticles></LanguagePack></LanguagePacks>
 </ManagementPack>

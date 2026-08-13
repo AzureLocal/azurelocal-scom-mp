@@ -1,9 +1,31 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "profile": "Lab",
-  "status": "AwaitingEvidence",
-  "purpose": "Bounded functional, fault, transition, and diagnostic validation only.",
-  "discoverySettings": [],
-  "monitoringSettings": [],
-  "activationRule": "No setting is added until the workflow ID, safe range, cost, and lab evidence are accepted."
+  "status": "DevelopmentStarter",
+  "purpose": "Fast feedback for bounded functional, fault, transition, and diagnostic validation; not a production baseline.",
+  "discoverySettings": [
+    {
+      "id": "TopologyInterval",
+      "workflowId": "HybridSolutionsCloud.HyperV.Topology.Discovery",
+      "contextClassId": "HybridSolutionsCloud.HyperV.HostRole",
+      "module": "PowerShellDiscovery",
+      "parameter": "IntervalSeconds",
+      "value": 600
+    }
+  ],
+  "monitoringSettings": [
+    {
+      "id": "MonitorInterval",
+      "workflowIds": ["VMMS", "Cluster", "VirtualMachines", "Replication", "NetworkATC", "Memory", "Cpu", "Csv", "Pipeline"],
+      "parameter": "IntervalSeconds",
+      "value": 60
+    },
+    { "id": "CpuWarning", "workflowIds": ["Cpu"], "parameter": "CpuWarningPercent", "value": 70 },
+    { "id": "CpuCritical", "workflowIds": ["Cpu"], "parameter": "CpuCriticalPercent", "value": 85 },
+    { "id": "MemoryWarning", "workflowIds": ["Memory"], "parameter": "MemoryWarningMB", "value": 6144 },
+    { "id": "MemoryCritical", "workflowIds": ["Memory"], "parameter": "MemoryCriticalMB", "value": 4096 },
+    { "id": "CsvWarning", "workflowIds": ["Csv"], "parameter": "CsvWarningPercentFree", "value": 20 },
+    { "id": "CsvCritical", "workflowIds": ["Csv"], "parameter": "CsvCriticalPercentFree", "value": 15 }
+  ],
+  "activationRule": "Use only in an isolated lab. Fast schedules increase agent, OperationsManager database, and warehouse cost."
 }

@@ -1,6 +1,6 @@
 # ADR 0031 — Hyper-V Management Pack authoring toolchain
 
-**Status:** Proposed
+**Status:** Accepted
 
 **Date:** 2026-08-13
 
@@ -10,8 +10,9 @@
 
 The Hyper-V SCOM product needs reviewable source, deterministic builds, schema and dependency
 validation, sealing, signing, and lab imports. No single authoring application should become a
-runtime dependency or the only place where product source exists. The current workstation does not
-have Microsoft Management Pack verification or sealing tools installed.
+runtime dependency or the only place where product source exists. The current workstation has the
+Microsoft SDK assembly and workflow-analysis tool, but the official sealed base MP dependencies and
+a representative SCOM management group remain external release inputs.
 
 Microsoft distinguishes editable XML from sealed `.mp` artifacts and requires dependencies to be
 present during import. The Management Pack Authoring Guide supports SCOM 2019, 2022, 2025, and SCOM
@@ -19,7 +20,7 @@ Managed Instance and documents both direct authoring and fragment-assisted workf
 fragments provide useful patterns, but every imported pattern still requires source review,
 namespace replacement, current-version validation, and product-specific tests.
 
-## Proposed decision
+## Decision
 
 Use tool-neutral Management Pack XML templates and scenario-focused fragments as the canonical
 source. Build and contract checks run through repository-owned PowerShell 7 scripts. An approved

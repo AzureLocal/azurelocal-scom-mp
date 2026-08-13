@@ -1,14 +1,14 @@
 ---
 title: Hyper-V Management Pack administration guide
-description: Public operator guide for installing, validating, tuning, upgrading, and removing the planned Hyper-V SCOM Management Pack.
+description: Public operator guide for building, installing, validating, tuning, upgrading, and removing the Hyper-V SCOM Management Pack.
 ---
 
 # Hyper-V Management Pack administration guide
 
-This guide explains how the planned Hyper-V SCOM Management Pack will be installed, tuned, and
-maintained. No signed product package has been released yet. Artifact names and procedures remain
-proposed until the support matrix, monitoring catalog, lab evidence, and ADRs 0027–0029 are
-accepted.
+This guide explains how the Hyper-V SCOM Management Pack is built, installed, tuned, and
+maintained. Functional development XML is available; no sealed and signed product package has been
+released yet. A release remains blocked until Microsoft SDK verification, test sealing, clean SCOM
+lab import, fault/recovery, lifecycle, and signing gates pass.
 
 ## What customers will receive
 
@@ -17,7 +17,7 @@ accepted.
 | Sealed product MPs | Library, Discovery, Monitoring, Presentation, and optional Reporting content |
 | Management Pack guide | Prerequisites, import, verification, tuning, upgrade, rollback, removal, and troubleshooting |
 | Monitoring catalog | Workflow IDs, targets, defaults, overrideable parameters, knowledge, and evidence |
-| Override starter files | Separate, non-importable Discovery and Monitoring examples for Lab, Standard, and Strict |
+| Override starter files | Generator and separate customer-owned Discovery and Monitoring output for Lab, Standard, and Strict |
 | Release record | Version matrix, dependencies, checksums, changes, known issues, and profile changes |
 
 The sealed MPs are product-owned. Every active override is stored in customer-owned, unsealed XML.
@@ -127,11 +127,23 @@ destination MP. Do not use a console shortcut that obscures where the change is 
 | Standard | Establishing the normal production starting point | Local topology or response requirements clearly differ from the documented assumptions |
 | Strict | Protecting explicitly designated critical services with tested response capacity | The goal is simply to generate more alerts or lower every threshold |
 
-Templates are examples, not signed product dependencies. For the selected profile:
+Templates are examples, not signed product dependencies. Generate one selected profile with:
+
+```powershell
+./src/hyper-v/scom-mp/tools/New-HyperVOverrideManagementPacks.ps1 `
+    -TuningProfile Standard `
+    -OrganizationId Contoso `
+    -OrganizationName 'Contoso' `
+    -Version '0.1.0.0' `
+    -PublicKeyToken '<product-public-key-token>' `
+    -OutputPath './out/contoso-overrides'
+```
+
+Then:
 
 1. Read the profile manifest and change log for the exact product version.
-2. Copy both the Discovery and Monitoring example files.
-3. Replace placeholder IDs and display names with organization-owned values.
+2. Review both generated Discovery and Monitoring files.
+3. Replace the example organization identity with the customer's approved identity.
 4. Remove settings that are not intentionally adopted.
 5. Validate XML references and import the files only in pre-production.
 6. Exercise normal, failure, recovery, maintenance, migration, and failover scenarios.

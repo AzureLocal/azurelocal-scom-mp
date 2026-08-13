@@ -3,8 +3,9 @@
 This repository defines Hybrid infrastructure health monitoring for two platform tracks. Azure
 Local has committed SCOM Management Pack and Azure Monitor Health Models delivery surfaces. Hyper-V
 has a committed SCOM Management Pack and a conditional future Azure Monitor surface through
-Arc-enabled SCVMM. SquaredUp integrations are optional visualization layers. Product implementation
-has not started.
+Arc-enabled SCVMM. SquaredUp integrations are optional visualization layers. The Hyper-V
+functional development MP is authored; it is not yet a sealed, signed, or SCOM-lab-certified
+release.
 
 The documentation is a VitePress site rooted at `docs/` and published beneath the
 `/hybrid-health-monitoring/` base path at
@@ -18,8 +19,9 @@ identifiers and direct board links must never be published in the public site or
 
 Hyper-V SCOM phase one covers support and topology, exhaustive raw inventories, prior Microsoft MP
 research, SCOM workflow mapping, threshold engineering, lab/fault validation, final catalog
-curation, and comprehensive MP/DA architecture validation. Authoring remains gated by this evidence
-and accepted successor Hyper-V ADRs.
+curation, and comprehensive MP/DA architecture validation. ADRs 0027–0029 and 0031 are accepted;
+the authored development baseline now advances through SDK dependency verification, sealing, and
+lab certification.
 
 The proposed Hyper-V packaging contract includes sealed Library, Discovery, Monitoring,
 Presentation, and optional Reporting artifacts. Customers own separate unsealed Discovery and

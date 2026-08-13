@@ -1,9 +1,31 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "1.1",
   "profile": "Strict",
-  "status": "AwaitingEvidence",
-  "purpose": "Explicitly designated critical services with tested response capacity.",
-  "discoverySettings": [],
-  "monitoringSettings": [],
-  "activationRule": "No setting is added until the workflow ID, safe range, cost, and lab evidence are accepted."
+  "status": "DevelopmentStarter",
+  "purpose": "More sensitive starting point for explicitly designated critical virtualization services with tested response capacity.",
+  "discoverySettings": [
+    {
+      "id": "TopologyInterval",
+      "workflowId": "HybridSolutionsCloud.HyperV.Topology.Discovery",
+      "contextClassId": "HybridSolutionsCloud.HyperV.HostRole",
+      "module": "PowerShellDiscovery",
+      "parameter": "IntervalSeconds",
+      "value": 900
+    }
+  ],
+  "monitoringSettings": [
+    {
+      "id": "MonitorInterval",
+      "workflowIds": ["VMMS", "Cluster", "VirtualMachines", "Replication", "NetworkATC", "Memory", "Cpu", "Csv", "Pipeline"],
+      "parameter": "IntervalSeconds",
+      "value": 120
+    },
+    { "id": "CpuWarning", "workflowIds": ["Cpu"], "parameter": "CpuWarningPercent", "value": 70 },
+    { "id": "CpuCritical", "workflowIds": ["Cpu"], "parameter": "CpuCriticalPercent", "value": 85 },
+    { "id": "MemoryWarning", "workflowIds": ["Memory"], "parameter": "MemoryWarningMB", "value": 8192 },
+    { "id": "MemoryCritical", "workflowIds": ["Memory"], "parameter": "MemoryCriticalMB", "value": 4096 },
+    { "id": "CsvWarning", "workflowIds": ["Csv"], "parameter": "CsvWarningPercentFree", "value": 20 },
+    { "id": "CsvCritical", "workflowIds": ["Csv"], "parameter": "CsvCriticalPercentFree", "value": 15 }
+  ],
+  "activationRule": "Use only after workload baselines, alert routing, staffing, and remediation capacity have been validated."
 }

@@ -1,6 +1,6 @@
 ---
 title: Hyper-V Management Pack structure
-description: Proposed sealed package decomposition, reference graph, overrides, and release-bundle contract for Hyper-V monitoring.
+description: Sealed package decomposition, reference graph, overrides, and release-bundle contract for Hyper-V monitoring.
 ---
 
 # Hyper-V Management Pack structure
@@ -11,10 +11,10 @@ sealing reusable MPs that other MPs reference, and keeping overrides in separate
 See [Select a Management Pack file](https://learn.microsoft.com/en-us/system-center/scom/select-management-pack-file?view=sc-om-2025)
 and [Create a Management Pack for overrides](https://learn.microsoft.com/en-us/system-center/scom/manage-mp-create-unsealed-mp?view=sc-om-2025).
 
-## Proposed artifact set
+## Artifact set
 
-`HybridSolutionsCloud.HyperV` is the working namespace. ADR 0027 must accept the final IDs before
-any sealed public contract is released.
+`HybridSolutionsCloud.HyperV` is the accepted namespace. The development source implements these
+IDs; sealing and signing turn the validated build into the public release contract.
 
 | Artifact | Form | Responsibility | Required dependencies |
 |---|---|---|---|
@@ -141,8 +141,8 @@ flowchart LR
 Each release bundle must contain:
 
 - sealed and release-signed MPs or MP bundles;
-- separate Discovery and Monitoring override starter files for the optional Lab, Standard, and
-  Strict profiles, delivered as non-importable public examples;
+- a generator and separate Discovery and Monitoring starter-profile manifests for optional Lab,
+  Standard, and Strict customer-owned overrides;
 - the Management Pack guide, support matrix, monitoring catalog, and tuning guidance;
 - release notes, dependency/version matrix, checksums, and license;
 - import, upgrade, rollback, and removal instructions; and
@@ -161,9 +161,9 @@ Each release bundle must contain:
 - The dependency graph is generated and compared in continuous integration to prevent accidental
   Azure Local or legacy Hyper-V MP references.
 
-## Packaging decision gate
+## Packaging release gates
 
-ADR 0027 must resolve these remaining details:
+ADR 0027 resolves the logical artifact boundary. Each release must still record:
 
 1. exact namespace and display-name prefix;
 2. whether Reporting ships in the base bundle or as an optional add-on;

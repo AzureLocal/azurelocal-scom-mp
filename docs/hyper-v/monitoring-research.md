@@ -5,13 +5,13 @@ description: Phase-one research plan for the complete Hyper-V SCOM signal invent
 
 # Hyper-V SCOM monitoring research
 
-Phase one is the active research and evidence program.
-Its purpose is to determine, with evidence, what the Hyper-V Management Pack can observe and what
-it should monitor by default. Management Pack authoring does not begin until this research is
-synthesized and the resulting architecture decisions are accepted.
+Phase one is the active research and evidence program. Its purpose is to determine, with evidence,
+what the Hyper-V Management Pack can observe and what it should monitor by default. The first
+functional baseline implements the highest-confidence phase-one subset; research continues to
+validate release defaults and later coverage instead of blocking all authoring.
 
-The evidence is evaluated against the [comprehensive proposed SCOM architecture](../design/hyper-v/architecture.md)
-and proposed ADRs 0027–0029. Research may refine those proposals; it must record why rather than
+The evidence is evaluated against the [comprehensive SCOM architecture](../design/hyper-v/architecture.md)
+and accepted ADRs 0027–0029. Research may refine those decisions; it must record why rather than
 allowing implementation to drift silently from the design.
 
 ## Two different questions

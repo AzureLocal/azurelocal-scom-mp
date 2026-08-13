@@ -1,36 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <Manifest>
-    <Identity>
-      <ID>HybridSolutionsCloud.HyperV.Discovery</ID>
-      <Version>{{VERSION}}</Version>
-    </Identity>
+    <Identity><ID>HybridSolutionsCloud.HyperV.Discovery</ID><Version>{{VERSION}}</Version></Identity>
     <Name>Hybrid Solutions Cloud Hyper-V Discovery</Name>
     <References>
-      <Reference Alias="System">
-        <ID>System.Library</ID>
-        <Version>7.5.8501.0</Version>
-        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
-      </Reference>
-      <Reference Alias="Windows">
-        <ID>Microsoft.Windows.Library</ID>
-        <Version>7.5.8501.0</Version>
-        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
-      </Reference>
-      <Reference Alias="HCSHyperVLibrary">
-        <ID>HybridSolutionsCloud.HyperV.Library</ID>
-        <Version>{{VERSION}}</Version>
-        <PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken>
-      </Reference>
+      <Reference Alias="System"><ID>System.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="Windows"><ID>Microsoft.Windows.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="HCSHyperVLibrary"><ID>HybridSolutionsCloud.HyperV.Library</ID><Version>{{VERSION}}</Version><PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken></Reference>
     </References>
   </Manifest>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="HybridSolutionsCloud.HyperV.HostRole.Seed.Discovery" Enabled="true" Target="Windows!Microsoft.Windows.Server.OperatingSystem" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes><DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" /></DiscoveryTypes>
+        <DataSource ID="RegistrySeed" TypeID="Windows!Microsoft.Windows.FilteredRegistryDiscoveryProvider">
+          <ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</ComputerName>
+          <RegistryAttributeDefinitions>
+            <RegistryAttributeDefinition><AttributeName>VMMSServiceExists</AttributeName><Path>SYSTEM\CurrentControlSet\Services\vmms</Path><PathType>0</PathType><AttributeType>0</AttributeType></RegistryAttributeDefinition>
+          </RegistryAttributeDefinitions>
+          <Frequency>14400</Frequency>
+          <ClassId>$MPElement[Name="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole"]$</ClassId>
+          <InstanceSettings><Settings>
+            <Setting><Name>$MPElement[Name="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Name><Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value></Setting>
+            <Setting><Name>$MPElement[Name="System!System.Entity"]/DisplayName$</Name><Value>Hyper-V on $Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value></Setting>
+          </Settings></InstanceSettings>
+          <Expression><SimpleExpression><ValueExpression><XPathQuery Type="Boolean">Values/VMMSServiceExists</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="Boolean">true</Value></ValueExpression></SimpleExpression></Expression>
+        </DataSource>
+      </Discovery>
+      <Discovery ID="HybridSolutionsCloud.HyperV.Topology.Discovery" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ComputeComponent" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponent" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponent" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponent" />
+          <DiscoveryClass TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponent" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.BoundaryContainsHostRole" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.BoundaryContainsVirtualMachine" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.BoundaryContainsClusterSharedVolume" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRoleRunsVirtualMachine" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsBoundary" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsComputeComponent" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsVirtualMachineComponent" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsStorageComponent" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsNetworkComponent" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsMonitoringComponent" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ComputeComponentContainsHostRole" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponentContainsHostRole" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponentContainsVirtualMachine" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponentContainsHostRole" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponentContainsClusterSharedVolume" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponentContainsHostRole" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponentContainsVirtualSwitch" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponentContainsNetworkAtcIntent" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponentContainsHostRole" />
+          <DiscoveryRelationship TypeID="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponentContainsPipeline" />
+        </DiscoveryTypes>
+        <DataSource ID="PowerShellDiscovery" TypeID="Windows!Microsoft.Windows.TimedPowerShell.DiscoveryProvider">
+          <IntervalSeconds>1800</IntervalSeconds><SyncTime /><ScriptName>HybridSolutionsCloud.HyperV.Topology.Discovery.ps1</ScriptName>
+          <ScriptBody><![CDATA[
+param($SourceId, $ManagedEntityId, $ComputerName)
+
+$ErrorActionPreference = 'Stop'
+$api = New-Object -ComObject 'MOM.ScriptAPI'
+$data = $api.CreateDiscoveryData(0, $SourceId, $ManagedEntityId)
+
+function Add-EntityProperty {
+    param($Instance, [string]$Element, $Value)
+    if ($null -ne $Value) { $Instance.AddProperty($Element, [string]$Value) }
+}
+
+function Add-RelationshipInstance {
+    param([string]$TypeName, $Source, $Target)
+    $relationship = $data.CreateRelationshipInstance($TypeName)
+    $relationship.Source = $Source
+    $relationship.Target = $Target
+    $data.AddInstance($relationship)
+}
+
+try {
+    Import-Module Hyper-V -ErrorAction Stop
+    $vmHost = Get-VMHost -ErrorAction Stop
+    $computer = Get-CimInstance -ClassName Win32_ComputerSystem -ErrorAction Stop
+    $hostShortName = $env:COMPUTERNAME
+    $cluster = $null
+    try { Import-Module FailoverClusters -ErrorAction Stop; $cluster = Get-Cluster -ErrorAction Stop } catch { $cluster = $null }
+
+    if ($null -ne $cluster) {
+        $clusterId = if ($cluster.PSObject.Properties['Id'] -and $cluster.Id) { [string]$cluster.Id } else { [string]$cluster.Name }
+        $boundaryId = 'cluster:' + $clusterId.ToLowerInvariant()
+        $boundaryType = 'FailoverCluster'
+        $clusterName = [string]$cluster.Name
+        $functionalLevel = if ($cluster.PSObject.Properties['ClusterFunctionalLevel']) { [string]$cluster.ClusterFunctionalLevel } else { '' }
+    } else {
+        $clusterId = ''
+        $boundaryId = 'host:' + $ComputerName.ToLowerInvariant()
+        $boundaryType = 'StandaloneHost'
+        $clusterName = ''
+        $functionalLevel = ''
+    }
+
+    $vms = @(Get-VM -ErrorAction Stop)
+    $networkAuthority = if (Get-Command Get-NetIntent -ErrorAction SilentlyContinue) { 'NetworkATC' } else { 'ManualOrExternal' }
+
+    $host = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']$")
+    Add-EntityProperty $host "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/RoleVersion$" $vmHost.HyperVVersion
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/RoleState$" 'Enabled'
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/IsClustered$" ($null -ne $cluster)
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/ClusterName$" $clusterName
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/ClusterId$" $clusterId
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/BoundaryId$" $boundaryId
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/LogicalProcessorCount$" $computer.NumberOfLogicalProcessors
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/MemoryBytes$" $computer.TotalPhysicalMemory
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/VirtualMachineCount$" $vms.Count
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/NetworkAuthority$" $networkAuthority
+    Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/DiscoveryVersion$" '1.0'
+    Add-EntityProperty $host "$MPElement[Name='System!System.Entity']/DisplayName$" ('Hyper-V on ' + $ComputerName)
+    $data.AddInstance($host)
+
+    $boundary = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']$")
+    Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/BoundaryId$" $boundaryId
+    Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/BoundaryType$" $boundaryType
+    Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/ClusterName$" $clusterName
+    Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/ClusterId$" $clusterId
+    Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/FunctionalLevel$" $functionalLevel
+    Add-EntityProperty $boundary "$MPElement[Name='System!System.Entity']/DisplayName$" $(if ($clusterName) { $clusterName } else { $ComputerName })
+    $data.AddInstance($boundary)
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.BoundaryContainsHostRole']$" $boundary $host
+
+    $service = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service']$")
+    Add-EntityProperty $service "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service']/BoundaryId$" $boundaryId
+    Add-EntityProperty $service "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service']/BoundaryType$" $boundaryType
+    Add-EntityProperty $service "$MPElement[Name='System!System.Entity']/DisplayName$" ('Hyper-V Health - ' + $(if ($clusterName) { $clusterName } else { $ComputerName }))
+    $data.AddInstance($service)
+
+    $components = @{}
+    foreach ($componentDefinition in @(
+        @('Compute', "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ComputeComponent']$", "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ComputeComponent']/BoundaryId$"),
+        @('Virtual Machines', "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponent']$", "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponent']/BoundaryId$"),
+        @('Storage', "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponent']$", "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponent']/BoundaryId$"),
+        @('Network', "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponent']$", "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponent']/BoundaryId$"),
+        @('Monitoring Pipeline', "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponent']$", "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponent']/BoundaryId$")
+    )) {
+        $label = $componentDefinition[0]
+        $component = $data.CreateClassInstance($componentDefinition[1])
+        Add-EntityProperty $component $componentDefinition[2] $boundaryId
+        Add-EntityProperty $component "$MPElement[Name='System!System.Entity']/DisplayName$" $label
+        $data.AddInstance($component)
+        $components[$label] = $component
+    }
+
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsBoundary']$" $service $boundary
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsComputeComponent']$" $service $components['Compute']
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsVirtualMachineComponent']$" $service $components['Virtual Machines']
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsStorageComponent']$" $service $components['Storage']
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsNetworkComponent']$" $service $components['Network']
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ServiceContainsMonitoringComponent']$" $service $components['Monitoring Pipeline']
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ComputeComponentContainsHostRole']$" $components['Compute'] $host
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponentContainsHostRole']$" $components['Virtual Machines'] $host
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponentContainsHostRole']$" $components['Storage'] $host
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponentContainsHostRole']$" $components['Network'] $host
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponentContainsHostRole']$" $components['Monitoring Pipeline'] $host
+
+    foreach ($vm in $vms) {
+        $vmId = [string]$vm.VMId
+        $vmInstance = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']$")
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/BoundaryId$" $boundaryId
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/VMId$" $vmId
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/Name$" $vm.Name
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/State$" $vm.State
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/Status$" $vm.Status
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/ExpectedState$" $(if ($vm.AutomaticStartAction -eq 'Start') { 'Running' } else { 'PolicyDependent' })
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/CurrentHost$" $ComputerName
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/IsClustered$" ($null -ne $cluster)
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/Generation$" $vm.Generation
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/ConfigurationVersion$" $vm.Version
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/ProcessorCount$" $vm.ProcessorCount
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/DynamicMemoryEnabled$" $vm.DynamicMemoryEnabled
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/StartupMemoryMB$" ([int]($vm.MemoryStartup / 1MB))
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/MinimumMemoryMB$" ([int]($vm.MemoryMinimum / 1MB))
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/MaximumMemoryMB$" ([int]($vm.MemoryMaximum / 1MB))
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/AssignedMemoryMB$" ([int]($vm.MemoryAssigned / 1MB))
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/CheckpointType$" $vm.CheckpointType
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/AutomaticStartAction$" $vm.AutomaticStartAction
+        Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/AutomaticStopAction$" $vm.AutomaticStopAction
+        $replication = Get-VMReplication -VM $vm -ErrorAction SilentlyContinue
+        if ($replication) {
+            Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/ReplicationMode$" $replication.Mode
+            Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/ReplicationHealth$" $replication.Health
+        }
+        Add-EntityProperty $vmInstance "$MPElement[Name='System!System.Entity']/DisplayName$" $vm.Name
+        $data.AddInstance($vmInstance)
+        Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.BoundaryContainsVirtualMachine']$" $boundary $vmInstance
+        Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRoleRunsVirtualMachine']$" $host $vmInstance
+        Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponentContainsVirtualMachine']$" $components['Virtual Machines'] $vmInstance
+    }
+
+    if ($null -ne $cluster) {
+        foreach ($csv in @(Get-ClusterSharedVolume -ErrorAction SilentlyContinue)) {
+            $partition = $csv.SharedVolumeInfo.Partition
+            $volumePath = [string]$csv.SharedVolumeInfo.FriendlyVolumeName
+            $volumeId = if ($volumePath) { $volumePath.ToLowerInvariant() } else { [string]$csv.Name }
+            $csvInstance = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']$")
+            Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/BoundaryId$" $boundaryId
+            Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/VolumeId$" $volumeId
+            Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/Name$" $csv.Name
+            Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/Path$" $volumePath
+            Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/State$" $csv.State
+            Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/OwnerNode$" $csv.OwnerNode
+            Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/SizeBytes$" $partition.Size
+            Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/FreeBytes$" $partition.FreeSpace
+            if ($partition.Size -gt 0) { Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/PercentFree$" ([math]::Round(($partition.FreeSpace / $partition.Size) * 100, 2)) }
+            Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/RedirectedAccess$" $csv.SharedVolumeInfo.RedirectedAccess
+            Add-EntityProperty $csvInstance "$MPElement[Name='System!System.Entity']/DisplayName$" $csv.Name
+            $data.AddInstance($csvInstance)
+            Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.BoundaryContainsClusterSharedVolume']$" $boundary $csvInstance
+            Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponentContainsClusterSharedVolume']$" $components['Storage'] $csvInstance
+        }
+    }
+
+    foreach ($switch in @(Get-VMSwitch -ErrorAction SilentlyContinue)) {
+        $switchInstance = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']$")
+        Add-EntityProperty $switchInstance "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
+        Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/SwitchId$" $switch.Id
+        Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/Name$" $switch.Name
+        Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/SwitchType$" $switch.SwitchType
+        Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/EmbeddedTeamingEnabled$" $switch.EmbeddedTeamingEnabled
+        Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/IovEnabled$" $switch.IovEnabled
+        Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/NetAdapterInterfaceDescriptions$" ($switch.NetAdapterInterfaceDescriptions -join '; ')
+        Add-EntityProperty $switchInstance "$MPElement[Name='System!System.Entity']/DisplayName$" $switch.Name
+        $data.AddInstance($switchInstance)
+        Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponentContainsVirtualSwitch']$" $components['Network'] $switchInstance
+    }
+
+    if (Get-Command Get-NetIntent -ErrorAction SilentlyContinue) {
+        foreach ($intent in @(Get-NetIntent -ErrorAction SilentlyContinue)) {
+            $intentInstance = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']$")
+            Add-EntityProperty $intentInstance "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
+            Add-EntityProperty $intentInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']/IntentName$" $intent.IntentName
+            Add-EntityProperty $intentInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']/Status$" $intent.Status
+            Add-EntityProperty $intentInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']/TrafficType$" $intent.TrafficType
+            Add-EntityProperty $intentInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']/AdapterNames$" ($intent.AdapterName -join '; ')
+            Add-EntityProperty $intentInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']/IsClusterIntent$" ($null -ne $cluster)
+            Add-EntityProperty $intentInstance "$MPElement[Name='System!System.Entity']/DisplayName$" $intent.IntentName
+            $data.AddInstance($intentInstance)
+            Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponentContainsNetworkAtcIntent']$" $components['Network'] $intentInstance
+        }
+    }
+
+    $pipeline = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']$")
+    Add-EntityProperty $pipeline "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']/PipelineId$" 'Topology'
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']/LastDiscoveryUtc$" ([DateTime]::UtcNow.ToString('o'))
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']/DiscoveryStatus$" 'Healthy'
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']/ErrorSummary$" ''
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']/TopologyObjectCount$" ($vms.Count + 2)
+    Add-EntityProperty $pipeline "$MPElement[Name='System!System.Entity']/DisplayName$" ('Topology pipeline on ' + $ComputerName)
+    $data.AddInstance($pipeline)
+    Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponentContainsPipeline']$" $components['Monitoring Pipeline'] $pipeline
+} catch {
+    $api.LogScriptEvent('HybridSolutionsCloud.HyperV.Topology.Discovery.ps1', 8101, 1, $_.Exception.ToString())
+}
+
+$data
+]]></ScriptBody>
+          <Parameters>
+            <Parameter><Name>SourceId</Name><Value>$MPElement$</Value></Parameter>
+            <Parameter><Name>ManagedEntityId</Name><Value>$Target/Id$</Value></Parameter>
+            <Parameter><Name>ComputerName</Name><Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value></Parameter>
+          </Parameters>
+          <TimeoutSeconds>300</TimeoutSeconds>
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+  </Monitoring>
   <LanguagePacks>
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
-        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Discovery">
-          <Name>Hybrid Solutions Cloud Hyper-V Discovery</Name>
-          <Description>Development foundation for Hyper-V role, topology, relationship, and Distributed Application membership discoveries.</Description>
-        </DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Discovery"><Name>Hybrid Solutions Cloud Hyper-V Discovery</Name><Description>Discovers independent Hyper-V host, boundary, VM, CSV, switch, Network ATC, monitoring-pipeline, and Distributed Application topology.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.HostRole.Seed.Discovery"><Name>Discover Hyper-V host role</Name><Description>Discovers the Hyper-V host role when the Virtual Machine Management service is installed.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Topology.Discovery"><Name>Discover Hyper-V topology and service health model</Name><Description>Discovers boundary-scoped topology and Distributed Application membership using supported Hyper-V, Failover Clustering, and Network ATC interfaces.</Description></DisplayString>
       </DisplayStrings>
     </LanguagePack>
   </LanguagePacks>

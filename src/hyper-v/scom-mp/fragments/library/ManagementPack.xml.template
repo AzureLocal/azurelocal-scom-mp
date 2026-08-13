@@ -22,15 +22,215 @@
         <Version>7.0.8433.0</Version>
         <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
       </Reference>
+      <Reference Alias="ServiceDesigner">
+        <ID>Microsoft.SystemCenter.ServiceDesigner.Library</ID>
+        <Version>7.0.8433.0</Version>
+        <PublicKeyToken>31bf3856ad364e35</PublicKeyToken>
+      </Reference>
     </References>
   </Manifest>
+  <TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="HybridSolutionsCloud.HyperV.HostRole" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.LocalApplication" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="RoleVersion" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="RoleState" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="IsClustered" Type="bool" Key="false" Required="false" />
+          <Property ID="ClusterName" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="ClusterId" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="BoundaryId" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="LogicalProcessorCount" Type="int" Key="false" Required="false" />
+          <Property ID="MemoryBytes" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="VirtualMachineCount" Type="int" Key="false" Required="false" />
+          <Property ID="NetworkAuthority" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="DiscoveryVersion" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.Boundary" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="BoundaryType" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="ClusterName" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="ClusterId" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="FunctionalLevel" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.VirtualMachine" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="VMId" Type="string" Key="true" CaseSensitive="false" MaxLength="64" MinLength="1" Required="true" />
+          <Property ID="Name" Type="string" Key="false" CaseSensitive="true" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="State" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="Status" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="ExpectedState" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="CurrentHost" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="IsClustered" Type="bool" Key="false" Required="false" />
+          <Property ID="Generation" Type="string" Key="false" CaseSensitive="false" MaxLength="16" MinLength="0" Required="false" />
+          <Property ID="ConfigurationVersion" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="ProcessorCount" Type="int" Key="false" Required="false" />
+          <Property ID="DynamicMemoryEnabled" Type="bool" Key="false" Required="false" />
+          <Property ID="StartupMemoryMB" Type="int" Key="false" Required="false" />
+          <Property ID="MinimumMemoryMB" Type="int" Key="false" Required="false" />
+          <Property ID="MaximumMemoryMB" Type="int" Key="false" Required="false" />
+          <Property ID="AssignedMemoryMB" Type="int" Key="false" Required="false" />
+          <Property ID="CheckpointType" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="AutomaticStartAction" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="AutomaticStopAction" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="ReplicationMode" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="ReplicationHealth" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.ClusterSharedVolume" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="VolumeId" Type="string" Key="true" CaseSensitive="false" MaxLength="512" MinLength="1" Required="true" />
+          <Property ID="Name" Type="string" Key="false" CaseSensitive="true" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="Path" Type="string" Key="false" CaseSensitive="false" MaxLength="1024" MinLength="0" Required="false" />
+          <Property ID="State" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="OwnerNode" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="SizeBytes" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="FreeBytes" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="PercentFree" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="RedirectedAccess" Type="bool" Key="false" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.VirtualSwitch" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.LocalApplication" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="SwitchId" Type="string" Key="true" CaseSensitive="false" MaxLength="64" MinLength="1" Required="true" />
+          <Property ID="Name" Type="string" Key="false" CaseSensitive="true" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="SwitchType" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="EmbeddedTeamingEnabled" Type="bool" Key="false" Required="false" />
+          <Property ID="IovEnabled" Type="bool" Key="false" Required="false" />
+          <Property ID="NetAdapterInterfaceDescriptions" Type="string" Key="false" CaseSensitive="false" MaxLength="2048" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.NetworkAtcIntent" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.LocalApplication" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="IntentName" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="Status" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="TrafficType" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="AdapterNames" Type="string" Key="false" CaseSensitive="false" MaxLength="2048" MinLength="0" Required="false" />
+          <Property ID="IsClusterIntent" Type="bool" Key="false" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.MonitoringPipeline" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.LocalApplication" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="PipelineId" Type="string" Key="true" CaseSensitive="false" MaxLength="64" MinLength="1" Required="true" />
+          <Property ID="LastDiscoveryUtc" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="DiscoveryStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="ErrorSummary" Type="string" Key="false" CaseSensitive="false" MaxLength="2048" MinLength="0" Required="false" />
+          <Property ID="TopologyObjectCount" Type="int" Key="false" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.Service" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Service" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="BoundaryType" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.ComputeComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.VirtualMachineComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.StorageComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.NetworkComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.HyperV.MonitoringComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+        </ClassType>
+      </ClassTypes>
+      <RelationshipTypes>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.BoundaryContainsHostRole" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Boundary" Type="HybridSolutionsCloud.HyperV.Boundary" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="HostRole" Type="HybridSolutionsCloud.HyperV.HostRole" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.BoundaryContainsVirtualMachine" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Boundary" Type="HybridSolutionsCloud.HyperV.Boundary" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="VirtualMachine" Type="HybridSolutionsCloud.HyperV.VirtualMachine" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.BoundaryContainsClusterSharedVolume" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Boundary" Type="HybridSolutionsCloud.HyperV.Boundary" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="ClusterSharedVolume" Type="HybridSolutionsCloud.HyperV.ClusterSharedVolume" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.HostRoleRunsVirtualMachine" Accessibility="Public" Abstract="false" Base="System!System.Reference">
+          <Source ID="HostRole" Type="HybridSolutionsCloud.HyperV.HostRole" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="VirtualMachine" Type="HybridSolutionsCloud.HyperV.VirtualMachine" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.ServiceContainsBoundary" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Service" Type="HybridSolutionsCloud.HyperV.Service" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="Boundary" Type="HybridSolutionsCloud.HyperV.Boundary" MinCardinality="0" MaxCardinality="1" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.ServiceContainsComputeComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Service" Type="HybridSolutionsCloud.HyperV.Service" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="Component" Type="HybridSolutionsCloud.HyperV.ComputeComponent" MinCardinality="0" MaxCardinality="1" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.ServiceContainsVirtualMachineComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Service" Type="HybridSolutionsCloud.HyperV.Service" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="Component" Type="HybridSolutionsCloud.HyperV.VirtualMachineComponent" MinCardinality="0" MaxCardinality="1" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.ServiceContainsStorageComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Service" Type="HybridSolutionsCloud.HyperV.Service" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="Component" Type="HybridSolutionsCloud.HyperV.StorageComponent" MinCardinality="0" MaxCardinality="1" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.ServiceContainsNetworkComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Service" Type="HybridSolutionsCloud.HyperV.Service" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="Component" Type="HybridSolutionsCloud.HyperV.NetworkComponent" MinCardinality="0" MaxCardinality="1" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.ServiceContainsMonitoringComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Service" Type="HybridSolutionsCloud.HyperV.Service" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="Component" Type="HybridSolutionsCloud.HyperV.MonitoringComponent" MinCardinality="0" MaxCardinality="1" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.ComputeComponentContainsHostRole" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.ComputeComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="HostRole" Type="HybridSolutionsCloud.HyperV.HostRole" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.VirtualMachineComponentContainsHostRole" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.VirtualMachineComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="HostRole" Type="HybridSolutionsCloud.HyperV.HostRole" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.VirtualMachineComponentContainsVirtualMachine" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.VirtualMachineComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="VirtualMachine" Type="HybridSolutionsCloud.HyperV.VirtualMachine" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.StorageComponentContainsHostRole" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.StorageComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="HostRole" Type="HybridSolutionsCloud.HyperV.HostRole" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.StorageComponentContainsClusterSharedVolume" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.StorageComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="ClusterSharedVolume" Type="HybridSolutionsCloud.HyperV.ClusterSharedVolume" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.NetworkComponentContainsHostRole" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.NetworkComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="HostRole" Type="HybridSolutionsCloud.HyperV.HostRole" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.NetworkComponentContainsVirtualSwitch" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.NetworkComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="VirtualSwitch" Type="HybridSolutionsCloud.HyperV.VirtualSwitch" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.NetworkComponentContainsNetworkAtcIntent" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.NetworkComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="NetworkAtcIntent" Type="HybridSolutionsCloud.HyperV.NetworkAtcIntent" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.MonitoringComponentContainsHostRole" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.MonitoringComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="HostRole" Type="HybridSolutionsCloud.HyperV.HostRole" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.HyperV.MonitoringComponentContainsPipeline" Accessibility="Public" Abstract="false" Base="System!System.Containment">
+          <Source ID="Component" Type="HybridSolutionsCloud.HyperV.MonitoringComponent" MinCardinality="0" MaxCardinality="1" />
+          <Target ID="Pipeline" Type="HybridSolutionsCloud.HyperV.MonitoringPipeline" MinCardinality="0" MaxCardinality="2147483647" />
+        </RelationshipType>
+      </RelationshipTypes>
+    </EntityTypes>
+  </TypeDefinitions>
   <LanguagePacks>
     <LanguagePack ID="ENU" IsDefault="true">
       <DisplayStrings>
-        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Library">
-          <Name>Hybrid Solutions Cloud Hyper-V Library</Name>
-          <Description>Development foundation for Hyper-V classes, relationships, reusable modules, and secure references.</Description>
-        </DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Library"><Name>Hybrid Solutions Cloud Hyper-V Library</Name><Description>Classes and relationships for independent Hyper-V host, boundary, virtual-machine, cluster-storage, networking, monitoring-pipeline, and service health.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.HostRole"><Name>Hyper-V Host Role</Name><Description>A Windows Server computer running the Hyper-V Virtual Machine Management service.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Boundary"><Name>Hyper-V Service Boundary</Name><Description>A stable failover-cluster or standalone-host monitoring boundary.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.VirtualMachine"><Name>Hyper-V Virtual Machine</Name><Description>A boundary-scoped virtual machine keyed by its Hyper-V VM identifier, independent of current host placement.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.ClusterSharedVolume"><Name>Hyper-V Cluster Shared Volume</Name><Description>A Cluster Shared Volume owned by a Hyper-V failover-cluster boundary.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.VirtualSwitch"><Name>Hyper-V Virtual Switch</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.NetworkAtcIntent"><Name>Network ATC Intent</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.MonitoringPipeline"><Name>Hyper-V Monitoring Pipeline</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.Service"><Name>Hyper-V Health Service</Name><Description>The Distributed Application root for one Hyper-V cluster or standalone host.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.ComputeComponent"><Name>Compute</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.VirtualMachineComponent"><Name>Virtual Machines</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.StorageComponent"><Name>Storage</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.NetworkComponent"><Name>Network</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.HyperV.MonitoringComponent"><Name>Monitoring Pipeline</Name></DisplayString>
+        {{LIBRARY_ELEMENT_DISPLAY_STRINGS}}
       </DisplayStrings>
     </LanguagePack>
   </LanguagePacks>
