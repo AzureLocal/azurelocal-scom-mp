@@ -1,81 +1,279 @@
 ---
 title: Hyper-V Distributed Application
-description: Hyper-V SCOM Distributed Application boundaries, component groups, rollup rules, and research gates.
+description: Hyper-V SCOM Distributed Application service model, dynamic membership, component groups, rollup, topology changes, views, and research gates.
 ---
 
 # Hyper-V Distributed Application design
 
-The Hyper-V SCOM product ships a Hyper-V-owned Distributed Application with no dependency on the
-Azure Local MP. The working logical root is **`HyperV.Deployment`**; the final platform namespace,
-stable key, and class hierarchy are locked before authoring by the successor Hyper-V topology and
-discovery ADRs.
+The Hyper-V SCOM product ships a Hyper-V-owned Distributed Application (DA) with no dependency on
+the Azure Local MP. One DA represents one operational failure boundary: a failover cluster or a
+standalone Hyper-V host. The working root is `HybridSolutionsCloud.HyperV.Deployment`; ADR 0028 must
+accept its final namespace, stable key, and class hierarchy before authoring.
 
-## Monitoring boundaries
+A DA organizes and presents health. It does not replace correctly targeted unit, aggregate, and
+dependency monitors. Microsoft describes Distributed Applications as grouped monitored objects
+whose overall health is calculated for service-oriented alerts, views, and reports. See
+[Use the Authoring workspace in Operations Manager](https://learn.microsoft.com/en-us/system-center/scom/manage-using-authoring-workspace?view=sc-om-2025).
 
-The product creates an independent DA instance for each supported monitoring boundary:
+## Service boundary rule
 
-- one per Hyper-V failover cluster; and
-- one per standalone Hyper-V host.
+```mermaid
+flowchart TD
+    OBJECT[Discovered Hyper-V object] --> OWNER{Stable operational boundary?}
+    OWNER -->|Failover cluster| CDA[Cluster DA]
+    OWNER -->|Standalone host| HDA[Standalone-host DA]
+    OWNER -->|Unknown or ambiguous| HOLD[Exclude from DA and raise topology/pipeline evidence]
+    CDA --> ONE[Exactly one required DA membership path]
+    HDA --> ONE
+    ONE --> HEALTH[Health rolls to one service root]
+
+    classDef decision fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+    classDef service fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b
+    classDef outcome fill:#ecfdf5,stroke:#059669,color:#064e3b
+    class OWNER decision
+    class CDA,HDA,HOLD service
+    class ONE,HEALTH outcome
+```
 
 SCVMM management does not merge unrelated clusters or hosts into one required DA. A future fleet
-view can aggregate multiple DAs through optional presentation content or a separately packaged
-integration MP.
+view can aggregate DAs through presentation content or a separately packaged integration MP.
 
-## Candidate service model
+## Cluster DA
 
-| DA branch | Membership | Applicability and rollup intent |
+```mermaid
+flowchart TB
+    ROOT[Hyper-V cluster service]
+    COMP[Compute and cluster]
+    VM[Virtual machines]
+    STO[Storage and Replica]
+    NET[Networking]
+    MGMT[Management plane]
+    PIPE[Monitoring pipeline]
+
+    ROOT --> COMP
+    ROOT --> VM
+    ROOT --> STO
+    ROOT --> NET
+    ROOT --> MGMT
+    ROOT --> PIPE
+
+    COMP --> CLUSTER[Cluster, quorum, nodes, roles, and resources]
+    VM --> VMS[Expected-running and actionable VMs]
+    STO --> CSV[CSVs, paths, virtual disks, VHD/VHDX, and Replica]
+    NET --> AUTH[Exactly one Network ATC, manual, or SCVMM/SDN authority path]
+    MGMT --> OPTIONAL[Optional SCVMM and Network Controller dependencies]
+    PIPE --> TELEMETRY[Agents, discovery freshness, workflow health, and data freshness]
+
+    classDef root fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+    classDef branch fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b
+    classDef member fill:#ecfdf5,stroke:#059669,color:#064e3b
+    class ROOT root
+    class COMP,VM,STO,NET,MGMT,PIPE branch
+    class CLUSTER,VMS,CSV,AUTH,OPTIONAL,TELEMETRY member
+```
+
+## Standalone-host DA
+
+```mermaid
+flowchart TB
+    ROOT[Hyper-V standalone-host service]
+    COMP[Compute and host]
+    VM[Virtual machines]
+    STO[Storage and Replica]
+    NET[Networking]
+    PIPE[Monitoring pipeline]
+
+    ROOT --> COMP
+    ROOT --> VM
+    ROOT --> STO
+    ROOT --> NET
+    ROOT --> PIPE
+
+    COMP --> HOST[Windows computer, Hyper-V role, and required services]
+    VM --> VMS[Expected-running and actionable VMs]
+    STO --> DISK[Local/external paths, virtual disks, VHD/VHDX, and Replica]
+    NET --> SWITCH[Physical adapters, switches, ports, and VM adapters]
+    PIPE --> TELEMETRY[Agent, discovery, workflow, and freshness health]
+
+    classDef root fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+    classDef branch fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b
+    classDef member fill:#ecfdf5,stroke:#059669,color:#064e3b
+    class ROOT root
+    class COMP,VM,STO,NET,PIPE branch
+    class HOST,VMS,DISK,SWITCH,TELEMETRY member
+```
+
+Cluster-only objects are absent rather than Healthy placeholders in a standalone DA. The optional
+Management plane branch appears only when an accepted topology makes that plane operationally
+required.
+
+## Component contract
+
+| DA branch | Membership | Default root impact |
 |---|---|---|
-| Compute and cluster | Hyper-V host or cluster, cluster service, quorum, nodes, and virtualization services | Always present; cluster-only objects are omitted for standalone hosts |
-| Virtual machines | VMs and clustered VM roles related to the boundary | Only expected-running or otherwise actionable state affects default availability; intentional Off state must not make the DA unhealthy |
-| Storage and Replica | CSVs, storage paths, virtual disks, VHD/VHDX dependencies, and Hyper-V Replica relationships | Include only discovered resources owned by the boundary |
-| Networking | Physical adapters, vSwitches, ports, VM adapters, and the selected Network ATC, manual, or SCVMM/SDN authority path | Do not roll overlapping network-management authorities into the same deployment |
-| Management plane | Optional SCVMM, Network Controller, and related authoritative management dependencies | Present only when the supported topology selects that management plane |
-| Monitoring pipeline | SCOM agent, discovery freshness, workflow health, and required management-server collection paths | Separate root-level branch so missing telemetry cannot appear as healthy infrastructure |
+| Compute and cluster | Host role or cluster, quorum, nodes, clustered roles/resources, and required virtualization services | Availability-critical; redundancy-aware for clustered hosts |
+| Virtual machines | VMs classified as actionable by expected-state policy | Population-aware; intentional Off/Saved/template states do not penalize availability |
+| Storage and Replica | CSVs, approved storage paths, disks, VHD/VHDX dependencies, and Replica relationships | Availability or data-integrity critical where the dependency is required |
+| Networking | Physical-to-virtual topology under exactly one selected authority | Availability-critical for required paths; configuration drift can be lower impact |
+| Management plane | Optional SCVMM, Network Controller, and authoritative management dependencies | Topology-specific; absent when not selected |
+| Monitoring pipeline | Agent, required discovery freshness, workflow health, and required collection paths | Root-impacting so missing telemetry cannot look Healthy |
 
-The exact classes and membership queries remain evidence-gated by AB#7343, AB#7348, and AB#7350.
-Those spikes may refine branch names or split a branch, but they may not remove the requirement for
-a platform-owned DA.
+## Dynamic membership
+
+The DA is authored in XML and populated from discovered classes and typed relationships. Operators
+must not recreate it manually with the Distributed Application Designer.
+
+```mermaid
+sequenceDiagram
+    participant T as Topology discoveries
+    participant R as SCOM relationships
+    participant M as DA membership discovery
+    participant G as Component groups
+    participant D as DA root
+
+    T->>R: Create stable boundary, object, and ownership relationships
+    M->>R: Query supported typed relationships
+    M->>G: Add current members to exactly one applicable branch
+    G->>D: Expose dependency rollup path
+    Note over M,G: Reconcile membership by stable key
+```
+
+Membership rules:
+
+- Start from the stable DA boundary key, not an estate-wide group or name pattern.
+- Traverse only product-owned or explicitly approved typed relationships.
+- Give every required member exactly one canonical health path to avoid double weighting.
+- Do not put the same networking object under Network ATC and SCVMM/SDN branches.
+- Retain intentionally non-impacting objects in state/inventory views when useful, without adding
+  them to an availability dependency rollup.
+- Treat empty required branches as topology or monitoring-pipeline faults, not Healthy success.
+
+## Membership reconciliation
+
+```mermaid
+flowchart TD
+    SNAP[Authoritative topology snapshot] --> MAP[Map stable IDs and relationships]
+    MAP --> VALID{Keys unique and authority unambiguous?}
+    VALID -->|No| FAULT[Preserve last known safe membership and raise pipeline fault]
+    VALID -->|Yes| DIFF[Compare with current DA membership]
+    DIFF --> ADD[Add new supported members]
+    DIFF --> KEEP[Keep unchanged members and health history]
+    DIFF --> REMOVE[Remove authoritatively absent relationships]
+    ADD --> COMMIT[Commit one deterministic membership snapshot]
+    KEEP --> COMMIT
+    REMOVE --> COMMIT
+    COMMIT --> VERIFY[Verify expected branch counts and freshness]
+
+    classDef decision fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+    classDef process fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b
+    classDef good fill:#ecfdf5,stroke:#059669,color:#064e3b
+    classDef bad fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+    class VALID decision
+    class SNAP,MAP,DIFF,ADD,KEEP,REMOVE process
+    class COMMIT,VERIFY good
+    class FAULT bad
+```
 
 ## Health propagation
 
-| Layer | Responsibility |
-|---|---|
-| Unit monitors | Establish health for supported Hyper-V, cluster, storage, network, VM, and management signals |
-| Aggregate monitors | Organize Availability, Configuration, Performance, and applicable Security state within each object |
-| Dependency monitors | Propagate health through discovered relationships and into the applicable DA component group |
-| DA root | Presents the standalone-host or cluster service state for views, reports, dashboards, and SLOs |
+```mermaid
+flowchart BT
+    SIGNAL[Provider evidence] --> UNIT[Unit monitor state]
+    UNIT --> DIM[Object health dimension]
+    DIM --> OBJECT[Object health]
+    OBJECT --> DEP[Dependency monitor]
+    DEP --> BRANCH[DA component-group health]
+    BRANCH --> IMPACT[Impact-weighted root dependency]
+    IMPACT --> ROOT[Hyper-V deployment health]
+    ROOT --> SLA[Views, reports, dashboards, and SLO]
 
-Worst-state is the default, not an unconditional rule. VM power state, percentage-based population
-health, redundancy, maintenance, intentional drain/offline state, missing data, and recovery behavior
-must be decided from AB#7351–AB#7353 and validated in the lab. A simple count of powered-off VMs or
-a single raw utilization threshold must not turn the entire DA unhealthy without operational
-context.
+    classDef source fill:#e8f3ff,stroke:#0078d4,color:#172554
+    classDef health fill:#ecfdf5,stroke:#059669,color:#064e3b
+    classDef service fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+    class SIGNAL source
+    class UNIT,DIM,OBJECT,DEP,BRANCH health
+    class IMPACT,ROOT,SLA service
+```
+
+Worst state is a starting point, not an unconditional algorithm. Redundant hosts, VM populations,
+maintenance, node drain, planned migration, intentional power states, and monitoring freshness need
+topology-aware policies validated through AB#7351–AB#7353.
+
+## Failure examples
+
+```mermaid
+flowchart LR
+    Q[Quorum unavailable] --> CQ[Compute branch Critical]
+    CQ --> CR[Cluster DA Critical]
+
+    V[One intentionally stopped VM] --> VX[Excluded from availability penalty]
+    VX --> VR[VM branch remains based on actionable population]
+
+    A[All required discovery stale] --> MP[Monitoring pipeline Critical]
+    MP --> DR[DA not allowed to remain Healthy]
+
+    classDef critical fill:#fef2f2,stroke:#dc2626,color:#7f1d1d
+    classDef expected fill:#ecfdf5,stroke:#059669,color:#064e3b
+    class Q,CQ,CR,A,MP,DR critical
+    class V,VX,VR expected
+```
+
+## Operator surfaces
+
+```mermaid
+flowchart TB
+    DA[Selected Hyper-V DA] --> DIAGRAM[Diagram view]
+    DA --> STATE[Component and object state views]
+    DA --> ALERT[Active alerts scoped to members]
+    DA --> PERF[Curated performance views]
+    DA --> EVENT[Curated event views]
+    DA --> TASK[Safe diagnostic tasks]
+    DA --> REPORT[Availability, performance, capacity, and change reports]
+    DA --> SLO[Service-level objective targets]
+    DA --> DASH[Optional SquaredUp dashboards]
+
+    classDef root fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+    classDef surface fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b
+    class DA root
+    class DIAGRAM,STATE,ALERT,PERF,EVENT,TASK,REPORT,SLO,DASH surface
+```
+
+Every surface scopes through stable DA membership or product-owned classes. Reports and dashboards
+do not reimplement topology with display-name queries.
+
+Microsoft permits service-level objectives to target a class, group, or Distributed Application.
+The product provides DA-oriented guidance and validates the selected target in pre-production. See
+[Service-level objectives](https://learn.microsoft.com/en-us/system-center/scom/manage-monitor-sla-overview?view=sc-om-2025).
 
 ## Required product artifacts
 
 - Hyper-V-owned DA root and component-group class XML;
-- dynamic relationship and membership discoveries for standalone and clustered boundaries;
+- deterministic dynamic membership discoveries for cluster and standalone boundaries;
 - topology-aware aggregate and dependency monitors;
-- Health Explorer, diagram, state, alert, and task views scoped to the DA instance;
-- report and service-level objective targeting;
-- optional SquaredUp Dashboard Server views that target only Hyper-V classes; and
-- import, population, topology-change, fault, recovery, upgrade, side-by-side, and removal tests.
+- localized diagram, state, alert, event, performance, and task views;
+- availability and performance report/SLO guidance;
+- optional SquaredUp Dashboard Server content targeting only Hyper-V classes; and
+- import, empty-topology, population, move, failover, fault, recovery, scale, upgrade, coexistence,
+  and removal tests.
 
-## Research acceptance gates
+## Acceptance gates
 
-Before MP XML authoring, the Hyper-V research must prove:
+Before DA authoring, the research and proposed ADRs must prove:
 
-1. stable cluster and standalone-host DA keys;
-2. deterministic membership through supported discoveries and relationships;
-3. correct behavior for clustered VM movement, host drain, maintenance, and failover;
+1. stable cluster and standalone-host root keys;
+2. deterministic membership and execution placement across HealthServices;
+3. correct VM identity and membership during migration, drain, failover, rename, and removal;
 4. exclusive Network ATC, manual, or SCVMM/SDN authority membership;
-5. actionable VM-state and population-rollup rules;
-6. Unknown and stale-data behavior; and
-7. acceptable workflow cost at the supported scale.
+5. actionable expected-state and population rollups for VMs;
+6. redundancy-aware host and cluster rollups;
+7. Unknown/stale-data behavior and recovery;
+8. acceptable membership and rollup cost at supported maximum scale; and
+9. correct views, reports, dashboards, and SLO targeting.
 
-## References
+## Related design
 
+- [Hyper-V SCOM architecture](architecture.md)
+- [Class and relationship model](class-and-relationship-model.md)
+- [Health and alert architecture](health-and-alert-architecture.md)
 - [ADR 0026 — Platform-owned SCOM Distributed Applications](../decisions/0026-platform-owned-scom-distributed-applications.md)
-- [Hyper-V SCOM monitoring research](../../hyper-v/monitoring-research.md)
-- [Microsoft Operations Manager Distributed Applications](https://learn.microsoft.com/en-us/system-center/scom/manage-using-authoring-workspace?view=sc-om-2025)
-- [Microsoft Operations Manager service-level objectives](https://learn.microsoft.com/en-us/system-center/scom/manage-monitor-sla-overview?view=sc-om-2025)
+- [Hyper-V monitoring research](../../hyper-v/monitoring-research.md)

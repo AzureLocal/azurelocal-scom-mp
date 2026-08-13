@@ -10,8 +10,22 @@ inherit Azure Local entities, signals, thresholds, cloud dependencies, or accept
 
 | Design lane | Commitment | Status |
 |---|---|---|
-| [SCOM Management Pack](scom-mp.md) | Committed | Phase-one research active under AB#7327 |
+| [SCOM Management Pack](scom-mp.md) | Committed | Comprehensive architecture proposed; phase-one research active under AB#7327 |
 | [Azure Monitor through Arc-enabled SCVMM](azure-monitor.md) | Conditional | Research and go/defer/no-go ADR required |
+
+## Hyper-V SCOM architecture
+
+The SCOM lane now has implementation-grade design contracts for the
+[end-to-end architecture](architecture.md), [Management Pack structure](management-pack-structure.md),
+[class and relationship model](class-and-relationship-model.md),
+[discovery and workflows](discovery-and-workflow-architecture.md),
+[health and alerts](health-and-alert-architecture.md),
+[Distributed Application](distributed-application.md), [authoring standards](authoring-standards.md),
+[security and operability](security-and-operability.md), and
+[validation and release](validation-and-release.md).
+
+The diagrams on these pages are rendered by the site's Vue component so architecture, sequence,
+state, class, and decision flows remain readable in both light and dark documentation themes.
 
 ## Platform design questions
 

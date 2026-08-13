@@ -37,3 +37,9 @@
 - The Microsoft Hyper-V 2019 Management Pack is a research input only. The new Hyper-V MP will not
   import, extend, override, require, or take a runtime dependency on it. Useful concepts must be
   revalidated and implemented independently in this project's namespaces and workflows.
+- The comprehensive Hyper-V SCOM architecture is a proposed implementation baseline, not permission
+  to begin XML authoring. Proposed ADR 0027 decomposes the product into Library, Discovery,
+  Monitoring, Presentation, optional Reporting, and customer-owned Overrides artifacts. Proposed
+  ADR 0028 defines stable boundary identity, VM mobility, staged discovery, workflow placement, and
+  cookdown. Proposed ADR 0029 defines evidence-driven health, alerts, monitoring freshness, and
+  topology-aware DA rollup. AB#7359 validates all three against AB#7327 evidence before acceptance.

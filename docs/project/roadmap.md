@@ -29,7 +29,7 @@ flowchart TD
 |---|---|---|---|
 | [Azure Local monitoring — AB#7313](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7313) | [Azure Local SCOM MP — AB#7315](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7315) | Committed | Planned |
 | [Azure Local monitoring — AB#7313](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7313) | [Azure Local Azure Monitor — AB#7316](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7316) | Committed | Planned |
-| [Hyper-V monitoring — AB#7314](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7314) | [Hyper-V SCOM MP — AB#7317](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7317) | Committed | Research and design next |
+| [Hyper-V monitoring — AB#7314](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7314) | [Hyper-V SCOM MP — AB#7317](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7317) | Committed | Comprehensive architecture proposed; evidence research active |
 | [Hyper-V monitoring — AB#7314](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7314) | [Hyper-V Azure Monitor through Arc-enabled SCVMM — AB#7318](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7318) | Conditional | Research gate; future roadmap |
 
 ## Now — foundation and decision gates
@@ -39,7 +39,8 @@ These items unblock safe implementation:
 | Item | Outcome | Dependency |
 |---|---|---|
 | [Independent SCOM packaging contract — AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319) | Validate independent namespaces, artifacts, signing, coexistence, upgrade, and removal behavior | Implements accepted ADR 0022 for both SCOM Features |
-| [Hyper-V SCOM monitoring research — AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327) | Exhaustive signal inventory, MP gap analysis, workflow/threshold research, lab validation, and curated defaults through AB#7343–AB#7353 | Active; gates Hyper-V authoring |
+| [Hyper-V SCOM monitoring research — AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327) | Validate proposed ADRs 0027–0029 through exhaustive signal inventory, workflow/threshold research, lab evidence, and curated defaults | Active; gates Hyper-V authoring |
+| [Hyper-V SCOM architecture validation — AB#7359](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7359) | Trace the comprehensive package, object, discovery, workflow, health, alert, DA, security, scale, and release design to spike evidence | Child of AB#7327; resolves ADRs 0027–0029 |
 | [Azure Local Health Models revalidation — AB#7323](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7323) | Revalidate APIs, preview limits, identity, and signal contracts | Gates Azure Local Azure Monitor authoring |
 | [Arc-enabled SCVMM inventory spike — AB#7331](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7331) | Prove inventory and guest-management boundaries | Precedes telemetry proof |
 | [Hyper-V Health Models feasibility spike — AB#7332](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7332) | Prove or disprove a useful supported entity and signal model | Precedes go/no-go ADR |
@@ -64,7 +65,8 @@ The complete phase-one Hyper-V breakdown is published in
 
 ### Hyper-V SCOM Management Pack
 
-1. Complete DA boundary, membership, and rollup evidence in AB#7327.
+1. Validate the [comprehensive architecture](../design/hyper-v/architecture.md), DA boundary,
+   membership, and rollup through AB#7327 and AB#7359, then resolve proposed ADRs 0027–0029.
 2. Author classes, discoveries, and DA membership — [AB#7328](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7328) and [AB#7356](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7356).
 3. Author monitoring, DA rollups/operator surfaces, and overrides — [AB#7329](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7329) and [AB#7357](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7357).
 4. Validate, package, and document the independent release — [AB#7330](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7330).

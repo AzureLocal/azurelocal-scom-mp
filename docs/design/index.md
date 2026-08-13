@@ -12,7 +12,7 @@ to Hyper-V.
 | Platform | SCOM Management Pack | Azure Monitor Health Models |
 |---|---|---|
 | **Azure Local** | [Accepted design baseline](azure-local/scom-mp.md) | [Accepted baseline; API revalidation next](azure-local/azure-monitor.md) |
-| **Hyper-V** | [Active phase-one research](hyper-v/scom-mp.md) | [Conditional research track](hyper-v/azure-monitor.md) |
+| **Hyper-V** | [Comprehensive proposed architecture; active evidence research](hyper-v/scom-mp.md) | [Conditional research track](hyper-v/azure-monitor.md) |
 
 ## Shared design
 
@@ -47,7 +47,8 @@ of the accepted early ADRs describe Azure Local unless a page says otherwise.
 The [Hyper-V design](hyper-v/index.md) is intentionally separate:
 
 - [Hyper-V SCOM Management Pack design](hyper-v/scom-mp.md) is the active first phase under
-  AB#7327 and includes a required, research-refined
+  AB#7327, includes a [comprehensive architecture map](hyper-v/architecture.md), and has a required,
+  research-refined
   [Hyper-V Distributed Application](hyper-v/distributed-application.md); and
 - [Hyper-V Azure Monitor design](hyper-v/azure-monitor.md) remains conditional on the Arc-enabled
   SCVMM research and ADR 0023.

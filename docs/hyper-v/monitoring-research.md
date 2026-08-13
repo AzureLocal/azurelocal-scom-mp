@@ -11,6 +11,10 @@ Its purpose is to determine, with evidence, what the Hyper-V Management Pack can
 it should monitor by default. Management Pack authoring does not begin until this research is
 synthesized and the resulting architecture decisions are accepted.
 
+The evidence is evaluated against the [comprehensive proposed SCOM architecture](../design/hyper-v/architecture.md)
+and proposed ADRs 0027–0029. Research may refine those proposals; it must record why rather than
+allowing implementation to drift silently from the design.
+
 ## Two different questions
 
 The research deliberately produces two artifacts:

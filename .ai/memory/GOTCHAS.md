@@ -21,3 +21,7 @@
   research and non-runtime engineering practices may be reused.
 - An exhaustive counter/event/property inventory is intentionally larger than the shipped default
   profile. Keep rejected and collection-only candidates traceable instead of silently deleting them.
+- VitePress production rendering does not validate Mermaid syntax during the static build. Validate
+  every changed diagram in an actual browser and assert that `.mermaid-diagram svg` is present and
+  `.mermaid-error`/`.mermaid-loading` are absent. The local Node-only Mermaid parser can report a
+  `DOMPurify.addHook` limitation that does not occur in the browser runtime.

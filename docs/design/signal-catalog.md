@@ -6,7 +6,7 @@
 >
 > **Platform scope:** the populated catalog below is the accepted **Azure Local** baseline.
 > Hyper-V signals will be added in a separate platform section only after research story AB#7327
-> and child spikes AB#7343–AB#7353 verify supported sources, SCOM workflows, thresholds, and lab
+> and child Tasks AB#7343–AB#7353 plus AB#7359 verify supported sources, SCOM workflows, thresholds, architecture, and lab
 > behavior. See the [Hyper-V research plan](../hyper-v/monitoring-research.md) and
 > [catalog policy](../hyper-v/monitoring-catalog.md). Shared names indicate equivalent meaning, not an
 > assumption that every platform exposes the signal.

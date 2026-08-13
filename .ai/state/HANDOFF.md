@@ -8,56 +8,45 @@
 
 ## Last session
 
-- **What changed and why:** Activated Hyper-V Epic AB#7314, SCOM Feature AB#7317, and umbrella
-  research Story AB#7327. Expanded phase one so an exhaustive technical inventory is kept separate
-  from the smaller, opinionated default monitoring catalog.
-- **Azure DevOps:** Created child research Tasks AB#7343–AB#7353 in the Hyper-V area. AB#7343–AB#7349
-  cover support/topology, raw signal domains, and prior Microsoft MP research. AB#7350–AB#7351
-  depend on those inventories and cover SCOM workflows and thresholds. AB#7352 depends on both
-  engineering tasks and validates sources/faults in the lab. AB#7353 depends on lab validation and
-  curates defaults. AB#7343 and AB#7348 now explicitly cover Network ATC, SCVMM/SDN, manual
-  networking, and authority detection; comments were added to those Tasks and AB#7327.
-- **Documentation:** Added `docs/hyper-v/monitoring-research.md` and
-  `docs/hyper-v/monitoring-catalog.md`; updated VitePress navigation, roadmap, implementation plan,
-  signal-catalog gate, Hyper-V pages, research-spike page, changelog, and source register.
-- **Threshold decision:** Do not use 75% host memory utilization as a standalone default health
-  trigger. Research must combine available/reserved host memory, Hyper-V memory pressure, paging,
-  sustained duration, recovery, topology, and lab evidence.
-- **Sources:** Initial source set includes current Microsoft Hyper-V performance/tuning,
-  troubleshooting, Failover Cluster/CSV, SCOM, PowerShell, and Hyper-V MP documentation, plus
-  current Veeam ONE Hyper-V alarms as secondary comparison evidence.
-- **Network and prior-MP corrections:** Network ATC is the preferred baseline for eligible Windows
-  Server 2025 Datacenter Hyper-V clusters unless SCVMM/SDN is the selected network authority. The
-  Microsoft Hyper-V 2019 MP is research evidence only; the new MP will not import, extend,
-  override, require, or take a runtime dependency on it.
-- **Design navigation:** Reorganized design platform first, then delivery surface. Azure Local and
-  Hyper-V each have explicit SCOM and Azure Monitor design lanes; Hyper-V Azure Monitor remains
-  conditional. Added an ADR scope map so Azure Local ADRs are not silently applied to Hyper-V.
-- **Documentation title:** The sidebar documentation layout renders the brand as two lines—Hybrid
-  Infrastructure, then Health Monitoring—so it stays inside the title column and does not cover
-  search. The landing-page header remains a single line.
-- **Architecture:** Added accepted ADR 0025 for Hyper-V network-management authority. It preserves
-  accepted ADR 0021 as an immutable historical record while superseding its Network ATC
-  implication.
-- **Independent SCOM products:** Accepted ADR 0022 with no shared Azure Local/Hyper-V sealed
-  library, class, namespace, package, Distributed Application, release, or runtime dependency.
-  Research and non-runtime engineering practices may still be reused.
-- **Distributed Applications:** Added accepted ADR 0026 and dedicated Azure Local and Hyper-V DA
-  design pages. Azure Local owns its deployment DA; Hyper-V owns a separate DA per supported
-  failover cluster or standalone host. Both require dynamic membership, tested health propagation,
-  operator views, reports, dashboards, and SLO targeting.
-- **DA backlog:** Created AB#7354–AB#7357 for Azure Local and Hyper-V DA classes/membership and
-  rollups/operator surfaces. Updated Features AB#7315 and AB#7317 plus AB#7319, AB#7320, AB#7321,
-  AB#7327, AB#7328, AB#7329, AB#7343, and AB#7350 to enforce independent packaging and DA
-  delivery/research requirements.
-- **Validation:** VitePress production build passed and rendered both DA pages plus ADRs 0022 and
-  0026. Markdownlint passed across all changed Markdown, `git diff --check` passed, and the
-  changed-file secret scan found no matches. Governance validation found its global markdownlint
-  and lychee executables unavailable; the repository-configured markdownlint and VitePress internal
-  link/build checks ran successfully instead.
+- **What changed and why:** Expanded the Hyper-V SCOM design from a high-level research gate into a
+  comprehensive proposed Management Pack and Distributed Application architecture. The design is
+  implementation-grade but explicitly remains evidence-gated; it does not authorize MP XML
+  authoring before AB#7327/AB#7359 and proposed ADRs 0027–0029 are resolved.
+- **Architecture documents:** Added end-to-end architecture, MP structure, class/relationship model,
+  discovery/workflow architecture, health/alert architecture, authoring standards, security and
+  operability, and validation/release pages. Rebuilt the Hyper-V DA page with cluster and standalone
+  service models, stable-boundary rules, membership reconciliation, topology-aware rollup, operator
+  surfaces, and acceptance gates.
+- **Diagrams:** Added 47 Mermaid diagrams rendered by the repository's Vue component. They cover
+  component, dependency, class, sequence, state, discovery, decision, health, security, scale,
+  lifecycle, and release flows. Browser validation rendered all 47 SVGs across ten design pages
+  with zero Mermaid errors, zero loading placeholders, and zero console errors.
+- **Proposed decisions:** Added ADR 0027 for modular sealed Library/Discovery/Monitoring/Presentation
+  and optional Reporting MPs plus customer Overrides; ADR 0028 for stable object identity, VM
+  mobility, staged discovery, execution placement, and cookdown; and ADR 0029 for evidence-driven
+  health, alerts, monitoring freshness, and topology-aware DA rollup. All remain Proposed.
+- **Microsoft best practices:** Grounded the design in current Microsoft SCOM guidance for MP
+  contents, logical MP separation, sealed versus writable override MPs, override targeting,
+  Run As profiles and more-secure credential distribution, pre-production lifecycle validation,
+  Distributed Applications, SLOs, knowledge, and import/removal dependencies. Detailed legacy and
+  community authoring patterns remain research inputs that require current-version validation.
+- **Azure DevOps:** Created Task AB#7359, `Validate comprehensive Hyper-V SCOM MP and DA
+  architecture`, in the Hyper-V area and parented it to AB#7327. Added architecture comments to
+  AB#7327, AB#7350, AB#7356, and AB#7357. Roadmap and plan now include AB#7359.
+- **Navigation and project state:** Updated VitePress navigation, Hyper-V design/product pages, ADR
+  index, roadmap, research flow, plan, changelog, source register, and `.ai/` memory/state files.
+- **Validation:** Repository-configured markdownlint passed 26 changed/new Markdown files with zero
+  issues. VitePress 1.6.4 production build passed, including internal-link validation and sitemap
+  generation; only the existing large-chunk advisory remains. Browser validation returned HTTP 200
+  for all ten Hyper-V design routes and rendered 47/47 diagrams. `git diff --check` passed and the
+  changed-file secret scan found zero suspicious matches. Governance validation could not invoke
+  globally installed markdownlint or lychee because they are unavailable; the repository lint,
+  VitePress link/build checks, and browser checks ran instead.
 - **Branch:** `main`.
-- **Next steps:** Run AB#7343 and the raw inventory Tasks AB#7344–AB#7349. Preserve raw enumeration
-  output even when a signal is later rejected. Do not author AB#7328 or AB#7329 until AB#7353 and
-  the successor Hyper-V scope/discovery/signal ADRs are approved.
+- **Next steps:** Execute AB#7343–AB#7353, continuously trace findings into AB#7359, refine the
+  proposed identifiers and contracts, and accept/revise/replace ADRs 0027–0029 before starting
+  Stories AB#7328 or AB#7329. In particular, resolve exact supported SCOM/Windows/SCVMM versions,
+  Microsoft library versions, class keys/base classes, workflow execution runtime, scale budgets,
+  thresholds, expected VM state, and DA percentage/redundancy rollups.
 - **Unrelated cleanup:** The superseded clone at `D:/git/azurelocal/azurelocal-scom-mp` remains until
   the prior Windows working-directory handle is released.

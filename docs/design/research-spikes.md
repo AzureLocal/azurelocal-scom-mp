@@ -24,7 +24,9 @@ flowchart LR
     P --> S2[Hyper-V SCOM catalog research<br/>AB#7327]
     P --> Net[Hyper-V network authority<br/>ADR 0025]
     Net --> S2
-    S2 --> HV[Hyper-V topology ADR<br/>number assigned after spike]
+    S2 --> MP[MP decomposition<br/>ADR 0027 proposed]
+    S2 --> OBJ[Object and discovery architecture<br/>ADR 0028 proposed]
+    S2 --> HEALTH[Health and DA rollup<br/>ADR 0029 proposed]
     P --> S3[Arc-enabled SCVMM spike<br/>AB#7331]
     S3 --> S4[Telemetry proof<br/>AB#7332]
     S4 --> Arc[Go / defer / no-go<br/>ADR 0023]
@@ -34,6 +36,11 @@ flowchart LR
 
 AB#7327 is the umbrella research Story. Its bounded child Tasks can execute in the dependency order
 shown on the [Hyper-V monitoring research](../hyper-v/monitoring-research.md) page:
+
+Their evidence validates the proposed
+[MP decomposition](decisions/0027-hyper-v-scom-management-pack-decomposition.md),
+[object/discovery architecture](decisions/0028-hyper-v-object-and-discovery-architecture.md), and
+[health/DA rollup](decisions/0029-hyper-v-health-alert-and-da-rollup.md) decisions.
 
 | Work item | Focus |
 |---|---|
@@ -48,6 +55,7 @@ shown on the [Hyper-V monitoring research](../hyper-v/monitoring-research.md) pa
 | [AB#7351](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7351) | Threshold, duration, recovery, and tuning policy |
 | [AB#7352](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7352) | Lab source, fault, latency, recovery, and overhead validation |
 | [AB#7353](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7353) | Final Must/Should/Could/collect-only/excluded catalog |
+| [AB#7359](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7359) | Trace all architecture contracts to the research evidence and resolve proposed ADRs 0027–0029 |
 
 ## Spike completion contract
 

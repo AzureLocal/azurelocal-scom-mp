@@ -18,8 +18,9 @@ Azure Local, Epic AB#7314 owns Hyper-V, and Features AB#7315–AB#7318 own the f
 
 Hyper-V SCOM phase one is active under Story AB#7327. Child Tasks AB#7343–AB#7353 cover support and
 topology, exhaustive raw inventories, prior Microsoft MP research, SCOM workflow mapping, threshold
-engineering, lab/fault validation, and final catalog curation. Authoring Stories AB#7328–AB#7330
-remain gated by this evidence and the successor Hyper-V ADRs.
+engineering, lab/fault validation, and final catalog curation. AB#7359 validates the comprehensive
+MP/DA architecture and resolves proposed ADRs 0027–0029. Authoring Stories AB#7328–AB#7330 remain
+gated by this evidence and accepted successor Hyper-V ADRs.
 
 The design information architecture is platform first and delivery surface second. It has explicit
 Azure Local/SCOM, Azure Local/Azure Monitor, Hyper-V/SCOM, and conditional Hyper-V/Azure Monitor

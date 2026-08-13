@@ -110,7 +110,9 @@ All upstream sources used in designing and implementing this project. Organized 
 | **Key Concepts** ⭐ | https://learn.microsoft.com/en-us/system-center/scom/key-concepts?view=sc-om-2025 | Management Groups, Agents, Management Packs, Rules vs. Monitors, health states. |
 | **What is in a Management Pack** ⭐ | https://learn.microsoft.com/en-us/system-center/scom/manage-overview-management-pack?view=sc-om-2025 | Monitors, Rules, Views, Knowledge, Tasks, Reports, Discoveries, Run As Profiles. Sealed vs Unsealed. |
 | Management Pack Lifecycle | https://learn.microsoft.com/en-us/system-center/scom/manage-mp-lifecycle?view=sc-om-2025 | Review/Tune/Deploy/Maintain stages. Best practices. |
+| Select a Management Pack File | https://learn.microsoft.com/en-us/system-center/scom/select-management-pack-file?view=sc-om-2025 | Logical MP separation, sealing, reusable references, and avoiding the Default Management Pack. |
 | Create MP for Overrides | https://learn.microsoft.com/en-us/system-center/scom/manage-mp-create-unsealed-mp?view=sc-om-2025 | |
+| Best Practices for Configuring Overrides | https://learn.microsoft.com/en-us/troubleshoot/system-center/scom/best-practices-configure-overrides | Separate override MPs, group targeting, deliberate enable/disable overrides, and test-environment validation. |
 | Import/Export/Remove MPs | https://learn.microsoft.com/en-us/system-center/scom/manage-mp-import-remove-delete?view=sc-om-2025 | |
 | Management Pack Templates | https://learn.microsoft.com/en-us/system-center/scom/management-pack-templates?view=sc-om-2025 | |
 | Create MP Templates | https://learn.microsoft.com/en-us/system-center/scom/create-management-pack-templates?view=sc-om-2025 | |
@@ -119,6 +121,8 @@ All upstream sources used in designing and implementing this project. Organized 
 | Migrate to SCOM Managed Instance | https://learn.microsoft.com/en-us/system-center/scom/migrate-to-operations-manager-managed-instance?view=sc-om-2025 | |
 | Heartbeat overview | https://learn.microsoft.com/en-us/system-center/scom/manage-agent-heartbeat-overview?view=sc-om-2025 | |
 | Agentless monitoring | https://learn.microsoft.com/en-us/system-center/scom/manage-agentless-monitoring?view=sc-om-2025 | |
+| Run As Accounts and Profiles | https://learn.microsoft.com/en-us/system-center/scom/plan-security-runas-accounts-profiles?view=sc-om-2025 | Workflow identity, least privilege, targeting, and more-secure credential distribution. |
+| Manage Run As Accounts and Profiles | https://learn.microsoft.com/en-us/system-center/scom/manage-security-maintain-runas-profiles?view=sc-om-2025 | Current configuration and lifecycle guidance. |
 | Management Group Design | https://learn.microsoft.com/en-us/system-center/scom/plan-mgmt-group-design?view=sc-om-2025 | |
 
 ---

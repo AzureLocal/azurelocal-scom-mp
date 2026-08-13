@@ -29,6 +29,10 @@
 * Add ADR 0026 plus explicit Azure Local and Hyper-V Distributed Application design contracts,
   implementation tasks AB#7354–AB#7357, dynamic membership, rollup, views, reports, dashboards,
   SLO targets, and validation requirements.
+* Add the comprehensive Hyper-V SCOM architecture set with Vue-rendered component, class,
+  sequence, state, dependency, discovery, alert, security, test, and release diagrams.
+* Propose ADRs 0027–0029 for Hyper-V MP decomposition, object/discovery architecture, and
+  evidence-driven health, alert, and DA rollup behavior.
 
 ## [0.2.1](https://github.com/AzureLocal/azurelocal-scom-mp/compare/azurelocal-scom-mp-v0.2.0...azurelocal-scom-mp-v0.2.1) (2026-05-05)
 

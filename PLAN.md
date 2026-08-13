@@ -46,7 +46,8 @@ Epic AB#7314 — Deliver Hyper-V health monitoring
 │   │   ├── Tasks AB#7343–AB#7349 — Scope, raw inventories, and prior-MP research inputs
 │   │   ├── Tasks AB#7350–AB#7351 — SCOM workflow and threshold engineering
 │   │   ├── Task AB#7352 — Lab and fault validation
-│   │   └── Task AB#7353 — Curate the authoring-ready default catalog
+│   │   ├── Task AB#7353 — Curate the authoring-ready default catalog
+│   │   └── Task AB#7359 — Validate the comprehensive MP and DA architecture
 │   ├── Story AB#7328 — Author Hyper-V SCOM classes and discoveries
 │   │   └── Task AB#7356 — Author Hyper-V DA classes and membership
 │   ├── Story AB#7329 — Author Hyper-V SCOM monitoring and overrides
@@ -103,6 +104,9 @@ products when that is safer than coupling their public contracts.
 | Hyper-V SCOM discovery strategy | Planned after spike | Select supported discovery providers and hosting relationships | AB#7327 |
 | Hyper-V signal and rollup policy | Planned after spike | Lock signal catalog, thresholds, defaults, and exceptions | AB#7327 |
 | [0026](docs/design/decisions/0026-platform-owned-scom-distributed-applications.md) | Accepted | Require a separate platform-owned DA in each SCOM product | Repository-owner decision; refined through platform authoring/research |
+| [0027](docs/design/decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Proposed | Define modular sealed Hyper-V MPs and customer override boundary | AB#7319 and AB#7327 |
+| [0028](docs/design/decisions/0028-hyper-v-object-and-discovery-architecture.md) | Proposed | Define stable identities, relationships, staged discovery, execution, and cookdown | AB#7343–AB#7352 |
+| [0029](docs/design/decisions/0029-hyper-v-health-alert-and-da-rollup.md) | Proposed | Define evidence-driven health, alerting, monitoring freshness, and DA rollup | AB#7351–AB#7357 |
 
 Accepted ADRs 0001–0020 continue to govern the Azure Local baseline unless a successor ADR explicitly
 supersedes one. They must not be silently generalized to Hyper-V.
@@ -136,7 +140,8 @@ Deliver:
 - stable standalone-host and cluster DA keys, component membership, and rollup inputs; and
 - proposed scope, discovery, signal/rollup, and DA-refinement ADRs.
 
-AB#7327 is now an active umbrella Story with child research spikes AB#7343–AB#7353. The child work
+AB#7327 is now an active umbrella Story with research Tasks AB#7343–AB#7353 plus architecture
+validation Task AB#7359. The child work
 first inventories everything observable, then maps acquisition and threshold behavior, validates it
 in the lab, and finally classifies each candidate as Must monitor, Should monitor, Could monitor,
 collect only, diagnostic, or excluded. The detailed contract is published in
@@ -193,7 +198,7 @@ Deliver:
 ### Hyper-V SCOM Management Pack
 
 1. Complete the topology/support spike, including per-cluster and per-standalone-host DA boundaries,
-   and accept the resulting ADRs.
+   and resolve proposed ADRs 0027–0029 using the research and lab evidence.
 2. Apply the independent product boundary in ADR 0022.
 3. Author approved classes, relationships, discoveries, DA classes, and dynamic membership for
    each supported topology variant.

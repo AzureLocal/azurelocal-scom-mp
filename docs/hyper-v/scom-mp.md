@@ -32,6 +32,11 @@ Authoring starts after these decisions are complete:
    membership and rollup contract through the topology and workflow spikes.
 4. Accept a Hyper-V scope/topology successor ADR based on the spike results.
 
+The comprehensive proposed design is now available in the
+[Hyper-V SCOM architecture map](../design/hyper-v/scom-mp.md). It covers package decomposition,
+classes and relationships, staged discovery, workflows and cookdown, health and alerts, dynamic DA
+membership and rollup, authoring standards, least privilege, operability, testing, and release.
+
 The Management Pack will not inherit Azure Local-only assumptions such as solution updates, DCMA,
 or the Azure Local ARM resource model. It will include Network ATC discovery and health for eligible
 Windows Server 2025 Datacenter Hyper-V clusters while preserving explicit coverage for non-ATC and
@@ -45,12 +50,13 @@ independently in this project's own Management Pack.
 
 The active first phase is not MP XML authoring. It is the exhaustive inventory and evidence gate in
 [AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327).
-Eleven child spikes separate topology, Windows Server, Hyper-V/VM, clustering/CSV, storage/Replica,
+Twelve child Tasks separate topology, Windows Server, Hyper-V/VM, clustering/CSV, storage/Replica,
 networking, prior Microsoft MP research, SCOM workflow mapping, threshold engineering, lab
-validation, and final catalog curation.
+validation, final catalog curation, and comprehensive architecture validation.
 
 - [Research plan](monitoring-research.md)
 - [Monitoring catalog and threshold policy](monitoring-catalog.md)
+- [Comprehensive SCOM architecture](../design/hyper-v/architecture.md)
 - [Distributed Application design](../design/hyper-v/distributed-application.md)
 
 The research records everything technically observable, but only actionable and supportable signals
