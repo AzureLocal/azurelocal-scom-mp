@@ -137,6 +137,7 @@ export default defineConfig({
             { text: '0027 — Hyper-V MP decomposition', link: '/design/decisions/0027-hyper-v-scom-management-pack-decomposition' },
             { text: '0028 — Hyper-V object and discovery', link: '/design/decisions/0028-hyper-v-object-and-discovery-architecture' },
             { text: '0029 — Hyper-V health and DA rollup', link: '/design/decisions/0029-hyper-v-health-alert-and-da-rollup' },
+            { text: '0030 — Platform-first source tree', link: '/design/decisions/0030-platform-first-source-tree' },
             { text: 'ADR template', link: '/design/decisions/template' },
           ],
         },

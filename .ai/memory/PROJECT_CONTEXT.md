@@ -33,3 +33,7 @@ non-runtime engineering practices only. They own independent MP namespaces, pack
 monitoring, overrides, Distributed Applications, releases, and support lifecycles. Azure Local uses
 the deployment DA defined by ADR 0005/0018. Hyper-V requires a separate DA instance per supported
 failover cluster or standalone host, refined by AB#7327 before authoring.
+
+The source tree enforces the same hierarchy through accepted ADR 0030. Azure Local and Hyper-V are
+top-level source owners, each with `scom-mp` and `azure-monitor` solution roots. The Hyper-V Azure
+Monitor root is reserved but cannot contain deployable implementation before an ADR 0023 go decision.

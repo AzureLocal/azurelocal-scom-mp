@@ -43,3 +43,8 @@
   ADR 0028 defines stable boundary identity, VM mobility, staged discovery, workflow placement, and
   cookdown. Proposed ADR 0029 defines evidence-driven health, alerts, monitoring freshness, and
   topology-aware DA rollup. AB#7359 validates all three against AB#7327 evidence before acceptance.
+- Product source is platform first and solution second under `src/azure-local/{scom-mp,azure-monitor}`
+  and `src/hyper-v/{scom-mp,azure-monitor}`. ADR 0030 is accepted and supersedes obsolete source-path
+  examples in ADRs 0013–0015 without changing their substantive decisions. Hyper-V Azure Monitor is
+  a reserved boundary only until ADR 0023 records a go decision. SquaredUp artifacts live inside
+  their owning solution.

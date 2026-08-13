@@ -32,13 +32,22 @@
   community authoring patterns remain research inputs that require current-version validation.
 - **Azure DevOps:** Created Task AB#7359, `Validate comprehensive Hyper-V SCOM MP and DA
   architecture`, in the Hyper-V area and parented it to AB#7327. Added architecture comments to
-  AB#7327, AB#7350, AB#7356, and AB#7357. Roadmap and plan now include AB#7359.
+  AB#7327, AB#7350, AB#7356, and AB#7357. Roadmap and plan now include AB#7359. Added the accepted
+  source-tree implementation note to packaging Story AB#7319.
+- **Source structure:** Replaced the obsolete solution-first `src/scom-mp`, `src/azure-monitor`, and
+  `src/squaredup` roots with `src/azure-local/{scom-mp,azure-monitor}` and
+  `src/hyper-v/{scom-mp,azure-monitor}`. Added source-root contracts and solution placeholders,
+  nested optional SquaredUp artifacts under their owners, and kept Hyper-V Azure Monitor reserved
+  with no deployable files. Accepted ADR 0030 is the current source-path authority and supersedes
+  obsolete path examples in immutable ADRs 0008 and 0013–0015.
 - **Navigation and project state:** Updated VitePress navigation, Hyper-V design/product pages, ADR
   index, roadmap, research flow, plan, changelog, source register, and `.ai/` memory/state files.
-- **Validation:** Repository-configured markdownlint passed 26 changed/new Markdown files with zero
-  issues. VitePress 1.6.4 production build passed, including internal-link validation and sitemap
-  generation; only the existing large-chunk advisory remains. Browser validation returned HTTP 200
-  for all ten Hyper-V design routes and rendered 47/47 diagrams. `git diff --check` passed and the
+- **Validation:** Repository-configured markdownlint passed the architecture set and the subsequent
+  17 source-layout Markdown files with zero issues. VitePress 1.6.4 production builds passed,
+  including internal-link validation and sitemap generation; only the existing large-chunk advisory
+  remains. Browser validation returned HTTP 200 for all ten live Hyper-V design routes and rendered
+  47/47 diagrams. Source-layout assertions found all four required roots, zero legacy roots, and no
+  deployable files in conditional Hyper-V Azure Monitor. `git diff --check` passed and the
   changed-file secret scan found zero suspicious matches. Governance validation could not invoke
   globally installed markdownlint or lychee because they are unavailable; the repository lint,
   VitePress link/build checks, and browser checks ran instead.

@@ -233,13 +233,13 @@ src/
 │   └── azure-monitor/
 └── hyper-v/
     ├── scom-mp/
-    └── azure-monitor/      # Created only after an ADR 0023 go decision
+    └── azure-monitor/      # Reserved now; deployable source only after an ADR 0023 go decision
 
 tools/                      # Non-runtime build and validation automation only
 ```
 
 Research remains in documentation and evidence artifacts. No shared Management Pack runtime source
-tree or sealed library is planned.
+tree or sealed library is planned. Accepted ADR 0030 is the current source-path authority.
 
 ## Validation gates
 

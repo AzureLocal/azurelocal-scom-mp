@@ -73,20 +73,25 @@ hybrid-health-monitoring/
 │   ├── scom-mp/             # Azure Local SCOM implementation docs
 │   └── azure-monitor/       # Azure Local Azure Monitor docs
 ├── diagrams/drawio/         # Editable diagram sources
-├── src/                     # Product implementation placeholders
+├── src/                     # Platform-first product source
+│   ├── azure-local/         # Azure Local SCOM and Azure Monitor solutions
+│   └── hyper-v/             # Hyper-V SCOM and reserved Azure Monitor solutions
 ├── PLAN.md                  # Executable delivery plan
 ├── REFERENCES.md            # Annotated source library
 └── STANDARDS.md             # Governance pointers
 ```
 
-The final `src/` boundaries are deliberately deferred until proposed ADR 0022 decides whether the
-two SCOM products share a sealed library or only source-level patterns.
+The [source tree](src/README.md) is platform first and solution second. Azure Local and Hyper-V each
+own separate `scom-mp/` and `azure-monitor/` roots. Accepted
+[ADR 0030](docs/design/decisions/0030-platform-first-source-tree.md) defines the layout; accepted
+ADR 0022 prohibits shared SCOM runtime elements.
 
 ## Current status
 
 - The Azure Local design baseline and VitePress site are complete.
 - The platform-first roadmap and Azure DevOps hierarchy are established.
-- SCOM packaging, Hyper-V topology, and Arc-enabled SCVMM feasibility are the next research gates.
+- Hyper-V MP/DA architecture validation, monitoring research, and Arc-enabled SCVMM feasibility are
+  the next research gates.
 - Product authoring has not started.
 
 ## Contributing

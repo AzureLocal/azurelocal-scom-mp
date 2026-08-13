@@ -6,8 +6,8 @@ description: Optional SquaredUp Cloud visualization layer for the Azure Local Az
 # SquaredUp Cloud (Azure Monitor track)
 
 ::: info Optional post-GA deliverable
-The SquaredUp Cloud workspace is planned after the Azure Monitor Health Model reaches general
-availability. Its source will live in `src/squaredup/cloud/`.
+The SquaredUp Cloud workspace is planned after the Azure Local Azure Monitor Health Model reaches
+general availability. Its source will live in `src/azure-local/azure-monitor/squaredup/`.
 :::
 
 [SquaredUp Cloud](https://squaredup.com) is a SaaS dashboard platform with 80+ integrations.
@@ -32,7 +32,7 @@ For this project, two plugins are relevant:
 
 ## Planned workspace
 
-A SquaredUp Cloud workspace export will ship in `src/squaredup/cloud/` covering:
+A SquaredUp Cloud workspace export will ship in `src/azure-local/azure-monitor/squaredup/` covering:
 
 | Dashboard | Contents |
 |---|---|

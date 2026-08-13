@@ -33,6 +33,8 @@
   sequence, state, dependency, discovery, alert, security, test, and release diagrams.
 * Propose ADRs 0027–0029 for Hyper-V MP decomposition, object/discovery architecture, and
   evidence-driven health, alert, and DA rollup behavior.
+* Restructure `src/` by Azure Local and Hyper-V platform, then SCOM and Azure Monitor solution;
+  accept ADR 0030 as the source-path authority and nest optional SquaredUp artifacts by owner.
 
 ## [0.2.1](https://github.com/AzureLocal/azurelocal-scom-mp/compare/azurelocal-scom-mp-v0.2.0...azurelocal-scom-mp-v0.2.1) (2026-05-05)
 

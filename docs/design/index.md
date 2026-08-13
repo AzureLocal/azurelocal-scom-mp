@@ -14,6 +14,19 @@ to Hyper-V.
 | **Azure Local** | [Accepted design baseline](azure-local/scom-mp.md) | [Accepted baseline; API revalidation next](azure-local/azure-monitor.md) |
 | **Hyper-V** | [Comprehensive proposed architecture; active evidence research](hyper-v/scom-mp.md) | [Conditional research track](hyper-v/azure-monitor.md) |
 
+## Source ownership
+
+Accepted [ADR 0030](decisions/0030-platform-first-source-tree.md) applies the same hierarchy to
+product source:
+
+| Platform | SCOM source | Azure Monitor source |
+|---|---|---|
+| Azure Local | `src/azure-local/scom-mp/` | `src/azure-local/azure-monitor/` |
+| Hyper-V | `src/hyper-v/scom-mp/` | `src/hyper-v/azure-monitor/` (reserved until ADR 0023 records a go decision) |
+
+Optional SquaredUp content sits under the solution it visualizes. Shared research and build tooling
+must not become a shared runtime product dependency.
+
 ## Shared design
 
 The [shared-design section](shared/index.md) contains only portfolio rules and patterns that are
