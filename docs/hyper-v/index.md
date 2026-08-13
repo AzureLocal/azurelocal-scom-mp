@@ -11,7 +11,7 @@ and Arc-enable each participating Hyper-V host for AMA/DCR telemetry.
 
 | Delivery surface | Commitment | Status |
 |---|---|---|
-| **SCOM Management Pack** | Committed platform track | Functional development baseline; certification pending |
+| **SCOM Management Pack** | Committed platform track | VSAE-verified and test-sealed development baseline; lab and release certification pending |
 | **Azure Monitor through Arc-enabled SCVMM** | Constrained track | Development baseline; substantial parity and lab gates remain |
 
 ::: info Two independent solutions
@@ -40,9 +40,9 @@ See the [Hyper-V design map](../design/hyper-v/index.md) for the separate
 [SCOM](../design/hyper-v/scom-mp.md) and conditional
 [Azure Monitor Health Models](../design/hyper-v/azure-monitor.md) lanes.
 
-## Planned Hyper-V topology research
+## Hyper-V topology research
 
-The first spike will define the supported matrix for:
+The research baseline defines the candidate supported matrix for:
 
 - standalone Hyper-V hosts;
 - Hyper-V failover clusters;

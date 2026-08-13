@@ -23,7 +23,7 @@ pwsh -NoProfile -File src/hyper-v/scom-mp/tools/New-HyperVOverrideManagementPack
   -Version 0.1.0.0 -PublicKeyToken 0123456789abcdef
 pwsh -NoProfile -File src/hyper-v/scom-mp/tools/Test-HyperVManagementPacksWithSdk.ps1 `
   -InputPath src/hyper-v/scom-mp/out/development `
-  -DependencyPath D:/scom/reference-mps
+  -DependencyPath 'C:/Program Files (x86)/System Center Visual Studio 2022 Authoring Extensions/References/OM2022'
 ```
 
 Development build output is written under `src/hyper-v/scom-mp/out/` and remains untracked.
@@ -35,7 +35,7 @@ pwsh -NoProfile -File src/azure-local/scom-mp/tools/Test-AzureLocalManagementPac
 Invoke-Pester -Path tests/unit/AzureLocalManagementPack.Build.Tests.ps1 -CI
 pwsh -NoProfile -File src/azure-local/scom-mp/tools/Test-AzureLocalManagementPacksWithSdk.ps1 `
   -InputPath src/azure-local/scom-mp/out/development `
-  -DependencyPath D:/scom/reference-mps
+  -DependencyPath 'C:/Program Files (x86)/System Center Visual Studio 2022 Authoring Extensions/References/OM2022'
 ```
 
 Azure Monitor and integration contract checks:

@@ -13,8 +13,10 @@ make this platform's entity model, signals, or discoveries applicable to the Hyp
 
 ::: warning Development baseline, not a production release
 Five independent MP artifacts, the platform-owned DA, monitoring workflows, operator views,
-customer override templates, and offline tests are implemented. Microsoft SDK verification,
-sealing/signing, and SCOM lab certification are still required before release.
+customer override templates, and offline tests are implemented. Microsoft VSAE/SDK verification,
+ordered transient test sealing, and strong-name verification pass for the complete suite against
+the installed SCOM 2022 dependencies. Governed release signing and SCOM lab certification are
+still required before release.
 :::
 
 Looking for the other SCOM product? See the independent
@@ -51,7 +53,8 @@ Looking for the other SCOM product? See the independent
 2. [Architecture](../design/azure-local/architecture.md) — the product and runtime boundary
 3. [Monitoring catalog](monitoring-catalog.md) — what is monitored, collected, or deferred
 4. [Management Pack guide](management-pack-guide.md) — build, import, tune, upgrade, and remove
-5. [Validation and release](../design/azure-local/validation-and-release.md) — evidence still required
+5. [Validation and release](../design/azure-local/validation-and-release.md) — completed authoring
+   evidence and remaining lab/release gates
 
 ## Track-specific upstream references
 

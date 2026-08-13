@@ -20,19 +20,21 @@ for the Hyper-V topology approved by the research and ADR gates.
 | Distributed Application | A Hyper-V-owned service root for every supported cluster or standalone host, with dynamic component membership, rollup, views, reports, dashboards, and SLO targeting |
 | Customization | Separate customer-owned Discovery and Monitoring override MPs with optional Lab, Standard, and Strict starter templates |
 | Operations | State, alert, performance, and topology views with optional SquaredUp dashboards |
-| Delivery | Sealed, signed, tested, versioned Management Pack artifacts and operator documentation |
+| Release contract | Five sealed, signed, tested, versioned Management Pack artifacts plus operator documentation after certification |
 
 ## Delivery state
 
 The design and functional XML authoring are complete for the initial development baseline. Release
 certification now requires:
 
-1. verify all generated MPs with the Microsoft SDK and official dependency MPs;
-2. test-seal the Library, Discovery, Monitoring, Presentation, and optional Reporting MPs;
-3. clean-import into representative standalone and clustered SCOM labs;
+1. ~~Verify all generated MPs with Microsoft VSAE/SDK and the installed SCOM 2022 dependency
+   MPs.~~ Complete.
+2. ~~Test-seal the Library, Discovery, Monitoring, Presentation, and optional Reporting MPs in
+   dependency order.~~ Complete with a transient development key; no test artifact is a release.
+3. Clean-import into representative standalone and clustered SCOM labs;
 4. validate discovery, migration/failover identity, monitoring, recovery, DA population and rollup,
    views, overrides, scale, upgrade, and removal; and
-5. seal, sign, version, and publish the certified artifacts.
+5. release-seal, sign, version, and publish the certified artifacts with the governed identity.
 
 The comprehensive proposed design is now available in the
 [Hyper-V SCOM architecture map](../design/hyper-v/scom-mp.md). It covers package decomposition,

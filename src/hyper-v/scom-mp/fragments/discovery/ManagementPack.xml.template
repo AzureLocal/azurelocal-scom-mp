@@ -72,7 +72,7 @@ param($SourceId, $ManagedEntityId, $ComputerName)
 
 $ErrorActionPreference = 'Stop'
 $api = New-Object -ComObject 'MOM.ScriptAPI'
-$data = $api.CreateDiscoveryData(0, $SourceId, $ManagedEntityId)
+$discoveryData = $api.CreateDiscoveryData(0, $SourceId, $ManagedEntityId)
 
 function Add-EntityProperty {
     param($Instance, [string]$Element, $Value)
@@ -80,11 +80,11 @@ function Add-EntityProperty {
 }
 
 function Add-RelationshipInstance {
-    param([string]$TypeName, $Source, $Target)
-    $relationship = $data.CreateRelationshipInstance($TypeName)
+    param([string]$TypeName, $Source, $TargetInstance)
+    $relationship = $discoveryData.CreateRelationshipInstance($TypeName)
     $relationship.Source = $Source
-    $relationship.Target = $Target
-    $data.AddInstance($relationship)
+    $relationship.Target = $TargetInstance
+    $discoveryData.AddInstance($relationship)
 }
 
 try {
@@ -112,7 +112,7 @@ try {
     $vms = @(Get-VM -ErrorAction Stop)
     $networkAuthority = if (Get-Command Get-NetIntent -ErrorAction SilentlyContinue) { 'NetworkATC' } else { 'ManualOrExternal' }
 
-    $host = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']$")
+    $host = $discoveryData.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']$")
     Add-EntityProperty $host "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
     Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/RoleVersion$" $vmHost.HyperVVersion
     Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/RoleState$" 'Enabled'
@@ -126,23 +126,23 @@ try {
     Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/NetworkAuthority$" $networkAuthority
     Add-EntityProperty $host "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole']/DiscoveryVersion$" '1.0'
     Add-EntityProperty $host "$MPElement[Name='System!System.Entity']/DisplayName$" ('Hyper-V on ' + $ComputerName)
-    $data.AddInstance($host)
+    $discoveryData.AddInstance($host)
 
-    $boundary = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']$")
+    $boundary = $discoveryData.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']$")
     Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/BoundaryId$" $boundaryId
     Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/BoundaryType$" $boundaryType
     Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/ClusterName$" $clusterName
     Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/ClusterId$" $clusterId
     Add-EntityProperty $boundary "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Boundary']/FunctionalLevel$" $functionalLevel
     Add-EntityProperty $boundary "$MPElement[Name='System!System.Entity']/DisplayName$" $(if ($clusterName) { $clusterName } else { $ComputerName })
-    $data.AddInstance($boundary)
+    $discoveryData.AddInstance($boundary)
     Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.BoundaryContainsHostRole']$" $boundary $host
 
-    $service = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service']$")
+    $service = $discoveryData.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service']$")
     Add-EntityProperty $service "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service']/BoundaryId$" $boundaryId
     Add-EntityProperty $service "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.Service']/BoundaryType$" $boundaryType
     Add-EntityProperty $service "$MPElement[Name='System!System.Entity']/DisplayName$" ('Hyper-V Health - ' + $(if ($clusterName) { $clusterName } else { $ComputerName }))
-    $data.AddInstance($service)
+    $discoveryData.AddInstance($service)
 
     $components = @{}
     foreach ($componentDefinition in @(
@@ -153,10 +153,10 @@ try {
         @('Monitoring Pipeline', "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponent']$", "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponent']/BoundaryId$")
     )) {
         $label = $componentDefinition[0]
-        $component = $data.CreateClassInstance($componentDefinition[1])
+        $component = $discoveryData.CreateClassInstance($componentDefinition[1])
         Add-EntityProperty $component $componentDefinition[2] $boundaryId
         Add-EntityProperty $component "$MPElement[Name='System!System.Entity']/DisplayName$" $label
-        $data.AddInstance($component)
+        $discoveryData.AddInstance($component)
         $components[$label] = $component
     }
 
@@ -174,7 +174,7 @@ try {
 
     foreach ($vm in $vms) {
         $vmId = [string]$vm.VMId
-        $vmInstance = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']$")
+        $vmInstance = $discoveryData.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']$")
         Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/BoundaryId$" $boundaryId
         Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/VMId$" $vmId
         Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/Name$" $vm.Name
@@ -200,7 +200,7 @@ try {
             Add-EntityProperty $vmInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachine']/ReplicationHealth$" $replication.Health
         }
         Add-EntityProperty $vmInstance "$MPElement[Name='System!System.Entity']/DisplayName$" $vm.Name
-        $data.AddInstance($vmInstance)
+        $discoveryData.AddInstance($vmInstance)
         Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.BoundaryContainsVirtualMachine']$" $boundary $vmInstance
         Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRoleRunsVirtualMachine']$" $host $vmInstance
         Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualMachineComponentContainsVirtualMachine']$" $components['Virtual Machines'] $vmInstance
@@ -211,7 +211,7 @@ try {
             $partition = $csv.SharedVolumeInfo.Partition
             $volumePath = [string]$csv.SharedVolumeInfo.FriendlyVolumeName
             $volumeId = if ($volumePath) { $volumePath.ToLowerInvariant() } else { [string]$csv.Name }
-            $csvInstance = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']$")
+            $csvInstance = $discoveryData.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']$")
             Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/BoundaryId$" $boundaryId
             Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/VolumeId$" $volumeId
             Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/Name$" $csv.Name
@@ -223,14 +223,14 @@ try {
             if ($partition.Size -gt 0) { Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/PercentFree$" ([math]::Round(($partition.FreeSpace / $partition.Size) * 100, 2)) }
             Add-EntityProperty $csvInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.ClusterSharedVolume']/RedirectedAccess$" $csv.SharedVolumeInfo.RedirectedAccess
             Add-EntityProperty $csvInstance "$MPElement[Name='System!System.Entity']/DisplayName$" $csv.Name
-            $data.AddInstance($csvInstance)
+            $discoveryData.AddInstance($csvInstance)
             Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.BoundaryContainsClusterSharedVolume']$" $boundary $csvInstance
             Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.StorageComponentContainsClusterSharedVolume']$" $components['Storage'] $csvInstance
         }
     }
 
     foreach ($switch in @(Get-VMSwitch -ErrorAction SilentlyContinue)) {
-        $switchInstance = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']$")
+        $switchInstance = $discoveryData.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']$")
         Add-EntityProperty $switchInstance "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
         Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/SwitchId$" $switch.Id
         Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/Name$" $switch.Name
@@ -239,13 +239,13 @@ try {
         Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/IovEnabled$" $switch.IovEnabled
         Add-EntityProperty $switchInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.VirtualSwitch']/NetAdapterInterfaceDescriptions$" ($switch.NetAdapterInterfaceDescriptions -join '; ')
         Add-EntityProperty $switchInstance "$MPElement[Name='System!System.Entity']/DisplayName$" $switch.Name
-        $data.AddInstance($switchInstance)
+        $discoveryData.AddInstance($switchInstance)
         Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponentContainsVirtualSwitch']$" $components['Network'] $switchInstance
     }
 
     if (Get-Command Get-NetIntent -ErrorAction SilentlyContinue) {
         foreach ($intent in @(Get-NetIntent -ErrorAction SilentlyContinue)) {
-            $intentInstance = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']$")
+            $intentInstance = $discoveryData.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']$")
             Add-EntityProperty $intentInstance "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
             Add-EntityProperty $intentInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']/IntentName$" $intent.IntentName
             Add-EntityProperty $intentInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']/Status$" $intent.Status
@@ -253,12 +253,12 @@ try {
             Add-EntityProperty $intentInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']/AdapterNames$" ($intent.AdapterName -join '; ')
             Add-EntityProperty $intentInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkAtcIntent']/IsClusterIntent$" ($null -ne $cluster)
             Add-EntityProperty $intentInstance "$MPElement[Name='System!System.Entity']/DisplayName$" $intent.IntentName
-            $data.AddInstance($intentInstance)
+            $discoveryData.AddInstance($intentInstance)
             Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.NetworkComponentContainsNetworkAtcIntent']$" $components['Network'] $intentInstance
         }
     }
 
-    $pipeline = $data.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']$")
+    $pipeline = $discoveryData.CreateClassInstance("$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']$")
     Add-EntityProperty $pipeline "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
     Add-EntityProperty $pipeline "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']/PipelineId$" 'Topology'
     Add-EntityProperty $pipeline "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']/LastDiscoveryUtc$" ([DateTime]::UtcNow.ToString('o'))
@@ -266,13 +266,13 @@ try {
     Add-EntityProperty $pipeline "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']/ErrorSummary$" ''
     Add-EntityProperty $pipeline "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringPipeline']/TopologyObjectCount$" ($vms.Count + 2)
     Add-EntityProperty $pipeline "$MPElement[Name='System!System.Entity']/DisplayName$" ('Topology pipeline on ' + $ComputerName)
-    $data.AddInstance($pipeline)
+    $discoveryData.AddInstance($pipeline)
     Add-RelationshipInstance "$MPElement[Name='HCSHyperVLibrary!HybridSolutionsCloud.HyperV.MonitoringComponentContainsPipeline']$" $components['Monitoring Pipeline'] $pipeline
 } catch {
     $api.LogScriptEvent('HybridSolutionsCloud.HyperV.Topology.Discovery.ps1', 8101, 1, $_.Exception.ToString())
 }
 
-$data
+$discoveryData
 ]]></ScriptBody>
           <Parameters>
             <Parameter><Name>SourceId</Name><Value>$MPElement$</Value></Parameter>

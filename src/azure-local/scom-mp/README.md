@@ -1,8 +1,9 @@
 # Azure Local SCOM Management Pack source
 
 This directory owns every runtime and test artifact for the independent Azure Local SCOM product.
-It is a functional development baseline: the source builds and passes offline contract tests, but
-it is not yet sealed, signed, or certified in a SCOM management group.
+It is a functional development baseline: the source builds, passes offline contract tests and
+VSAE/SDK verification against the installed SCOM 2022 dependencies, and completes ordered
+transient test sealing. It is not governed-release-signed or certified in a SCOM management group.
 
 ```text
 scom-mp/
@@ -34,15 +35,23 @@ The contract test builds five development artifacts under `artifacts/azure-local
 checks their XML, identities, public localization, topology, workflows, views, and independent
 product boundary. The Pester suite exercises the same public build contract as a test runner.
 
-Microsoft SDK verification additionally requires the sealed SCOM dependency MPs:
+Microsoft SDK verification additionally requires System Center VSAE for Visual Studio 2022 and the
+official sealed SCOM dependency MPs. The PowerShell 7 wrapper delegates verification to Visual
+Studio 2022's full-framework MSBuild host:
 
 ```powershell
 & ./src/azure-local/scom-mp/tools/Test-AzureLocalManagementPacksWithSdk.ps1 `
+    -InputPath './src/azure-local/scom-mp/out/development' `
     -DependencyPath <path-to-exported-sealed-scom-mps>
 ```
 
-The SDK, sealing/signing, import, discovery, fault/recovery, upgrade, coexistence, and removal gates
-must pass before a release is described as production-ready.
+The verifier currently passes for all five projects against the installed SCOM 2022 dependency
+set. Verify and seal the Library first, then use the sealed Library while verifying Discovery and
+the remaining product MPs in dependency order.
+
+Transient test sealing is also proven. Governed release sealing/signing, clean import, discovery,
+fault/recovery, scale, upgrade, coexistence, and removal gates must pass before a release is
+described as production-ready.
 
 ## Customer overrides
 

@@ -36,9 +36,9 @@ These items unblock safe implementation:
 | Item | Outcome | Dependency |
 |---|---|---|
 | Independent SCOM packaging contract | Validate independent namespaces, artifacts, signing, coexistence, upgrade, and removal behavior | Implements accepted ADR 0022 for both SCOM Features |
-| Azure Local SCOM release certification | Resolve official dependencies, run SDK verification, test-seal, import, and exercise discovery, health, DA, lifecycle, coexistence, and removal | Gates the first Azure Local MP release |
+| Azure Local SCOM release certification | VSAE verification and transient test sealing complete; clean-import and exercise discovery, health, DA, lifecycle, coexistence, and removal | Gates the first Azure Local MP release |
 | Hyper-V SCOM monitoring research | Validate and extend the implemented catalog through exhaustive signal inventory, workflow/threshold research, lab evidence, and curated defaults | Active; gates released defaults and later coverage |
-| Hyper-V SCOM release certification | Verify dependencies and schema, test-seal, import in standalone/cluster labs, exercise fault/recovery and lifecycle, then sign | Gates the first public MP release |
+| Hyper-V SCOM release certification | VSAE verification and transient test sealing complete; import in standalone/cluster labs, exercise fault/recovery and lifecycle, then release-sign | Gates the first public MP release |
 | Azure Local Health Models revalidation | Revalidate APIs, preview limits, identity, and signal contracts | Gates Azure Local Azure Monitor authoring |
 | Arc-enabled SCVMM inventory spike | Validate inventory identity and guest-management boundaries in the lab | Initial desk research complete |
 | Hyper-V Health Models feasibility | Validate the authored model, DCR, live schemas, fault behavior, gaps, scale, and cost | Constrained go recorded; release gate active |
@@ -53,9 +53,11 @@ The complete phase-one Hyper-V breakdown is published in
 
 1. ~~Author classes, discoveries, and DA membership.~~ Complete in the development baseline.
 2. ~~Author monitoring, DA rollups/operator surfaces, and overrides.~~ Complete in the development baseline.
-3. Supply official SCOM dependency MPs and run Microsoft SDK verification.
-4. Test-seal and clean-import the Library, Discovery, Monitoring, Presentation, and optional
-   Reporting artifacts.
+3. ~~Resolve the installed SCOM 2022 dependencies and run Microsoft VSAE/SDK verification.~~
+   Complete for all five projects.
+4. ~~Test-seal the Library, Discovery, Monitoring, Presentation, and optional Reporting artifacts
+   in dependency order.~~ Complete with a transient development key. Next, clean-import them in the
+   Azure Local lab.
 5. Validate topology, Health Service faults, Network ATC, lifecycle state, DA population/rollup,
    tuning, maintenance, scale, upgrade, coexistence, and removal; then sign and publish.
 
@@ -70,9 +72,11 @@ The complete phase-one Hyper-V breakdown is published in
 
 ### Hyper-V SCOM Management Pack
 
-1. Supply official SCOM dependency MPs and run Microsoft SDK verification.
-2. Test-seal and clean-import the authored Library, Discovery, Monitoring, Presentation, and
-   optional Reporting artifacts.
+1. ~~Resolve the installed SCOM 2022 dependencies and run Microsoft VSAE/SDK verification.~~
+   Complete for all five projects.
+2. ~~Test-seal the authored Library, Discovery, Monitoring, Presentation, and optional Reporting
+   artifacts in dependency order.~~ Complete with a transient development key. Next, clean-import
+   them in the standalone and clustered Hyper-V labs.
 3. Validate standalone/cluster topology, DA membership/rollup, state, alert, performance, event,
    task, override, maintenance, failover, scale, upgrade, and removal behavior.
 4. Certify Lab, Standard, and Strict starter templates, then sign and publish the independent
@@ -100,6 +104,11 @@ Microsoft-supported inventory or telemetry cannot provide it.
 ServiceNow integration is an optional cross-cutting roadmap area with separate paths for each
 monitoring solution. It does not change the independence of the four solution boundaries.
 
+The SCOM path configures ServiceNow's existing SCOM Events connector; it is not a new custom
+connector build. Separate Azure Local and Hyper-V profiles, the mapping contract, offline
+validation, and public operator guidance are complete. The next milestone is live MID Server and
+connector proof in the operator-provided environment. Automation is considered after that proof.
+
 | Source solution | Preferred integration candidate | Commitment |
 |---|---|---|
 | Azure Local SCOM MP | ServiceNow SCOM Events connector through a Windows MID Server | Development profile/mapping/tests complete; live proof pending |
@@ -125,13 +134,14 @@ flowchart LR
     CORR --> INC[Incident or remediation workflow]
 ```
 
-Before implementation, research must validate licensing, supported product versions, authentication,
+Before live SCOM activation or Azure Monitor integration implementation, research must validate
+licensing, supported product versions, authentication,
 MID Server placement, CMDB/CI mapping, severity conversion, deduplication, maintenance behavior,
 bidirectional state changes, rate limits, failure handling, and audit requirements. Environments
 using SCOM and Azure Monitor together must select an authoritative source for each condition or
 prove a correlation key that prevents duplicate ServiceNow alerts and incidents.
 
-See the [ServiceNow integration roadmap](../integrations/servicenow.md) and implemented
+See the [ServiceNow integration status](../integrations/servicenow.md) and implemented
 [SCOM-to-ServiceNow guide](../integrations/scom-servicenow.md). Azure Monitor-to-ServiceNow remains
 later work; the SCOM connector development baseline does not change either MP's release boundary.
 

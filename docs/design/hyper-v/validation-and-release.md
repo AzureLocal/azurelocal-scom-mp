@@ -9,6 +9,14 @@ No Management Pack moves directly from authoring to production. Microsoft recomm
 pre-production Operations Manager environment for reviewing and tuning new or updated MPs, with
 version control and archived releases. See [Management Pack lifecycle](https://learn.microsoft.com/en-us/system-center/scom/manage-mp-lifecycle?view=sc-om-2025).
 
+## Current authoring-host evidence
+
+All five Hyper-V development projects—Library, Discovery, Monitoring, Presentation, and optional
+Reporting—pass VSAE `VerifyMergedManagementPack` against the installed OM2022 sealed dependency
+set. They also complete ordered test sealing with a transient development key. This proves the
+schema, references, and sealing path on the authoring host; it does not replace release signing,
+clean SCOM import, workflow execution, fault/recovery, scale, upgrade, or removal certification.
+
 ## Validation layers
 
 ```mermaid

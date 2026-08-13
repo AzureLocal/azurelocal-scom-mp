@@ -75,7 +75,7 @@ function Get-AzureLocalNodeMonitorContent {
         $monitorId = "HybridSolutionsCloud.AzureLocal.Node.$($definition.Id).Monitor"
         $messageId = "$monitorId.Message"
         $alertState = if ($definition.Impact -eq 'Warning') { 'Warning' } else { 'Error' }
-        $criticalHealth = $definition.Impact
+        $criticalHealth = 'Error'
         $alertXml = ''
         if ($definition.Alert) {
             $alertXml = '<AlertSettings AlertMessage="{0}"><AlertOnState>{1}</AlertOnState><AutoResolve>true</AutoResolve><AlertPriority>Normal</AlertPriority><AlertSeverity>MatchMonitorHealth</AlertSeverity><AlertParameters><AlertParameter1>$Data/Context/Property[@Name=''{2}Detail'']$</AlertParameter1></AlertParameters></AlertSettings>' -f $messageId, $alertState, $definition.Property
@@ -96,7 +96,7 @@ function Get-AzureLocalNodeMonitorContent {
         [void]$displayXml.AppendLine("<DisplayString ElementID=`"$monitorId`" SubElementID=`"Warning`"><Name>Warning</Name></DisplayString>")
         [void]$displayXml.AppendLine("<DisplayString ElementID=`"$monitorId`" SubElementID=`"Critical`"><Name>Critical</Name></DisplayString>")
         [void]$knowledgeXml.AppendLine(@"
-<KnowledgeArticle ElementID="$monitorId" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Summary</maml:title><maml:para>$($definition.Summary)</maml:para><maml:title>Operator response</maml:title><maml:para>$($definition.Action)</maml:para><maml:title>Tuning</maml:title><maml:para>Confirm the effective configuration, topology, maintenance state, duration, and recovery behavior. Store active settings only in the dedicated customer-owned Azure Local Monitoring Overrides Management Pack.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+<KnowledgeArticle ElementID="$monitorId" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Summary</maml:title><maml:para>$($definition.Summary)</maml:para></maml:section><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Operator response</maml:title><maml:para>$($definition.Action)</maml:para></maml:section><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Tuning</maml:title><maml:para>Confirm the effective configuration, topology, maintenance state, duration, and recovery behavior. Store active settings only in the dedicated customer-owned Azure Local Monitoring Overrides Management Pack.</maml:para></maml:section></MamlContent></KnowledgeArticle>
 "@)
     }
 

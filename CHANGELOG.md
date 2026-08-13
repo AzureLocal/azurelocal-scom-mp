@@ -7,6 +7,11 @@
 
 ### Changed
 
+* Correct both SCOM Distributed Application component class bases to the verified Service Designer
+  `ServiceComponentGroup` type and run SDK verification through Visual Studio 2022's
+  full-framework VSAE host.
+* Remove SCOM expression-namespace collisions from both discovery scripts, correct MAML knowledge
+  sections and three-state health mappings, and test-seal both complete five-MP dependency chains.
 * Split the Design and platform sidebars into four solution-owned navigation groups so Azure Local
   and Hyper-V SCOM designs are visibly separate from their Azure Monitor Health Models designs.
 * Expose solution-owned SquaredUp Dashboard Server and SquaredUp Cloud documentation in the
@@ -30,7 +35,8 @@
   workbook, contract validation, and ADR 0037.
 * Add the SCOM-to-ServiceNow development integration with separate Azure Local and Hyper-V
   connector profiles, an event/identity/lifecycle mapping contract, offline validation against both
-  authored MPs, public administration guidance, and ADR 0038.
+  authored MPs, public administration guidance, and ADR 0038. The integration configures
+  ServiceNow's existing SCOM Events connector; live MID Server certification remains.
 * Implement the functional Azure Local SCOM MP baseline as five independent artifacts with 17
   classes, 28 relationships, staged discovery, a six-branch Distributed Application, 14 unit
   monitors, six domain aggregates, 12 dependency rollups, curated alerts, performance and event

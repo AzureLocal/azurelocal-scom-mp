@@ -4,6 +4,13 @@
 - **Date**: 2026-05-05
 - **Deciders**: @kturner
 
+> **Implementation update — 2026-08-13:** This planning-era ADR predates the platform-first source
+> tree, VitePress migration, and five-project SCOM suites. The current Windows authoring path uses
+> Visual Studio 2022 full-framework MSBuild with VSAE `VerifyMergedManagementPack`, followed by
+> ordered sealing. Standalone `MPVerify.exe` is not a separate required gate. Current paths and
+> executable checks are defined by the product validation pages and repository scripts; the
+> workflow names and legacy paths below are retained as decision history.
+
 ## Context
 
 Phase 3 (SCOM MP authoring) and Phase 4 (Azure Monitor Bicep) cannot start safely without a defined
@@ -28,7 +35,7 @@ in Conventional Commits mode.
 
 | Workflow | Trigger | Job summary |
 |---|---|---|
-| `mp-build.yml` | PR + main; tags `v*` | Restore VSAE solution → `MPSeal` against test key (PR) or prod key from KeyVault (release) → `MPVerify` → `MPBPA` → upload `*.mp` + `*.xml` as artifact |
+| `mp-build.yml` | PR + main; tags `v*` | Restore VSAE solution → VSAE/SDK verification → ordered test or release sealing → best-practice checks → upload `*.mp` + `*.xml` as artifact |
 | `bicep-validate.yml` | PR + main | `bicep build` all `.bicep` → `bicep lint` → `az deployment sub what-if` against the lab subscription using `lab.bicepparam` → publish ARM JSON to `dist/` artifact |
 | `pwsh-test.yml` | PR + main | `Invoke-ScriptAnalyzer -Settings PSGallery -Severity Warning,Error` → run `Pester` against `src/scom-mp/discovery/*.Tests.ps1` and `src/azure-monitor/scripts/*.Tests.ps1` |
 | `kql-validate.yml` | PR + main | Validate every `kql/signals/*.kql` file parses (`Kusto.Language` parser) and runs against the lab LAW with mock seed data; assert expected health state |
@@ -78,8 +85,8 @@ in Conventional Commits mode.
 
 - **Single monolithic CI workflow** — rejected; couples MP, Bicep, KQL, and docs cycle times,
   and surfaces unrelated failures on every PR.
-- **Self-hosted runners on a SCOM management server** — rejected for now; GitHub-hosted Windows
-  runners can install VSAE/MPVerify on demand, and self-hosted adds opex without a clear win at
+- **Self-hosted runners on a SCOM management server** — rejected for now; a governed Windows
+  authoring host can provide VSAE and the matching dependencies, and self-hosted adds opex at
   Phase 3.
 - **Azure DevOps Pipelines** — rejected; not the org standard, and OIDC + release-please are
   better-supported in GitHub Actions.
@@ -96,4 +103,4 @@ in Conventional Commits mode.
 - ADR 0017 — Versioning & release policy (sibling ADR; release-please configuration)
 - [release-please](https://github.com/googleapis/release-please)
 - [Azure login GitHub Action with OIDC](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure)
-- Brian Wren MP authoring guide — MPSeal / MPVerify usage
+- Brian Wren MP authoring guide — sealing and verification concepts

@@ -32,7 +32,9 @@ Lab, Standard, and Strict profiles are generators and examples. They never impor
 never become sealed product policy, and never write to the Default Management Pack.
 
 Source is tool-neutral XML/templates plus PowerShell 7 build and verification tooling. Microsoft
-SDK verification, MPVerify, sealing/signing, and SCOM lab import remain release gates.
+VSAE/SDK verification and ordered transient test sealing pass for all five projects. Standalone
+`MPVerify.exe` is not an additional gate. Governed release sealing/signing and SCOM lab import and
+runtime certification remain release gates.
 
 This decision supersedes the Azure Local SCOM file and override layout in ADR 0008. It applies ADR
 0022 independently and does not create a Hyper-V dependency.

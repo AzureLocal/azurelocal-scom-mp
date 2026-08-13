@@ -113,19 +113,19 @@
           <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
           <Property ID="BoundaryType" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
         </ClassType>
-        <ClassType ID="HybridSolutionsCloud.HyperV.ComputeComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+        <ClassType ID="HybridSolutionsCloud.HyperV.ComputeComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.ServiceComponentGroup" Hosted="false" Singleton="false" Extension="false">
           <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
         </ClassType>
-        <ClassType ID="HybridSolutionsCloud.HyperV.VirtualMachineComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+        <ClassType ID="HybridSolutionsCloud.HyperV.VirtualMachineComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.ServiceComponentGroup" Hosted="false" Singleton="false" Extension="false">
           <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
         </ClassType>
-        <ClassType ID="HybridSolutionsCloud.HyperV.StorageComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+        <ClassType ID="HybridSolutionsCloud.HyperV.StorageComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.ServiceComponentGroup" Hosted="false" Singleton="false" Extension="false">
           <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
         </ClassType>
-        <ClassType ID="HybridSolutionsCloud.HyperV.NetworkComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+        <ClassType ID="HybridSolutionsCloud.HyperV.NetworkComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.ServiceComponentGroup" Hosted="false" Singleton="false" Extension="false">
           <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
         </ClassType>
-        <ClassType ID="HybridSolutionsCloud.HyperV.MonitoringComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false">
+        <ClassType ID="HybridSolutionsCloud.HyperV.MonitoringComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.ServiceComponentGroup" Hosted="false" Singleton="false" Extension="false">
           <Property ID="BoundaryId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
         </ClassType>
       </ClassTypes>

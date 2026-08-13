@@ -6,7 +6,9 @@ description: Build, import, configure, tune, operate, upgrade, and remove the Az
 # Azure Local Management Pack guide
 
 The repository currently produces development XML. Do not treat it as a signed release until the
-validation page records successful SDK, sealing, signing, and SCOM lab gates.
+validation page records governed release signing and successful SCOM lab gates. The complete suite
+already passes Microsoft VSAE/SDK verification and ordered transient test sealing; those authoring
+checks do not certify runtime behavior.
 
 ## Build
 

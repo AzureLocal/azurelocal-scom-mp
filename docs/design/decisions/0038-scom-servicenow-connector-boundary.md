@@ -32,6 +32,15 @@ ownership.
 - SCOM Metrics remains out of the default integration. It is evaluated only when Metric Intelligence
   is licensed and a measured use case justifies Data Warehouse access and ingestion volume.
 
+## Implementation evidence
+
+The accepted boundary is implemented as two separate secret-free connector profiles, one normalized
+event mapping contract, a PowerShell 7 offline validator, and public configuration/lifecycle
+guidance. The validator also builds both product MP suites and checks the alert behaviors the
+connector contract depends on. No custom connector, MID Server installation, ServiceNow mutation,
+or credential provisioning has been implemented. Live connector certification remains the next
+gate.
+
 ## Consequences
 
 - Connector credentials stay in the ServiceNow credential store or Windows service identity.

@@ -1,0 +1,37 @@
+<Project DefaultTargets="Verify" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VerificationWorkingPath Condition="'$(VerificationWorkingPath)' == ''">$(MSBuildThisFileDirectory)obj\</VerificationWorkingPath>
+    <VerificationSymbolTable>$(VerificationWorkingPath)verification.pdb</VerificationSymbolTable>
+  </PropertyGroup>
+
+  <UsingTask TaskName="VerifyMergedManagementPack" AssemblyFile="$(VsacTasksPath)" />
+
+  <Target Name="PrepareVerification">
+    <Error Condition="'$(VerificationTargetFile)' == ''" Text="VerificationTargetFile is required." />
+    <Error Condition="!Exists('$(VerificationTargetFile)')" Text="Management Pack not found: $(VerificationTargetFile)" />
+    <Error Condition="'$(ReferenceListPath)' == ''" Text="ReferenceListPath is required." />
+    <Error Condition="!Exists('$(ReferenceListPath)')" Text="Reference list not found: $(ReferenceListPath)" />
+    <Error Condition="'$(VsacTasksPath)' == ''" Text="VsacTasksPath is required." />
+    <Error Condition="!Exists('$(VsacTasksPath)')" Text="VSAE build tasks not found: $(VsacTasksPath)" />
+    <MakeDir Directories="$(VerificationWorkingPath)" />
+    <Touch Files="$(VerificationSymbolTable)" AlwaysCreate="true" />
+    <ReadLinesFromFile File="$(ReferenceListPath)">
+      <Output TaskParameter="Lines" ItemName="SealedReference" />
+    </ReadLinesFromFile>
+    <ItemGroup>
+      <SealedReference>
+        <HintPath>%(Identity)</HintPath>
+      </SealedReference>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="Verify" DependsOnTargets="PrepareVerification">
+    <VerifyMergedManagementPack
+      InputPath="$(VerificationTargetFile)"
+      SealedReferences="@(SealedReference)"
+      SymbolTablePath="$(VerificationSymbolTable)"
+      ProjectReferences="@(ProjectReference)"
+      ExcludedWarnings="@(ExcludedWarning)"
+      FastVerify="true" />
+  </Target>
+</Project>

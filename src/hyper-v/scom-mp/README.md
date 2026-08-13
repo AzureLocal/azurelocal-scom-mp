@@ -22,7 +22,9 @@ The folders implement ADR 0027. The functional development build contains 13 cla
 relationships, staged role/topology discovery, a platform-owned Distributed Application, nine
 health monitors, ten dependency rollups, twelve performance rules, four event-alert rules, one
 read-only diagnostic task, and ten operator views. The Microsoft SDK and SCOM lab gates remain
-separate from source completeness.
+separate from source completeness. The current five-project output passes VSAE/SDK verification
+against the installed SCOM 2022 dependencies and ordered transient test sealing; lab and governed
+release-signing evidence remains.
 
 The release keeps product-authored sealed artifacts separate from customer-owned unsealed
 overrides. Discovery and Monitoring receive independent generated override MPs for each optional
@@ -47,9 +49,9 @@ identity:
     -PublicKeyToken '<16-hex-character-public-token>'
 ```
 
-The build inventory always marks this output as development-only. The script does not claim SDK
-verification, sealing, signing, or lab import. Those gates require the approved SCOM build and lab
-environment defined by accepted ADR 0031.
+The build inventory always marks this output as development-only. The build script itself does not
+claim verification, sealing, signing, or lab import; those are separate evidence-producing steps
+defined by accepted ADR 0031.
 
 ## Generate customer-owned overrides
 
@@ -70,7 +72,10 @@ never store active overrides in the Default Management Pack.
 
 ## Microsoft SDK verification
 
-After exporting the official sealed dependency MPs from the target SCOM release, run:
+Install System Center Visual Studio Authoring Extensions (VSAE) for Visual Studio 2022 and make the
+official sealed dependency MPs from the target SCOM release available locally. Run the verifier
+from PowerShell 7; it delegates MP verification to Visual Studio 2022's full-framework MSBuild
+host so the sealed SCOM dependencies are loaded by a compatible runtime:
 
 ```powershell
 ./tools/Test-HyperVManagementPacksWithSdk.ps1 `
@@ -78,6 +83,8 @@ After exporting the official sealed dependency MPs from the target SCOM release,
     -DependencyPath 'D:/scom/reference-mps'
 ```
 
-The command fails on missing dependencies as well as schema and verification errors. SDK success
-does not replace test sealing, clean lab import, fault/recovery tests, upgrade/removal tests, or
-release signing.
+The command fails on missing dependencies as well as schema and verification errors. It currently
+passes for all five projects against the installed SCOM 2022 dependency set. SDK success and
+transient test sealing do not replace clean lab import, fault/recovery tests, upgrade/removal tests,
+or release signing. Verify and seal the Library first, then use the sealed Library while verifying
+Discovery and the remaining product MPs in dependency order.

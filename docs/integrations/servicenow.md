@@ -1,22 +1,43 @@
 ---
-title: ServiceNow integration roadmap
-description: Candidate ServiceNow Event Management integrations for SCOM and Azure Monitor solutions.
+title: ServiceNow integration
+description: Current SCOM connector baseline and planned Azure Monitor integration for ServiceNow Event Management.
 ---
 
-# ServiceNow integration roadmap
+# ServiceNow integration
 
-ServiceNow integration is planned as an optional layer for organizations that want monitoring
+ServiceNow integration is an optional layer for organizations that want monitoring
 events to participate in ITOM Event Management, CMDB-aware correlation, incident management, and
 operational workflows. It is not embedded in a core Management Pack or Azure Monitor health model.
 
-::: warning Development status
-The SCOM-to-ServiceNow connector boundary, mapping profiles, lifecycle policy, administration
-guidance, and offline contract validation are implemented. A real ServiceNow/SCOM/MID Server lab
-is still required. Azure Monitor-to-ServiceNow remains a later implementation.
+::: warning Current status
+The SCOM-to-ServiceNow configuration baseline is implemented and passes offline validation. It has
+not yet been installed or certified against a live ServiceNow/SCOM/MID Server environment. The
+Azure Monitor-to-ServiceNow path remains design and research work.
 :::
 
 For the implemented SCOM path, continue to the
 [SCOM-to-ServiceNow integration guide](scom-servicenow.md).
+
+## What exists and what remains
+
+ServiceNow already provides the **SCOM (Events)** connector. The first integration does not require
+a new custom connector or changes inside either sealed Management Pack.
+
+| Capability | Owner | Status |
+|---|---|---|
+| SCOM Events connector | ServiceNow product | Existing vendor connector; requires ITOM Event Management and a Windows MID Server |
+| Azure Local connector profile | This repository | Implemented; explicit `HybridSolutionsCloud.AzureLocal.*` allow-list |
+| Hyper-V connector profile | This repository | Implemented separately; explicit `HybridSolutionsCloud.HyperV.*` allow-list |
+| Event identity, severity, and lifecycle mapping | This repository | Implemented as a versioned, secret-free contract |
+| Offline contract validator | This repository | Implemented; builds both MP suites and validates profiles, mappings, alert lifecycle, and secret policy |
+| MID Server, SCOM client assemblies, credentials, CI binding, and connector instance | Customer lab | Must be configured in the new environment |
+| Live fault, recovery, replay, maintenance, and optional write-back proof | Customer lab | Not yet executed |
+| Automated ServiceNow deployment | Future decision | Intentionally deferred until the installed connector release and fields are proven in the lab |
+| Azure Monitor-to-ServiceNow delivery | Future implementation | Secure Webhook/common-alert-schema design selected; mapping and deployment artifacts not yet authored |
+
+A custom SCOM connector should be considered only if the installed ServiceNow connector cannot
+support the approved SCOM release, allow-list, identity, or lifecycle requirements. That decision
+requires a new ADR and lab evidence; it is not the default plan.
 
 ## Solution boundaries
 
@@ -30,9 +51,9 @@ For the implemented SCOM path, continue to the
 There is no shared ServiceNow runtime package that makes one solution depend on another. A common
 event-field contract may be documented and tested across solutions.
 
-## SCOM candidate architecture
+## SCOM architecture
 
-The selected architecture is the ServiceNow SCOM Events connector running through a Windows MID
+The implemented boundary uses the ServiceNow SCOM Events connector running through a Windows MID
 Server. It collects SCOM alerts and can synchronize supported close, reopen, acknowledgement, and
 ticket-reference behavior. The separate SCOM Metrics connector is evaluated only when ServiceNow
 Metric Intelligence is licensed and metric ingestion provides demonstrated value.
@@ -54,7 +75,7 @@ identity, actionable alerts, consistent severity, complete context, predictable 
 and documented maintenance behavior. Credentials, MID Server configuration, ServiceNow mappings,
 and incident policy stay outside the sealed MPs.
 
-## Azure Monitor candidate architecture
+## Azure Monitor planned architecture
 
 The preferred candidate is an Azure Monitor action group using a **Secure Webhook** with the common
 alert schema to the ServiceNow Event Management endpoint. Direct integration is preferred when
@@ -126,9 +147,9 @@ The proof must demonstrate:
 - supported integration and licensing matrix — research baseline complete; installed-release and
   SCOM 2025 confirmation remain;
 - SCOM event, alert, CI, severity, and lifecycle mapping — development contract complete;
-- Azure Monitor common-alert-schema mapping;
-- authoritative-source and correlation decision record;
-- security and connectivity design;
+- Azure Monitor common-alert-schema mapping — not started;
+- authoritative-source and correlation decision record — required before dual-source deployment;
+- security and connectivity design — SCOM baseline documented; Azure Monitor detail pending;
 - repeatable lab fixtures and fault tests — offline contract complete; live fixtures remain;
 - optional configuration profiles owned by each source solution — development baseline complete;
 - administrator, troubleshooting, upgrade, and rollback documentation — SCOM guide complete;
@@ -137,6 +158,7 @@ The proof must demonstrate:
 ## Current references
 
 - [ServiceNow SCOM connector configuration](https://www.servicenow.com/docs/r/it-operations-management/event-management/t_EMConfigureSCOMConnector.html)
+- [ServiceNow SCOM group collection limits](https://www.servicenow.com/docs/r/it-operations-management/event-management/t_EMAssignRoleSCOMGroup.html)
 - [ServiceNow Event Management Connectors release notes](https://www.servicenow.com/docs/r/store-release-notes/store-rn-itom-event-mgmt-connectors.html)
 - [ServiceNow Azure Monitor authenticated data source](https://www.servicenow.com/docs/r/it-operations-management/event-management/azure-integration.html)
 - [Microsoft Azure Monitor Secure Webhook configuration](https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/itsm-connector-secure-webhook-connections-azure-configuration)

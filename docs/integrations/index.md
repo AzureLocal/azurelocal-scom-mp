@@ -11,7 +11,7 @@ becoming a runtime dependency of that solution.
 
 | Integration | SCOM path | Azure Monitor path | Status |
 |---|---|---|---|
-| [ServiceNow](servicenow.md) | SCOM Events connector development profiles and validation; Metrics optional | Secure Webhook action group; optional Logic Apps enrichment | SCOM development baseline; live lab pending |
+| [ServiceNow](servicenow.md) | Existing ServiceNow SCOM Events connector plus implemented product profiles, mapping, and offline validation; Metrics optional | Secure Webhook/common-alert-schema design; optional Logic Apps enrichment | SCOM configuration baseline complete, live lab pending; Azure Monitor implementation pending |
 
 An integration must preserve the independent Azure Local and Hyper-V product boundaries. Shared
 field semantics and test fixtures are allowed; shared runtime packages that couple releases are not.

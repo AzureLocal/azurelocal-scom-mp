@@ -4,6 +4,12 @@
 - **Date**: 2026-05-05
 - **Deciders**: @kturner
 
+> **Implementation update — 2026-08-13:** This planning-era ADR predates the platform-first source
+> tree and current five-project SCOM suites. Microsoft verification is now executed through VSAE
+> `VerifyMergedManagementPack` with the installed sealed dependencies; standalone `MPVerify.exe` is
+> not a separate required gate. Current product paths and release evidence are documented on the
+> Azure Local and Hyper-V validation pages. Legacy paths below are retained as decision history.
+
 ## Context
 
 The repo ships three artifact streams (sealed SCOM MPs, Bicep modules, MkDocs site) that are
@@ -21,7 +27,7 @@ hard gate per layer. No artifact merges to `main` without its layer passing.
 
 | Artifact | Tool | Gate |
 |---|---|---|
-| SCOM MP XML | `MPVerify.exe` | Zero errors; warnings reviewed |
+| SCOM MP XML | VSAE `VerifyMergedManagementPack` / Microsoft SDK | All references resolve and verification returns zero errors |
 | SCOM MP XML | `MPBPA` (MP Best Practice Analyzer) | Zero criticals; warnings reviewed |
 | Bicep | `bicep build` + `bicep lint --diagnostics-format sarif` | Zero `error`-severity diagnostics |
 | PowerShell | `PSScriptAnalyzer` (Settings: `PSGallery`, Severity ≥ `Warning`) | Zero `Error`; `Warning` reviewed |
@@ -110,4 +116,4 @@ diff if any names diverge.
 - [PSScriptAnalyzer](https://learn.microsoft.com/en-us/powershell/module/psscriptanalyzer/)
 - [KustoLoco](https://github.com/NeilMacMullen/KustoLoco) — local Kusto evaluator for offline KQL tests
 - [bicep what-if](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-what-if)
-- Brian Wren — MPVerify and MPBPA usage
+- Brian Wren — Management Pack verification and best-practice analysis concepts

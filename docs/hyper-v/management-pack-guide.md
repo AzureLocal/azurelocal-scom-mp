@@ -7,8 +7,9 @@ description: Public operator guide for building, installing, validating, tuning,
 
 This guide explains how the Hyper-V SCOM Management Pack is built, installed, tuned, and
 maintained. Functional development XML is available; no sealed and signed product package has been
-released yet. A release remains blocked until Microsoft SDK verification, test sealing, clean SCOM
-lab import, fault/recovery, lifecycle, and signing gates pass.
+released yet. Microsoft VSAE/SDK verification and ordered transient test sealing pass for the full
+five-project suite. A release remains blocked until clean SCOM lab import, runtime, fault/recovery,
+scale, lifecycle, and governed release-signing gates pass.
 
 ## What customers will receive
 

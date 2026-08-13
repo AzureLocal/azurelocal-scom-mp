@@ -10,10 +10,23 @@ Management Packs stay independent and connector-neutral. ServiceNow owns connect
 CMDB binding, event rules, correlation, incident policy, and optional bidirectional behavior.
 
 ::: warning Development baseline
-The mapping profile and repository contract tests are implemented. A real ServiceNow ITOM Event
-Management instance, Windows MID Server, SCOM management group, compatible SCOM client assemblies,
-and lab credentials are required to configure and certify the connector.
+The two product-specific profiles, mapping contract, administration guidance, and repository tests
+are implemented. This is not a deployed connector. A real ServiceNow ITOM Event Management
+instance, Windows MID Server, SCOM management group, compatible SCOM client assemblies, and lab
+credentials are required to configure and certify it.
 :::
+
+## Build-versus-configure decision
+
+ServiceNow already supplies the SCOM Events connector used by this design. We therefore need to
+**configure and validate** that connector, not write a custom connector for the first release. The
+repository adds the product-specific contract ServiceNow cannot infer for us: namespace
+allow-lists, stable identity, severity mapping, lifecycle policy, safe defaults, and acceptance
+tests.
+
+The repository does not install a MID Server, upload Microsoft assemblies, create credentials,
+change a ServiceNow instance, or enable bidirectional write-back. Those are controlled lab or
+customer-environment actions.
 
 ## Supported architecture
 
@@ -39,6 +52,10 @@ supported-version table. The same page includes a SCOM 2025 assembly list. Becau
 are inconsistent, treat SCOM 2025 as **unverified** until ServiceNow confirms support for the exact
 connector release in use.
 
+The documentation update in August 2026 still shows that mismatch. Confirm the exact installed
+ServiceNow connector release and SCOM build before enabling collection; do not infer SCOM 2025
+support from the assembly list alone.
+
 ## Security model
 
 - Store credentials only in the ServiceNow credential store or the Windows MID Server service
@@ -62,10 +79,12 @@ Create explicit allow-lists for these Management Pack namespaces:
 | Azure Local | `HybridSolutionsCloud.AzureLocal.*` | Node role, deployment service, and Azure Local topology classes |
 | Hyper-V | `HybridSolutionsCloud.HyperV.*` | Host role, deployment service, VM, cluster, storage, and network classes |
 
-Do not begin with “all alerts.” SCOM product connector guidance says all alerts are forwarded by
-default unless the subscription is restricted; ServiceNow also provides connector-side group
-limiting. Validate which filter mechanism the installed connector release actually uses, then
-prove that an unrelated SCOM alert is excluded.
+Do not begin with “all alerts.” ServiceNow documents limiting this pull connector by creating a
+SCOM group, scoping a SCOM user role to that group, and assigning only that role to the connector
+identity. Translate each profile's namespace boundary into product-owned SCOM groups and scoped
+roles, then prove that an unrelated SCOM alert is excluded. Use a SCOM product-connector
+subscription only if the installed integration actually registers a product connector; the native
+ServiceNow pull connector does not make that assumption part of this design.
 
 ## Event and alert mapping
 
@@ -132,11 +151,34 @@ number can populate SCOM ticket ID. Incident resolution itself does not resolve 
 The source directory contains secret-free connector profiles, a normalized mapping contract, and a
 PowerShell validator. These are review/configuration inputs, not an automated ServiceNow deployment.
 
+| Artifact | Purpose |
+|---|---|
+| `config/azure-local.connector-profile.json` | Azure Local namespace, collection, and lifecycle defaults |
+| `config/hyper-v.connector-profile.json` | Independent Hyper-V namespace, collection, and lifecycle defaults |
+| `mappings/scom-event-contract.json` | Stable alert identity, field, severity, and replay contract |
+| `scripts/Test-ScomServiceNowIntegration.ps1` | Offline package, MP alert-behavior, mapping, and secret-policy validation |
+
 ```powershell
 & ./src/integrations/servicenow/scom/scripts/Test-ScomServiceNowIntegration.ps1
 ```
 
+## Next lab session
+
+1. Record the SCOM and ServiceNow releases, installed Event Management connector version, and
+   licensing.
+2. Prepare a Windows MID Server in the SCOM domain and time zone with the documented service
+   identity permissions.
+3. Upload only the matching SCOM client assemblies through the supported ServiceNow process.
+4. Create the SCOM Events connector with debug, raw payload logging, and bidirectional write-back
+   disabled.
+5. Apply one product allow-list first, then prove create, update, auto-close, exclusion,
+   maintenance, outage replay, and credential-failure behavior.
+6. Repeat with the other product profile; only then evaluate combined collection and correlation.
+7. Capture results in the validation matrix before deciding whether deployment automation or a
+   custom integration is justified.
+
 ## References
 
 - [Configure the ServiceNow SCOM connector](https://www.servicenow.com/docs/r/it-operations-management/event-management/t_EMConfigureSCOMConnector.html)
+- [Limit collected SCOM alerts to specific SCOM groups](https://www.servicenow.com/docs/r/it-operations-management/event-management/t_EMAssignRoleSCOMGroup.html)
 - [Configure a SCOM product connector subscription](https://learn.microsoft.com/en-us/system-center/scom/manage-integration-config-integration?view=sc-om-2025)

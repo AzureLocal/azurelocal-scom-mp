@@ -12,9 +12,10 @@ successor ADR.
 ## Current status
 
 The independent Azure Local SCOM product now has a functional development baseline. Its source
-builds five Management Pack artifacts and passes deterministic offline contract tests. Microsoft
-SDK verification, sealing/signing, SCOM lab import, discovery, fault/recovery, upgrade,
-coexistence, and removal evidence remain release gates.
+builds five Management Pack artifacts, passes deterministic offline contract tests and Microsoft
+VSAE/SDK verification against the installed SCOM 2022 dependency set, and completes ordered
+transient test sealing. Governed release signing, SCOM lab import, discovery, fault/recovery,
+scale, upgrade, coexistence, and removal evidence remain release gates.
 
 ## Canonical design
 

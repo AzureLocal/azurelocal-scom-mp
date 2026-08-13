@@ -42,19 +42,21 @@
   functional development baseline: Library, Discovery, Monitoring, Presentation, optional
   Reporting, and customer-owned override generation; stable boundary identity and mobile VM
   identity; staged discovery and cookdown; evidence-driven health, alerts, pipeline health, and
-  topology-aware DA rollup. SDK, sealing/signing, and SCOM lab evidence remain release gates.
+  topology-aware DA rollup. VSAE/SDK verification and transient test sealing pass against the
+  installed SCOM 2022 dependencies; governed release signing and SCOM lab evidence remain gates.
 - Hyper-V customer customization uses two unsealed, customer-owned MPs: Discovery Overrides for the
   sealed Discovery MP and Monitoring Overrides for the sealed Monitoring MP. Optional Lab,
   Standard, and Strict profiles are public starter examples only; they are reviewed and copied into
   customer-owned files, never imported automatically. The Default Management Pack is prohibited.
 - Accepted ADR 0031 makes tool-neutral XML/templates and PowerShell 7 the canonical Hyper-V MP
-  source/build path. Microsoft SDK verification, MPVerify, sealing/signing, and SCOM lab import are
-  authoritative release gates; Silect authoring tools are optional aids rather than source-of-truth
-  or runtime dependencies.
+  source/build path. Microsoft verification runs through VSAE `VerifyMergedManagementPack`;
+  standalone MPVerify is not a separate gate. Governed release sealing/signing and SCOM lab import
+  remain authoritative release gates; Silect authoring tools are optional aids rather than
+  source-of-truth or runtime dependencies.
 - Accepted ADRs 0032–0035 define the Azure Local SCOM local-runtime boundary, five-artifact package
   decomposition, staged object discovery and platform-owned Distributed Application, and
-  evidence-driven health/alert/rollup policy. The development baseline is implemented; SDK,
-  sealing/signing, and SCOM lab gates remain.
+  evidence-driven health/alert/rollup policy. The development baseline is implemented and passes
+  VSAE verification/transient test sealing; governed release signing and SCOM lab gates remain.
 - Accepted ADR 0036 defines an independent Azure Local Azure Monitor Health Model. The first Bicep
   baseline uses documented Azure Local platform metrics and leaves unproven domains Unknown.
 - Accepted ADRs 0023 and 0037 define the constrained Hyper-V Azure Monitor Health Model. Arc-enabled
@@ -62,7 +64,9 @@
   telemetry.
 - Accepted ADR 0038 defines the SCOM-to-ServiceNow boundary. The Management Packs remain
   connector-neutral; ServiceNow consumes alerts through separate product allowlists and uses SCOM
-  AlertId as the source identity. Metrics ingestion and bidirectional updates are opt-in policies.
+  AlertId as the source identity. ServiceNow supplies the existing SCOM Events connector; this repo
+  supplies configuration contracts and validation, not a custom connector. Metrics ingestion and
+  bidirectional updates are opt-in policies.
 - Public documentation and repository text must not expose internal work-item identifiers or direct
   board links. Use descriptive public milestones and research-gate names instead.
 - ServiceNow integration is optional and solution-owned. SCOM and Azure Monitor integrations do not

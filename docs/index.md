@@ -75,7 +75,8 @@ separate SCOM and Azure Monitor paths for Event Management, CMDB correlation, an
 ::: info Independent development baselines are implemented
 Azure Local and Hyper-V have separate functional SCOM Management Pack and Distributed Application
 baselines. Azure Local and constrained Hyper-V Health Model baselines compile with Bicep. The
-SCOM-to-ServiceNow mapping/profile baseline also passes offline validation. SDK, signing, live SCOM,
+SCOM-to-ServiceNow mapping/profile baseline also passes offline validation. Both SCOM suites pass
+Microsoft VSAE/SDK verification and ordered transient test sealing. Release signing and live SCOM,
 Azure, and ServiceNow certification gates remain. See the [project roadmap](/project/roadmap) and
 [implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
 :::
@@ -88,4 +89,4 @@ Azure, and ServiceNow certification gates remain. See the [project roadmap](/pro
 | 3 | Platform split, delivery hierarchy, ADR and spike planning | Complete |
 | 4 | Research and architecture gates | Initial decisions complete; lab evidence active |
 | 5 | Azure Local and Hyper-V development baselines | Complete |
-| 6 | SDK, SCOM, Azure, ServiceNow, and release certification | Active |
+| 6 | SCOM lab, Azure, ServiceNow, and release certification | Active |

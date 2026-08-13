@@ -39,4 +39,5 @@ Discovery and Monitoring each have a separate customer-owned unsealed override M
 - Storage Health Service root-cause faults are preferred to duplicate per-drive paging.
 - Thresholds, duration, alert behavior, and optional collections remain overrideable.
 - The Default Management Pack is never a customization destination.
-- Generated XML is development output until SDK, sealing, signing, and SCOM lab gates pass.
+- Generated XML remains development output after VSAE verification and transient test sealing;
+  governed release signing and SCOM lab gates still determine release readiness.

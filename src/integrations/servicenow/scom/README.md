@@ -4,6 +4,10 @@ This optional package provides public, secret-free configuration contracts for t
 Events connector. It does not modify ServiceNow, install a MID Server, redistribute Microsoft SCOM
 assemblies, or store credentials.
 
+ServiceNow supplies the connector. This repository supplies the separate Azure Local and Hyper-V
+profiles, mapping/lifecycle contract, and offline validation needed to configure it safely. Live
+MID Server and connector configuration remains environment-owned work.
+
 ```text
 scom/
 ├── config/       # Connector development profiles

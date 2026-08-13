@@ -10,9 +10,8 @@
 
 The Hyper-V SCOM product needs reviewable source, deterministic builds, schema and dependency
 validation, sealing, signing, and lab imports. No single authoring application should become a
-runtime dependency or the only place where product source exists. The current workstation has the
-Microsoft SDK assembly and workflow-analysis tool, but the official sealed base MP dependencies and
-a representative SCOM management group remain external release inputs.
+runtime dependency or the only place where product source exists. A representative SCOM management
+group remains an external release input.
 
 Microsoft distinguishes editable XML from sealed `.mp` artifacts and requires dependencies to be
 present during import. The Management Pack Authoring Guide supports SCOM 2019, 2022, 2025, and SCOM
@@ -34,6 +33,14 @@ The pipeline is:
 
 The repository never commits a private signing key. Development output without the release signing
 identity is explicitly non-release material.
+
+## Implementation evidence
+
+The repository-owned verifier now uses Visual Studio 2022 full-framework MSBuild and the VSAE
+`VerifyMergedManagementPack` target against the installed SCOM 2022 sealed dependencies. All five
+Hyper-V projects pass verification, ordered transient test sealing, and strong-name verification.
+Standalone `MPVerify.exe` is not a separate gate. Clean SCOM import, runtime behavior, lifecycle,
+scale, and governed release signing remain outstanding.
 
 ## Options considered
 
@@ -88,7 +95,7 @@ mandatory because XML well-formedness alone cannot prove importability or runtim
 1. Static build tests prove deterministic output, IDs, versions, references, override separation,
    and the absence of prohibited runtime dependencies.
 2. The approved authoring environment and exact Microsoft verification/sealing commands are
-   documented and repeatable.
+   documented, repeatable, and passing for the complete five-project suite.
 3. Test-sealed artifacts import in dependency order into every supported SCOM baseline.
 4. Signing identities and secret retrieval follow the release-security decision without committing
    key material.

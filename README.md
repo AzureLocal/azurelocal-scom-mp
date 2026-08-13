@@ -37,7 +37,7 @@ The `docs/` folder is a [VitePress](https://vitepress.dev/) site published at
 - separate [Azure Local](docs/azure-local/index.md) and [Hyper-V](docs/hyper-v/index.md) entry points;
 - the shared health-model design, signal catalog, and Architecture Decision Records;
 - Azure Local SCOM and Azure Monitor implementation guidance;
-- the planned Hyper-V SCOM Management Pack;
+- the implemented Hyper-V SCOM Management Pack development baseline;
 - the constrained Hyper-V Azure Monitor path through Arc-enabled SCVMM and Arc-enabled hosts; and
 - an Azure DevOps-backed [roadmap](docs/project/roadmap.md) and [implementation plan](PLAN.md).
 
@@ -94,12 +94,15 @@ ADR 0022 prohibits shared SCOM runtime elements.
   presentation, reporting, and customer override baseline are implemented.
 - The platform-first roadmap and Azure DevOps hierarchy are established.
 - The independent Hyper-V SCOM functional development baseline is also implemented.
-- Both SCOM products still require official dependency resolution, SDK verification, sealing,
-  signing, and SCOM lab certification before release.
+- Both five-project SCOM suites pass Microsoft VSAE/SDK verification against the installed SCOM
+  2022 dependencies and complete ordered test sealing with a transient development key. Governed
+  release signing, clean lab import, runtime, fault/recovery, scale, upgrade, coexistence, and
+  removal certification remain before release.
 - Independent Azure Local and constrained Hyper-V Azure Monitor Health Model development baselines
   compile with Bicep; live API, identity, telemetry, fault, cost, and teardown evidence remains.
-- The optional SCOM-to-ServiceNow integration has separate product allow-list profiles, a mapping
-  contract, administration guidance, and passing offline validation; live connector proof remains.
+- The optional SCOM-to-ServiceNow integration uses ServiceNow's existing SCOM Events connector. It
+  has separate product allow-list profiles, a mapping contract, administration guidance, and
+  passing offline validation; Windows MID Server configuration and live connector proof remain.
 
 ## Contributing
 

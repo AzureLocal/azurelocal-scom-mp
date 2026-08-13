@@ -65,6 +65,7 @@ Describe 'Hyper-V Management Pack development build' {
         $vmClass = $library.SelectSingleNode("//ClassType[@ID='HybridSolutionsCloud.HyperV.VirtualMachine']")
         $vmClass.Hosted | Should -Be 'false'
         @($vmClass.Property | Where-Object Key -eq 'true').ID | Should -Be @('BoundaryId', 'VMId')
+        @($library.SelectNodes("//ClassType[contains(@ID, 'Component')]") | ForEach-Object Base | Sort-Object -Unique) | Should -Be @('ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.ServiceComponentGroup')
     }
 
     It 'implements staged discovery and Distributed Application population' {
@@ -76,6 +77,7 @@ Describe 'Hyper-V Management Pack development build' {
         $discovery.OuterXml | Should -Match 'HybridSolutionsCloud\.HyperV\.Service'
         $discovery.OuterXml | Should -Match 'Get-ClusterSharedVolume'
         $discovery.OuterXml | Should -Match 'Get-NetIntent'
+        $discovery.OuterXml | Should -Not -Match '\$(?:data|target)\b(?!/)'
     }
 
     It 'implements health, collection, alert, task, and rollup workflows' {
@@ -91,6 +93,11 @@ Describe 'Hyper-V Management Pack development build' {
         @($rules | Where-Object Category -eq 'Alert').Count | Should -Be 4
         @($monitoring.SelectNodes('/ManagementPack/Monitoring/Tasks/Task')).Count | Should -Be 1
         @($monitoring.SelectNodes('/ManagementPack/LanguagePacks/LanguagePack/KnowledgeArticles/KnowledgeArticle')).Count | Should -Be 13
+        @($monitoring.SelectNodes("//*[local-name()='section']") | Where-Object { @($_.SelectNodes("./*[local-name()='title']")).Count -ne 1 }).Count | Should -Be 0
+        foreach ($unitMonitor in @($monitoring.SelectNodes('/ManagementPack/Monitoring/Monitors/UnitMonitor'))) {
+            $healthStates = @($unitMonitor.OperationalStates.OperationalState.HealthState)
+            @($healthStates | Sort-Object -Unique).Count | Should -Be $healthStates.Count
+        }
     }
 
     It 'implements operator views for services, inventory, alerts, events, and performance' {

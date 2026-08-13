@@ -2,6 +2,38 @@
 
 ## Current session
 
+- **Public-site reconciliation:** Updated the landing/status pages, both SCOM product and design
+  lanes, validation pages, roadmap, administration guides, source READMEs, current ADR notes, and
+  the Azure Local package diagram to record completed OM2022 VSAE verification and transient test
+  sealing. Standalone MPVerify is no longer represented as an additional release gate.
+- **ServiceNow clarification:** Audited the existing integration source and public docs. ServiceNow
+  supplies the SCOM Events connector; the repository already supplies separate Azure Local and
+  Hyper-V profiles, the normalized AlertId mapping/lifecycle contract, offline validation, ADR, and
+  operator guidance. No custom connector or automated ServiceNow mutation exists or is needed for
+  the first lab. Live Windows MID Server configuration and certification remain next; Azure Monitor
+  Secure Webhook/common-alert-schema artifacts remain future implementation.
+- **Microsoft verification unlocked:** Located the installed VSAE 1.10.571.0 OM2022 dependency
+  set and Visual Studio 2022 full-framework MSBuild. Replaced both PowerShell 7 in-process SDK
+  loaders with a shared VSAE `VerifyMergedManagementPack` MSBuild project and product wrappers.
+- **Verified defect fixed:** Microsoft verification proved that
+  `Microsoft.SystemCenter.ServiceDesigner.Component` does not exist in the OM2022 Service Designer
+  library. Changed all five Hyper-V and six Azure Local DA component classes to the verified
+  `Microsoft.SystemCenter.ServiceDesigner.ServiceComponentGroup` base and added regression checks.
+- **SDK and test-seal result:** The complete Hyper-V and Azure Local suites—Library, Discovery,
+  Monitoring, Presentation, and optional Reporting—pass Microsoft VSAE/SDK verification against
+  the installed OM2022 sealed dependencies. Both five-MP chains then test-sealed successfully in
+  dependency order with a transient development key stored only under `D:/tmp/`.
+- **Additional verified fixes:** Renamed discovery-script `$data` and helper `$Target` variables so
+  they cannot collide with SCOM expression namespaces, split malformed MAML into sibling sections,
+  and made all three-state monitor health mappings unique. Added regression assertions.
+- **Sealing runtime:** VSAE `FASTSEAL.exe` targets CLR v2.0.50727. `NET-Framework-Core` initially
+  reported `Removed`, then completed installation through Server Manager and now reports
+  `Installed`. **No restart was performed, and the operator explicitly prohibited restarting this
+  server.**
+- **Latest validation:** Both complete five-MP VSAE/SDK wrappers passed; all ten transient artifacts
+  test-sealed and passed strong-name verification; Pester 15/15; PSScriptAnalyzer zero warnings or
+  errors; VitePress production build and `git diff --check` passed; public ADO identifier scan
+  returned zero matches. VitePress emitted only its existing large-chunk warning.
 - **Outcome:** Implemented the Azure Local SCOM development baseline, both independent Azure
   Monitor Health Model baselines, and the optional SCOM-to-ServiceNow development contract. Updated
   research, ADRs, architecture, operator guidance, navigation, roadmap, source READMEs, changelog,
@@ -40,13 +72,21 @@
 - **Governance:** Registry resolves this as the HCS `docs` profile. The governance server could not
   inspect the Windows path for drift and its optional markdown/link binaries are not installed;
   equivalent local checks were run directly.
-- **Release gates:** Neither MP is SDK dependency-resolved, sealed, signed, or SCOM-lab-certified.
+- **Release gates:** Both complete suites are SDK dependency-resolved and transiently test-sealed
+  against OM2022, but no test output is a public release artifact. Governed release signing and
+  SCOM-lab certification remain; standalone MPVerify is not a separate gate.
   Neither Azure Monitor baseline has been deployed to a representative subscription. ServiceNow
   MID Server behavior and the supported SCOM version pair are not lab-certified.
 - **Branch:** `main`.
-- **Next action:** Export official SCOM dependency MPs, run both SDK verifiers, establish governed
-  sealing/signing, and execute the documented SCOM, Azure, and ServiceNow representative-lab
-  matrices. Use the operator-provided environments when available.
+- **Latest documentation validation:** VitePress production build passed, the ServiceNow contract
+  validator passed, Pester passed 15/15, PSScriptAnalyzer returned zero warnings/errors, edited
+  draw.io/SVG XML parsed, gitleaks reported zero findings, the public work-item identifier scan
+  returned zero matches, and `git diff --check` passed. Governance MCP could not access the local
+  Windows path; its optional markdownlint/lychee executables are also not installed server-side.
+- **Next action:** Do not restart this server. Import the transiently test-sealed products into the
+  operator-provided SCOM labs in dependency order and execute the documented SCOM and ServiceNow
+  matrices. Establish the governed release-signing identity only after the lab evidence is
+  approved. Azure Monitor live deployment remains a separate lab workstream.
 
 ## Last session
 

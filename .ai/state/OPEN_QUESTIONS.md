@@ -9,16 +9,17 @@
   alternatives? Resolve in the research program.
 - Which candidate thresholds are safe defaults after duration, recovery, dependency, and lab
   evidence are included? Resolve in the research program.
-- Which exact official sealed dependency-MP versions should the first release support? Export them
-  from each target SCOM release and run `Test-HyperVManagementPacksWithSdk.ps1`.
+- Beyond the verified SCOM 2022 dependency set, which exact sealed dependency-MP versions should
+  the first release support? Export them from each additional target SCOM release and run
+  `Test-HyperVManagementPacksWithSdk.ps1`.
 - Does the target SCOM HealthService and supported Windows Server matrix execute every embedded
   PowerShell provider workflow consistently, including Hyper-V, FailoverClusters, and Network ATC
   modules? Prove in the standalone and clustered labs.
 - Do stable VM identity, multi-node topology contributions, DA population/rollup, maintenance,
   migration/failover, recovery, upgrade, and removal behave as designed in SCOM?
 - What release signing identity and governed sealing pipeline will produce the first signed bundle?
-- Which official sealed dependency-MP versions should the first Azure Local release support, and
-  does the Azure Local MP pass Microsoft SDK verification against each target SCOM version?
+- Beyond the verified SCOM 2022 dependency set, which official sealed dependency-MP versions should
+  the first Azure Local release support, and does the suite pass VSAE verification against each?
 - In the representative Azure subscription, do the preview Health Model resources deploy with the
   documented Azure Local metrics, identities, dimensions, and state transitions used by the Bicep
   baselines?

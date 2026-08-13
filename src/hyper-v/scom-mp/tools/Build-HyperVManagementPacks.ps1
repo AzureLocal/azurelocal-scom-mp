@@ -70,7 +70,7 @@ function Get-HyperVHostMonitorContent {
         $monitorId = "HybridSolutionsCloud.HyperV.Host.$($definition.Id).Monitor"
         $messageId = "$monitorId.Message"
         $alertState = if ($definition.Impact -eq 'Warning') { 'Warning' } else { 'Error' }
-        $criticalHealth = $definition.Impact
+        $criticalHealth = 'Error'
 
         [void]$monitorXml.AppendLine(@"
       <UnitMonitor ID="$monitorId" Accessibility="Public" Enabled="true" Target="HCSHyperVLibrary!HybridSolutionsCloud.HyperV.HostRole" ParentMonitorID="Health!System.Health.$($definition.Parent)" Remotable="true" Priority="Normal" TypeID="HybridSolutionsCloud.HyperV.PropertyBag.ThreeState.MonitorType" ConfirmDelivery="true">
@@ -87,7 +87,7 @@ function Get-HyperVHostMonitorContent {
         [void]$displayXml.AppendLine("<DisplayString ElementID=`"$monitorId`" SubElementID=`"Critical`"><Name>Critical</Name></DisplayString>")
         [void]$displayXml.AppendLine("<DisplayString ElementID=`"$messageId`"><Name>$($definition.Name)</Name><Description>$($definition.Summary) Detail: {0}</Description></DisplayString>")
         [void]$knowledgeXml.AppendLine(@"
-<KnowledgeArticle ElementID="$monitorId" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Summary</maml:title><maml:para>$($definition.Summary)</maml:para><maml:title>Operator response</maml:title><maml:para>$($definition.Action)</maml:para><maml:title>Tuning</maml:title><maml:para>Confirm the effective configuration, topology, maintenance state, duration, and recovery behavior. Store active settings only in the dedicated customer-owned Hyper-V Monitoring Overrides Management Pack.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+<KnowledgeArticle ElementID="$monitorId" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Summary</maml:title><maml:para>$($definition.Summary)</maml:para></maml:section><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Operator response</maml:title><maml:para>$($definition.Action)</maml:para></maml:section><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Tuning</maml:title><maml:para>Confirm the effective configuration, topology, maintenance state, duration, and recovery behavior. Store active settings only in the dedicated customer-owned Hyper-V Monitoring Overrides Management Pack.</maml:para></maml:section></MamlContent></KnowledgeArticle>
 "@)
     }
 

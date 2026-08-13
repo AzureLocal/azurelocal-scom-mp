@@ -48,9 +48,12 @@ Describe 'Azure Local Management Pack development build' {
         $output = Join-Path $TestDrive 'topology'
         & $script:BuildScript -PublicKeyToken '0123456789abcdef' -OutputPath $output | Out-Null
         [xml]$library = Get-Content -LiteralPath (Join-Path $output 'HybridSolutionsCloud.AzureLocal.Library.xml') -Raw
+        [xml]$discovery = Get-Content -LiteralPath (Join-Path $output 'HybridSolutionsCloud.AzureLocal.Discovery.xml') -Raw
         @($library.SelectNodes('/ManagementPack/TypeDefinitions/EntityTypes/ClassTypes/ClassType')).Count | Should -Be 17
         @($library.SelectNodes('/ManagementPack/TypeDefinitions/EntityTypes/RelationshipTypes/RelationshipType')).Count | Should -Be 28
         $library.OuterXml | Should -Not -Match 'HybridSolutionsCloud\.HyperV'
+        @($library.SelectNodes("//ClassType[contains(@ID, 'Component')]") | ForEach-Object Base | Sort-Object -Unique) | Should -Be @('ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.ServiceComponentGroup')
+        $discovery.OuterXml | Should -Not -Match '\$(?:data|target)\b(?!/)'
     }
 
     It 'implements local health, collection, alerts, tasks, and DA rollup' {
@@ -62,6 +65,11 @@ Describe 'Azure Local Management Pack development build' {
         @($monitoring.SelectNodes('/ManagementPack/Monitoring/Monitors/DependencyMonitor')).Count | Should -Be 12
         @($monitoring.SelectNodes('/ManagementPack/Monitoring/Rules/Rule')).Count | Should -Be 16
         @($monitoring.SelectNodes('/ManagementPack/Monitoring/Tasks/Task')).Count | Should -Be 1
+        @($monitoring.SelectNodes("//*[local-name()='section']") | Where-Object { @($_.SelectNodes("./*[local-name()='title']")).Count -ne 1 }).Count | Should -Be 0
+        foreach ($unitMonitor in @($monitoring.SelectNodes('/ManagementPack/Monitoring/Monitors/UnitMonitor'))) {
+            $healthStates = @($unitMonitor.OperationalStates.OperationalState.HealthState)
+            @($healthStates | Sort-Object -Unique).Count | Should -Be $healthStates.Count
+        }
     }
 
     It 'implements operator views for service health, inventory, alerts, events, and performance' {

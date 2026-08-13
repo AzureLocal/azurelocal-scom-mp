@@ -5,8 +5,9 @@ description: Implemented development workflows and their current default behavio
 
 # Azure Local SCOM monitoring catalog
 
-This catalog describes the authored development baseline. It is not yet a sealed or lab-certified
-release.
+This catalog describes the authored development baseline. The suite passes Microsoft VSAE/SDK
+verification and transient test sealing, but it is not yet governed-release-signed or
+lab-certified.
 
 ## State monitors
 
