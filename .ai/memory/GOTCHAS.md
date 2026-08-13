@@ -13,8 +13,8 @@
   the guest-management, agent, Data Collection Rule, identity, and networking path.
 - Do not generalize accepted Azure Local ADRs 0001–0020 to Hyper-V. Hyper-V topology and signals
   require their own research-backed successor ADRs.
-- Microsoft already ships Hyper-V, Windows Server, and Failover Cluster Management Packs. Do not
-  author duplicate classes, alerts, or thresholds until AB#7349 resolves dependencies, gaps, and
-  coexistence behavior.
+- Microsoft ships an older Hyper-V 2019 Management Pack. Use it to research useful concepts in
+  AB#7349, but never make it an import, extension, override target, prerequisite, or runtime
+  dependency of this product.
 - An exhaustive counter/event/property inventory is intentionally larger than the shipped default
   profile. Keep rejected and collection-only candidates traceable instead of silently deleting them.

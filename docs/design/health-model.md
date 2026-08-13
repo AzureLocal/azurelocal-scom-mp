@@ -1,8 +1,10 @@
 # Health Model
 
-> The shared structural rules that govern how entities across both platform tracks transition, roll up,
-> and reports a health state. Locked by [ADR 0003](decisions/0003-health-rollup-policy.md)
-> (rollup policy) and [ADR 0009](decisions/0009-alert-vs-health-state.md) (alerts vs state).
+> **Scope:** the health-state vocabulary and structural principles are shared design goals. The
+> detailed entities, rollup table, exceptions, thresholds, and Azure Monitor mappings on this page
+> are the accepted **Azure Local** baseline from [ADR 0003](decisions/0003-health-rollup-policy.md)
+> and [ADR 0009](decisions/0009-alert-vs-health-state.md). Hyper-V adopts only the parts confirmed
+> by AB#7327 and its successor SCOM ADRs. Hyper-V Azure Monitor remains conditional on ADR 0023.
 
 ## Health dimensions
 

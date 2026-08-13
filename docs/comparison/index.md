@@ -15,8 +15,8 @@ See the [implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-h
 
 ## Looking for the concept crosswalk?
 
-The side-by-side concept mapping (SCOM ↔ Azure Monitor) lives under Design now —
-it's a track-agnostic foundation, not migration content:
+The Azure Local side-by-side concept mapping (SCOM ↔ Azure Monitor) lives under Design now. It is
+the conceptual foundation for this migration lane, not a Hyper-V design contract:
 
 → **[Design / Concept Mapping (SCOM ↔ AzMon)](../design/concept-mapping.md)**
 

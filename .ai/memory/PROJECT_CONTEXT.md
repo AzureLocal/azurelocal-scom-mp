@@ -17,6 +17,12 @@ Azure DevOps project `Hybrid Infrastructure Health Monitoring` is the tracker. E
 Azure Local, Epic AB#7314 owns Hyper-V, and Features AB#7315–AB#7318 own the four delivery surfaces.
 
 Hyper-V SCOM phase one is active under Story AB#7327. Child Tasks AB#7343–AB#7353 cover support and
-topology, exhaustive raw inventories, incumbent MP overlap, SCOM workflow mapping, threshold
+topology, exhaustive raw inventories, prior Microsoft MP research, SCOM workflow mapping, threshold
 engineering, lab/fault validation, and final catalog curation. Authoring Stories AB#7328–AB#7330
 remain gated by this evidence and the successor Hyper-V ADRs.
+
+The design information architecture is platform first and delivery surface second. It has explicit
+Azure Local/SCOM, Azure Local/Azure Monitor, Hyper-V/SCOM, and conditional Hyper-V/Azure Monitor
+lanes. Shared design is deliberately small; accepted Azure Local ADRs do not silently govern
+Hyper-V. ADR 0025 establishes Network ATC as the preferred eligible Hyper-V cluster baseline while
+requiring separate handling for SCVMM/SDN and non-ATC network-management paths.

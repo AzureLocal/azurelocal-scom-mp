@@ -6,6 +6,24 @@ foundation plus the Azure Local and Hyper-V platform tracks.
 These are project-scoped ADRs. Org-wide platform standards live in
 [`AzureLocal/platform/decisions/`](https://github.com/AzureLocal/platform/tree/main/decisions).
 
+## Design lane scope map
+
+The early accepted ADRs were written for the Azure Local baseline. They do not automatically govern
+Hyper-V simply because both products use SCOM or share health terminology.
+
+| Design lane | Governing decisions |
+|---|---|
+| Shared portfolio architecture | ADRs 0020, 0021, and 0024 |
+| Shared SCOM packaging boundary | ADR 0022, proposed |
+| Azure Local platform baseline | ADRs 0001–0003, 0007–0009, and 0014–0018 |
+| Azure Local SCOM | ADRs 0004, 0005, and 0011; ADR 0022 remains a packaging gate |
+| Azure Local Azure Monitor | ADRs 0006, 0010, 0012, 0013, and 0019 |
+| Hyper-V platform and SCOM | ADR 0025 plus successor topology, discovery, signal, threshold, and rollup ADRs after AB#7327 |
+| Hyper-V Azure Monitor | ADR 0023, proposed go/defer/no-go gate |
+
+Cross-cutting lifecycle ADRs can provide reusable patterns, but each platform and delivery lane
+must still validate its applicable topology, dependencies, artifacts, tests, and release contract.
+
 ## Index
 
 | # | Title | Status |
@@ -34,6 +52,7 @@ These are project-scoped ADRs. Org-wide platform standards live in
 | [0022](./0022-scom-management-pack-packaging-boundaries.md) | SCOM packaging boundaries — shared sealed library vs separate platform libraries | Proposed |
 | [0023](./0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) | Hyper-V Azure Monitor through Arc-enabled SCVMM — go, defer, or no-go gate | Proposed |
 | [0024](./0024-repository-and-publishing-identity.md) | Repository and publishing identity — Hybrid Solutions Cloud and labs.hybridsolutions.cloud | Accepted |
+| [0025](./0025-hyper-v-network-management-authority.md) | Hyper-V network-management authority — prefer Network ATC when eligible; distinguish SCVMM/SDN and manual paths | Accepted |
 
 ## When to write an ADR
 

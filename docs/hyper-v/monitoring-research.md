@@ -34,8 +34,8 @@ from duplicate or low-value noise.
 | Inventory | [AB#7345 — Hyper-V, hypervisor, and VM signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7345) | Host, scheduler, VM, integration service, checkpoint, metering, and migration signals |
 | Inventory | [AB#7346 — Failover Cluster, quorum, and CSV signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7346) | Cluster, node, quorum, group, resource, network, clustered VM role, CSV, and CSV cache signals |
 | Inventory | [AB#7347 — storage, VHD, and Replica signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7347) | Host and virtual storage, VHD/VHDX, checkpoint chains, QoS, latency, errors, capacity, and Replica |
-| Inventory | [AB#7348 — virtual-network signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7348) | Physical NIC through vSwitch, port, and VM adapter; QoS, offloads, drops, errors, queues, and saturation |
-| Gap analysis | [AB#7349 — existing MP coverage](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7349) | Microsoft Hyper-V, Windows Server, and Cluster MP overlap, gaps, dependencies, and coexistence policy |
+| Inventory | [AB#7348 — network-management signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7348) | Network ATC intent health for eligible clusters; manual and SCVMM/SDN alternatives; physical NIC through vSwitch, port, and VM adapter; QoS, offloads, drops, errors, queues, and saturation |
+| Reference analysis | [AB#7349 — existing MP research](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7349) | Reusable monitoring ideas, topology, signals, thresholds, and operational knowledge from Microsoft MPs without taking a runtime dependency |
 | Engineering | [AB#7350 — SCOM workflow mapping](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7350) | Target, discovery/monitor/rule type, interval, cookdown, permissions, cardinality, and estimated cost |
 | Engineering | [AB#7351 — thresholds and tuning](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7351) | Evidence-backed conditions, durations, hysteresis, recovery, missing-data behavior, and override tiers |
 | Validation | [AB#7352 — lab and fault validation](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7352) | Repeatable fixtures, captures, faults, latency, recovery, duplicate-event, overhead, and negative results |
@@ -69,8 +69,8 @@ installed surface and preserve the output for comparison:
   Windows namespaces;
 - services, role/feature state, registry-backed configuration, VHD/VHDX metadata, resource
   metering, and supported cluster validation output; and
-- the discoveries, monitors, rules, thresholds, and dependencies already shipped in applicable
-  Microsoft Management Packs.
+- the discoveries, monitors, rules, thresholds, and operational knowledge already shipped in
+  applicable Microsoft Management Packs, used strictly as research evidence.
 
 The inventory records version and topology availability. A counter or event seen on one host is not
 assumed to exist, mean the same thing, or remain supported on another Windows Server release.
@@ -81,7 +81,7 @@ Research uses sources in this order:
 
 1. current Microsoft product, support, performance-tuning, PowerShell, CIM/WMI, and SCOM
    documentation;
-2. manifests and exported elements from the current Microsoft Management Packs;
+2. manifests, guides, and exported elements from Microsoft Management Packs as research inputs;
 3. repeatable observation and fault injection on supported lab versions; and
 4. current vendor documentation as a comparison point, never as proof of Microsoft support.
 
@@ -96,7 +96,7 @@ AB#7327 can close only when:
 - the raw inventory and curated catalog are both published;
 - every selected signal has a supported acquisition path and repeatable evidence;
 - default behavior and threshold evidence are explicit;
-- Microsoft MP overlap and duplicate-alert behavior are resolved;
+- useful Microsoft MP behavior is captured and revalidated without creating a runtime dependency;
 - unknown, missing, maintenance, dependency, and recovery behavior are defined;
 - rejected candidates remain traceable with a reason; and
 - successor scope/topology, discovery, and signal/rollup ADRs are ready for approval.

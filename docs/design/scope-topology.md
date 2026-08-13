@@ -12,8 +12,10 @@
 | **Hyper-V** | Research planned for standalone, failover-clustered, and supported SCVMM-managed variants | SCOM committed; Azure Monitor conditional |
 
 The health dimensions and rollup principles can be shared. The Azure Local entity inventory below
-must not be copied into the Hyper-V Management Pack: Network ATC, Azure Local lifecycle, DCMA, HCI
-registration, and Azure Local resource types are platform-specific.
+must not be copied wholesale into the Hyper-V Management Pack: Azure Local lifecycle, DCMA, HCI
+registration, and Azure Local resource types remain platform-specific. Network ATC is a shared
+capability for eligible Windows Server 2025 Datacenter clusters; the Hyper-V model must include it
+when present and distinguish it from manual and SCVMM/SDN-managed networking.
 
 ## What we monitor for Azure Local
 

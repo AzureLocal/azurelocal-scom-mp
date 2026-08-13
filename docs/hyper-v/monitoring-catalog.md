@@ -21,7 +21,7 @@ threshold, and lab spikes provide evidence.
 | Failover Cluster | Cluster and node state, quorum/witness, groups, resources, clustered VM roles, ownership, failover behavior, networks, and validation findings |
 | CSV | State, pause, redirected I/O, ownership, free space, I/O latency/throughput/errors, cache use, and relevant events |
 | Storage | Physical/logical volumes, SMB/SAN/virtual FC where applicable, VHD/VHDX metadata, capacity, latency, queues, errors, fragmentation, QoS, and differencing chains |
-| Networking | Physical adapters, teams/SET where applicable, virtual switches, extensions, ports, VM adapters, VLAN/QoS, VMQ, vRSS, SR-IOV, bandwidth, queues, errors, and drops |
+| Networking | Network ATC intent/status/drift where supported; physical adapters, teams/SET where applicable, virtual switches, extensions, ports, VM adapters, VLAN/QoS, VMQ, vRSS, SR-IOV, bandwidth, queues, errors, and drops; SCVMM/SDN authority where selected |
 | Mobility | Live migration, storage migration, drain, placement, compatibility, authentication, duration, throughput, and failure events |
 | Replica and recovery | Replication state/health, lag, frequency, errors, relationship, last successful replication, and RPO policy |
 | Configuration and reliability | Time synchronization, updates, pending reboot, driver/firmware facts exposed by Windows, unexpected role drift, and reliability events |
@@ -104,6 +104,19 @@ combine available memory or host reserve, Hyper-V dynamic-memory pressure, pagin
 sustained duration. A percentage may remain useful for capacity trending or an optional policy tier,
 but it is not accepted as the sole phase-one health condition.
 :::
+
+## Microsoft Hyper-V 2019 MP boundary
+
+The Microsoft System Center 2019 Management Pack for Hyper-V is a research source, not part of this
+product's dependency model. AB#7349 may extract useful entity concepts, monitoring scenarios,
+signals, thresholds, alert knowledge, and lessons from its guide and exported elements. Every reused
+idea must be checked against current Windows Server behavior, current Microsoft documentation, and
+our lab results.
+
+The new Management Pack will not import, extend, override, or require the Microsoft Hyper-V 2019
+MP. It will define and ship its own supported classes, discoveries, monitors, rules, knowledge, and
+views. Research must document semantic provenance, but implementation must use this project's own
+namespaces and independently validated workflows.
 
 ## Noise and recovery rules
 

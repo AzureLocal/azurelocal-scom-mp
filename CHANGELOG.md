@@ -17,6 +17,14 @@
 * Add ADRs 0021–0023 for the platform split, SCOM packaging boundary, and Hyper-V Azure Monitor go/no-go gate.
 * Add the phase-one Hyper-V SCOM monitoring research plan, exhaustive inventory schema, threshold
   policy, and ADO child spikes AB#7343–AB#7353.
+* Treat Network ATC as the preferred baseline for eligible Windows Server 2025 Datacenter Hyper-V
+  clusters, with separate manual and SCVMM/SDN-managed networking paths.
+* Define the Microsoft Hyper-V 2019 Management Pack as research evidence only, with no import,
+  extension, override, or runtime dependency in the new Hyper-V MP.
+* Split the design documentation into explicit Azure Local and Hyper-V platform sections, each
+  separated into SCOM and Azure Monitor design lanes.
+* Add ADR 0025 for Hyper-V network-management authority and the Network ATC, SCVMM/SDN, and manual
+  networking variants.
 
 ## [0.2.1](https://github.com/AzureLocal/azurelocal-scom-mp/compare/azurelocal-scom-mp-v0.2.0...azurelocal-scom-mp-v0.2.1) (2026-05-05)
 

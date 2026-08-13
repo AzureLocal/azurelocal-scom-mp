@@ -7,9 +7,9 @@ description: SCOM Management Pack for Azure Local infrastructure.
 
 > **Azure Local / SCOM** — the committed SCOM delivery surface for Azure Local.
 
-This section covers **how the design is implemented** as a SCOM Management Pack. The
-*design itself* — entity model, signal catalog, rollup policy, customization — is
-track-agnostic and lives in [Design](../design/index.md). Read that first.
+This section covers **how the Azure Local design is implemented** as a SCOM Management Pack. Read
+the [Azure Local SCOM design lane](../design/azure-local/scom-mp.md) first. Shared principles do not
+make this platform's entity model, signals, or discoveries applicable to the Hyper-V MP.
 
 ::: info Authoring has not started
 The Azure Local design baseline is accepted. Shared SCOM packaging is gated by proposed ADR 0022
@@ -36,7 +36,7 @@ Looking for the other SCOM product? See the planned
 
 ## Where to start
 
-1. [Design overview](../design/index.md) — the conceptual foundation
+1. [Azure Local SCOM design](../design/azure-local/scom-mp.md) — the governing design lane
 2. [SCOM class hierarchy ADR](../design/decisions/0005-scom-class-hierarchy.md)
 3. [Discovery strategy ADR](../design/decisions/0004-scom-discovery-strategy.md)
 4. [Customization](../design/customization.md) — how operators tune the SCOM track

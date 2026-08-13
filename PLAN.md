@@ -39,7 +39,7 @@ Epic AB#7313 — Deliver Azure Local health monitoring
 Epic AB#7314 — Deliver Hyper-V health monitoring
 ├── Feature AB#7317 — Deliver the Hyper-V SCOM Management Pack
 │   ├── Story AB#7327 — Research and define the Hyper-V SCOM monitoring catalog
-│   │   ├── Tasks AB#7343–AB#7349 — Scope, raw inventories, and incumbent MP gaps
+│   │   ├── Tasks AB#7343–AB#7349 — Scope, raw inventories, and prior-MP research inputs
 │   │   ├── Tasks AB#7350–AB#7351 — SCOM workflow and threshold engineering
 │   │   ├── Task AB#7352 — Lab and fault validation
 │   │   └── Task AB#7353 — Curate the authoring-ready default catalog
@@ -118,6 +118,9 @@ Deliver:
 - Windows Server, Hyper-V, Failover Clustering, SCOM, and optional SCVMM support matrix;
 - topology for standalone hosts, clusters, virtual switches, storage, replica, and VMs;
 - supported PowerShell, CIM/WMI, event, service, and performance sources;
+- Network ATC as the preferred eligible-cluster baseline plus manual and SCVMM/SDN alternatives;
+- useful signal and monitor concepts from the Microsoft Hyper-V 2019 MP, treated as research only
+  with no package, class, or runtime dependency;
 - lab fixtures and negative cases; and
 - proposed scope, discovery, and signal ADRs.
 

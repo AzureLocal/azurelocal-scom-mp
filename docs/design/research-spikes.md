@@ -21,6 +21,8 @@ flowchart LR
     P[Platform split decision<br/>ADR 0021] --> S1[Shared packaging spike<br/>AB#7319]
     S1 --> Pkg[Packaging decision<br/>ADR 0022]
     P --> S2[Hyper-V SCOM catalog research<br/>AB#7327]
+    P --> Net[Hyper-V network authority<br/>ADR 0025]
+    Net --> S2
     S2 --> HV[Hyper-V topology ADR<br/>number assigned after spike]
     P --> S3[Arc-enabled SCVMM spike<br/>AB#7331]
     S3 --> S4[Telemetry proof<br/>AB#7332]
@@ -39,8 +41,8 @@ shown on the [Hyper-V monitoring research](../hyper-v/monitoring-research.md) pa
 | [AB#7345](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7345) | Hyper-V, hypervisor, and VM signals |
 | [AB#7346](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7346) | Failover Cluster, quorum, and CSV signals |
 | [AB#7347](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7347) | Storage, VHD/VHDX, and Replica signals |
-| [AB#7348](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7348) | Hyper-V virtual networking signals |
-| [AB#7349](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7349) | Existing Microsoft and commercial MP coverage and gaps |
+| [AB#7348](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7348) | Network ATC, manual, and SCVMM/SDN Hyper-V networking signals |
+| [AB#7349](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7349) | Existing Microsoft MP research inputs; no runtime dependency or reuse of its package |
 | [AB#7350](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7350) | Supported SCOM workflow mapping and cost |
 | [AB#7351](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7351) | Threshold, duration, recovery, and tuning policy |
 | [AB#7352](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7352) | Lab source, fault, latency, recovery, and overhead validation |

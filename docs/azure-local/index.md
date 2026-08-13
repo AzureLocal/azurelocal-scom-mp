@@ -12,9 +12,10 @@ Azure Local is a first-class platform track with two committed delivery surfaces
 | **SCOM Management Pack** | Azure Local classes, discoveries, monitors, rules, health rollups, overrides, views, packaging, and operator guidance | Planned | [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7315) |
 | **Azure Monitor Health Models** | Service Groups, entities, signals, health objectives, alerts, workbooks, and Bicep deployment | Planned | [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7316) |
 
-Both surfaces implement the Azure Local topology already documented in the shared
-[Design](../design/index.md) section. They use the same logical entities, health dimensions,
-rollup rules, and signal names where the underlying platforms expose equivalent data.
+Both surfaces implement the Azure Local topology documented in the
+[Azure Local design](../design/azure-local/index.md) section. They use the same logical entities,
+health dimensions, rollup rules, and signal names where the delivery surfaces expose equivalent
+data.
 
 ::: info Azure Local delivery epic
 Azure DevOps [Epic AB#7313](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7313)
@@ -35,8 +36,10 @@ companion packs can depend on this platform health model.
 
 ## Start here
 
-1. Read [Scope and topology](../design/scope-topology.md).
-2. Explore the [Azure Local SCOM Management Pack](../scom-mp/index.md).
-3. Review the [Azure Local Azure Monitor Health Model](../azure-monitor/index.md) and its
+1. Choose the [Azure Local SCOM design](../design/azure-local/scom-mp.md) or
+   [Azure Monitor Health Models design](../design/azure-local/azure-monitor.md).
+2. Read [Scope and topology](../design/scope-topology.md).
+3. Explore the [Azure Local SCOM Management Pack](../scom-mp/index.md).
+4. Review the [Azure Local Azure Monitor Health Model](../azure-monitor/index.md) and its
    [prerequisites](../azure-monitor/prerequisites.md).
-4. Follow delivery status on the [Roadmap](../project/roadmap.md).
+5. Follow delivery status on the [Roadmap](../project/roadmap.md).
