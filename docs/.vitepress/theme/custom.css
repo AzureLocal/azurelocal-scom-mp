@@ -1,0 +1,12 @@
+/* Keep the landing-page brand on one line. On documentation pages with a
+ * sidebar, use the narrower title column as a deliberate two-line lockup. */
+@media (min-width: 960px) {
+  .VPNavBarTitle.has-sidebar .title > span {
+    line-height: 1.15;
+    white-space: normal;
+  }
+
+  .VPNavBarTitle.has-sidebar .brand-line {
+    display: block;
+  }
+}

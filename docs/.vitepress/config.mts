@@ -47,7 +47,7 @@ export default defineConfig({
       src: '/assets/images/azurelocal-scom-mp-icon.svg',
       alt: 'Hybrid Infrastructure Health Monitoring',
     },
-    siteTitle: 'Hybrid Infrastructure Health Monitoring',
+    siteTitle: '<span class="brand-line">Hybrid Infrastructure</span> <span class="brand-line">Health Monitoring</span>',
 
     nav: [
       { text: 'Home', link: '/' },

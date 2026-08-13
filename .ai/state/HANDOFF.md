@@ -33,12 +33,16 @@
 - **Design navigation:** Reorganized design platform first, then delivery surface. Azure Local and
   Hyper-V each have explicit SCOM and Azure Monitor design lanes; Hyper-V Azure Monitor remains
   conditional. Added an ADR scope map so Azure Local ADRs are not silently applied to Hyper-V.
+- **Documentation title:** The sidebar documentation layout renders the brand as two lines—Hybrid
+  Infrastructure, then Health Monitoring—so it stays inside the title column and does not cover
+  search. The landing-page header remains a single line.
 - **Architecture:** Added accepted ADR 0025 for Hyper-V network-management authority. It preserves
   accepted ADR 0021 as an immutable historical record while superseding its Network ATC
   implication.
 - **Validation:** VitePress production build passed and rendered all eight new design pages plus
   ADR 0025. Markdownlint passed across all changed Markdown, `git diff --check` passed, and the
-  changed-file secret scan found no matches.
+  changed-file secret scan found no matches. The scoped navigation-title CSS also passed a fresh
+  VitePress production build.
 - **Branch:** `main`.
 - **Next steps:** Run AB#7343 and the raw inventory Tasks AB#7344–AB#7349. Preserve raw enumeration
   output even when a signal is later rejected. Do not author AB#7328 or AB#7329 until AB#7353 and
