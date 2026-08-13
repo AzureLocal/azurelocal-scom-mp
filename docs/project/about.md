@@ -22,7 +22,7 @@ records the migration decision.
 | Azure Local | SCOM Management Pack | Committed |
 | Azure Local | Azure Monitor Health Models | Committed |
 | Hyper-V | SCOM Management Pack | Committed |
-| Hyper-V | Azure Monitor through Arc-enabled SCVMM | Conditional roadmap item; research gate |
+| Hyper-V | Azure Monitor through Arc-enabled SCVMM and Arc-enabled hosts | Constrained development baseline; live validation and parity gates |
 
 ## Project goals
 

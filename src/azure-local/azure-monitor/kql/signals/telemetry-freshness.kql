@@ -1,0 +1,8 @@
+// Research query: validate table and resource identity in the target Azure Local environment.
+// This query is not assigned to the Health Model until lab evidence confirms the schema.
+Heartbeat
+| where TimeGenerated > ago(15m)
+| summarize LastHeartbeat=max(TimeGenerated), ReportingMachines=dcount(Computer)
+| extend MinutesSinceLastHeartbeat=datetime_diff('minute', now(), LastHeartbeat)
+| project FreshnessMinutes=MinutesSinceLastHeartbeat, ReportingMachines
+

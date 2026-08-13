@@ -1,7 +1,8 @@
 # ADR 0023 — Hyper-V Azure Monitor through Arc-enabled SCVMM
 
-**Status:** Proposed  
-**Date:** 2026-08-12  
+**Status:** Accepted — constrained go
+
+**Date:** 2026-08-13
 **Decision gate:** Arc-enabled SCVMM inventory and telemetry proof-of-concept research
 
 ## Context
@@ -15,26 +16,38 @@ The project needs evidence for the ARM resource graph, guest-management path, te
 Health Models entity design, identity and RBAC model, network requirements, preview constraints,
 latency, cost, scale, and lifecycle operations.
 
-## Proposed decision
+## Decision
 
-Keep the Hyper-V Azure Monitor Feature in the conditional future roadmap. Select **go**, **defer**,
-or **no-go** only after the two spikes complete and the evidence is reviewed.
+Proceed with a constrained development track. Arc-enabled SCVMM is mandatory for management-plane
+inventory, but it is not sufficient for host-fabric monitoring. Every Hyper-V host included in
+health evaluation must also be represented as an Arc-enabled Server, have Azure Monitor Agent, and
+be associated with the solution's evidence-backed Data Collection Rule.
 
-A go decision must define:
+The supported development boundary is:
 
-- mandatory SCVMM, Arc Resource Bridge, Connected Machine agent, AMA, and DCR prerequisites;
-- supported host, cluster, network, storage, and VM entity coverage;
-- the minimum viable signal catalog and known parity gaps with SCOM;
-- supported Azure regions and Health Models API versions;
+- Arc-enabled SCVMM supplies the VMM server, cloud, network, template, and VM inventory projection;
+- Arc-enabled Server plus AMA/DCR supplies guest-OS telemetry from the Hyper-V hosts;
+- the first Health Model covers management connectivity, host heartbeat and CPU, selected
+  Failover Clustering events, and telemetry coverage;
+- storage, virtual-switch, Network ATC, SDN, Replica, and full cluster-state parity remain research
+  gaps until supported telemetry is proven;
+- VM guest/workload health is outside the Hyper-V infrastructure product even when inventory is
+  available; and
+- Health Models API `2025-05-03-preview` remains a preview dependency.
+
+Release still requires:
+
+- supported Azure and Arc-enabled SCVMM regions;
 - identity, RBAC, network, scale, cost, upgrade, and removal contracts; and
-- fault-injection and release validation gates.
+- lab fault-injection, telemetry latency, state propagation, recovery, and teardown evidence.
 
 ## Current constraints
 
 - Azure Arc-enabled SCVMM inventory and Azure Arc-enabled Servers guest management are distinct
   capabilities and must be evaluated separately.
 - Undocumented APIs or unsupported scraping are not acceptable product dependencies.
-- No implementation story may become active before this ADR is accepted with a go decision.
+- An SCVMM inventory object does not prove that a corresponding health signal exists.
+- A development baseline may proceed; it must not be described as feature-parity or production-ready.
 
 ## References
 

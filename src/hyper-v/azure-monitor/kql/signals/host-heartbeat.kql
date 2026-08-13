@@ -1,0 +1,5 @@
+// Replace the resource ID when testing interactively. The Bicep module renders one definition per host.
+let HostResourceId = '/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/replace/providers/Microsoft.HybridCompute/machines/replace';
+let LastSeen = toscalar(Heartbeat | where _ResourceId =~ HostResourceId | summarize max(TimeGenerated));
+print FreshnessMinutes=datetime_diff('minute', now(), coalesce(LastSeen, datetime(1970-01-01)))
+

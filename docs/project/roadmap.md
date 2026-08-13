@@ -19,15 +19,15 @@ flowchart TD
 
     HV[Hyper-V monitoring]
     HV --> HVS[Hyper-V SCOM MP]
-    HV -. conditional .-> HVA[Hyper-V Azure Monitor via Arc-enabled SCVMM]
+    HV --> HVA[Hyper-V Azure Monitor via Arc-enabled SCVMM]
 ```
 
 | Epic | Delivery feature | Commitment | Status |
 |---|---|---|---|
-| Azure Local monitoring | Azure Local SCOM MP | Committed | Planned |
-| Azure Local monitoring | Azure Local Azure Monitor | Committed | Planned |
+| Azure Local monitoring | Azure Local SCOM MP | Committed | Functional development MP authored; release certification active |
+| Azure Local monitoring | Azure Local Azure Monitor | Committed | Preview development baseline authored; live validation active |
 | Hyper-V monitoring | Hyper-V SCOM MP | Committed | Functional development MP authored; release certification active |
-| Hyper-V monitoring | Hyper-V Azure Monitor through Arc-enabled SCVMM | Conditional | Research gate; future roadmap |
+| Hyper-V monitoring | Hyper-V Azure Monitor through Arc-enabled SCVMM | Constrained | Development baseline authored; lab and parity gates active |
 
 ## Now — certification and evidence gates
 
@@ -36,11 +36,12 @@ These items unblock safe implementation:
 | Item | Outcome | Dependency |
 |---|---|---|
 | Independent SCOM packaging contract | Validate independent namespaces, artifacts, signing, coexistence, upgrade, and removal behavior | Implements accepted ADR 0022 for both SCOM Features |
+| Azure Local SCOM release certification | Resolve official dependencies, run SDK verification, test-seal, import, and exercise discovery, health, DA, lifecycle, coexistence, and removal | Gates the first Azure Local MP release |
 | Hyper-V SCOM monitoring research | Validate and extend the implemented catalog through exhaustive signal inventory, workflow/threshold research, lab evidence, and curated defaults | Active; gates released defaults and later coverage |
 | Hyper-V SCOM release certification | Verify dependencies and schema, test-seal, import in standalone/cluster labs, exercise fault/recovery and lifecycle, then sign | Gates the first public MP release |
 | Azure Local Health Models revalidation | Revalidate APIs, preview limits, identity, and signal contracts | Gates Azure Local Azure Monitor authoring |
-| Arc-enabled SCVMM inventory spike | Prove inventory and guest-management boundaries | Precedes telemetry proof |
-| Hyper-V Health Models feasibility spike | Prove or disprove a useful supported entity and signal model | Precedes go/no-go ADR |
+| Arc-enabled SCVMM inventory spike | Validate inventory identity and guest-management boundaries in the lab | Initial desk research complete |
+| Hyper-V Health Models feasibility | Validate the authored model, DCR, live schemas, fault behavior, gaps, scale, and cost | Constrained go recorded; release gate active |
 
 See [Research spikes](../design/research-spikes.md) for the evidence contract.
 The complete phase-one Hyper-V breakdown is published in
@@ -50,15 +51,22 @@ The complete phase-one Hyper-V breakdown is published in
 
 ### Azure Local SCOM Management Pack
 
-1. Author classes, discoveries, and DA membership.
-2. Author monitoring, DA rollups/operator surfaces, and overrides.
-3. Validate, package, and document the independent release.
+1. ~~Author classes, discoveries, and DA membership.~~ Complete in the development baseline.
+2. ~~Author monitoring, DA rollups/operator surfaces, and overrides.~~ Complete in the development baseline.
+3. Supply official SCOM dependency MPs and run Microsoft SDK verification.
+4. Test-seal and clean-import the Library, Discovery, Monitoring, Presentation, and optional
+   Reporting artifacts.
+5. Validate topology, Health Service faults, Network ATC, lifecycle state, DA population/rollup,
+   tuning, maintenance, scale, upgrade, coexistence, and removal; then sign and publish.
 
 ### Azure Local Azure Monitor
 
-1. Author entities and signals.
-2. Implement deployment, alerts, and workbooks.
-3. Validate and document the release.
+1. ~~Revalidate the current preview API and initial signal contract.~~ Complete for the development baseline.
+2. ~~Author the initial entities, relationships, managed identity, documented metric signals,
+   state alerts, parameters, research KQL, and workbook.~~ Complete and Bicep-compiling.
+3. Validate supported regions, provider registration, Service Group options, live metric definitions,
+   Log Analytics schemas, RBAC, what-if, deployment, fault/recovery, cost, and teardown.
+4. Extend only with evidence-backed signals, then document and publish the preview release.
 
 ### Hyper-V SCOM Management Pack
 
@@ -74,28 +82,28 @@ The execution order between the three committed Features will be set after resea
 credible effort and lab-capacity estimates. Adding Hyper-V does not silently compress the existing
 Azure Local work.
 
-## Later — conditional Hyper-V Azure Monitor
+## In development — constrained Hyper-V Azure Monitor
 
-The Hyper-V Azure Monitor Feature stays deferred until:
+The Hyper-V Azure Monitor Feature has a constrained development go. Release remains blocked until:
 
 1. Arc-enabled SCVMM inventory and guest management are proven.
 2. Supported telemetry and Health Models behavior are proven.
-3. [ADR 0023](../design/decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md)
-   records a go decision.
-4. The conditional implementation plan is approved and activated.
+3. The DCR and authored Health Model pass live deployment, identity, schema, fault/recovery, cost,
+   scale, and removal tests.
+4. The supported scope and parity gaps are reviewed and accepted.
 
-A defer or no-go result is a valid outcome. The roadmap will not promise Azure Monitor parity where
+A future defer or no-go remains a valid outcome if lab evidence fails. The roadmap will not promise Azure Monitor parity where
 Microsoft-supported inventory or telemetry cannot provide it.
 
-## Later — ServiceNow integrations
+## Integration development — ServiceNow
 
 ServiceNow integration is an optional cross-cutting roadmap area with separate paths for each
 monitoring solution. It does not change the independence of the four solution boundaries.
 
 | Source solution | Preferred integration candidate | Commitment |
 |---|---|---|
-| Azure Local SCOM MP | ServiceNow SCOM Events connector through a Windows MID Server | Research and proof of concept |
-| Hyper-V SCOM MP | ServiceNow SCOM Events connector through a Windows MID Server | Research after MP alert contracts stabilize |
+| Azure Local SCOM MP | ServiceNow SCOM Events connector through a Windows MID Server | Development profile/mapping/tests complete; live proof pending |
+| Hyper-V SCOM MP | ServiceNow SCOM Events connector through a Windows MID Server | Development profile/mapping/tests complete; live proof pending |
 | Azure Local Azure Monitor | Azure Monitor action group using Secure Webhook and the common alert schema | Research and proof of concept |
 | Hyper-V Azure Monitor | Same Azure Monitor pattern | Conditional on the parent Hyper-V Azure Monitor go decision |
 
@@ -123,9 +131,9 @@ bidirectional state changes, rate limits, failure handling, and audit requiremen
 using SCOM and Azure Monitor together must select an authoritative source for each condition or
 prove a correlation key that prevents duplicate ServiceNow alerts and incidents.
 
-See the [ServiceNow integration roadmap](../integrations/servicenow.md) for the candidate
-architectures, evidence gates, and planned deliverables. This is a **Later** initiative, so no
-committed monitoring work moves or loses capacity in this roadmap update.
+See the [ServiceNow integration roadmap](../integrations/servicenow.md) and implemented
+[SCOM-to-ServiceNow guide](../integrations/scom-servicenow.md). Azure Monitor-to-ServiceNow remains
+later work; the SCOM connector development baseline does not change either MP's release boundary.
 
 ## Cross-cutting release outcomes
 

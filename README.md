@@ -12,7 +12,7 @@ alerts, customization, and lifecycle—not merely a list of metric thresholds.
 | Platform | SCOM Management Pack | Azure Monitor Health Models |
 |---|---|---|
 | **Azure Local** | Committed | Committed |
-| **Hyper-V** | Committed | Conditional future track through Azure Arc-enabled SCVMM |
+| **Hyper-V** | Committed | Constrained development through Azure Arc-enabled SCVMM and Arc-enabled Servers |
 
 The platforms share SCOM authoring patterns and health semantics where appropriate. Their topology,
 discoveries, signals, prerequisites, support matrices, and release boundaries remain explicit.
@@ -25,8 +25,9 @@ To preview or contribute to the documentation, install:
 - Node.js 20; and
 - PowerShell 7 or later.
 
-Product implementation prerequisites will be documented per platform and delivery surface after
-the current research and architecture gates complete.
+Product implementation prerequisites are documented per platform and delivery surface. A functional
+development baseline is not a production release until its platform-specific certification gates
+pass.
 
 ## Documentation
 
@@ -37,7 +38,7 @@ The `docs/` folder is a [VitePress](https://vitepress.dev/) site published at
 - the shared health-model design, signal catalog, and Architecture Decision Records;
 - Azure Local SCOM and Azure Monitor implementation guidance;
 - the planned Hyper-V SCOM Management Pack;
-- the research-gated Hyper-V Azure Monitor path through Arc-enabled SCVMM; and
+- the constrained Hyper-V Azure Monitor path through Arc-enabled SCVMM and Arc-enabled hosts; and
 - an Azure DevOps-backed [roadmap](docs/project/roadmap.md) and [implementation plan](PLAN.md).
 
 Preview the site locally:
@@ -75,7 +76,8 @@ hybrid-health-monitoring/
 ├── diagrams/drawio/         # Editable diagram sources
 ├── src/                     # Platform-first product source
 │   ├── azure-local/         # Azure Local SCOM and Azure Monitor solutions
-│   └── hyper-v/             # Hyper-V SCOM and reserved Azure Monitor solutions
+│   ├── hyper-v/             # Hyper-V SCOM and constrained Azure Monitor solutions
+│   └── integrations/        # Optional connector-owned profiles, mappings, and validation
 ├── PLAN.md                  # Executable delivery plan
 ├── REFERENCES.md            # Annotated source library
 └── STANDARDS.md             # Governance pointers
@@ -88,11 +90,16 @@ ADR 0022 prohibits shared SCOM runtime elements.
 
 ## Current status
 
-- The Azure Local design baseline and VitePress site are complete.
+- The Azure Local SCOM design, research catalog, deterministic source build, DA, monitoring,
+  presentation, reporting, and customer override baseline are implemented.
 - The platform-first roadmap and Azure DevOps hierarchy are established.
-- Hyper-V MP/DA architecture validation, monitoring research, and Arc-enabled SCVMM feasibility are
-  the next research gates.
-- Product authoring has not started.
+- The independent Hyper-V SCOM functional development baseline is also implemented.
+- Both SCOM products still require official dependency resolution, SDK verification, sealing,
+  signing, and SCOM lab certification before release.
+- Independent Azure Local and constrained Hyper-V Azure Monitor Health Model development baselines
+  compile with Bicep; live API, identity, telemetry, fault, cost, and teardown evidence remains.
+- The optional SCOM-to-ServiceNow integration has separate product allow-list profiles, a mapping
+  contract, administration guidance, and passing offline validation; live connector proof remains.
 
 ## Contributing
 

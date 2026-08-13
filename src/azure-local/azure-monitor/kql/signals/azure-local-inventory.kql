@@ -1,0 +1,7 @@
+// Research query: inspect Azure Local/Arc inventory represented in the workspace.
+// Confirm table availability and resource identifiers before using this as a health signal.
+Heartbeat
+| where TimeGenerated > ago(30m)
+| summarize LastSeen=max(TimeGenerated) by _ResourceId, Computer, OSType
+| order by Computer asc
+

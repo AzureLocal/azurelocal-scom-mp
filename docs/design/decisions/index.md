@@ -13,13 +13,13 @@ Hyper-V simply because both products use SCOM or share health terminology.
 
 | Design lane | Governing decisions |
 |---|---|
-| Shared portfolio architecture | ADRs 0020, 0021, 0024, and 0030 |
+| Shared portfolio architecture | ADRs 0020, 0021, 0024, 0030, and integration boundary ADR 0038 |
 | Shared SCOM product boundaries | ADR 0022 requires independent runtime products; ADR 0026 requires platform-owned DAs |
 | Azure Local platform baseline | ADRs 0001–0003, 0007–0009, and 0014–0018 |
-| Azure Local SCOM | ADRs 0004, 0005, 0011, 0022, and 0026 |
-| Azure Local Azure Monitor | ADRs 0006, 0010, 0012, 0013, and 0019 |
+| Azure Local SCOM | ADRs 0022, 0026, and 0032–0035 supersede or refine the earlier Azure Local SCOM baseline |
+| Azure Local Azure Monitor | ADRs 0006, 0010, 0012, 0013, 0019, and current preview refinement ADR 0036 |
 | Hyper-V platform and SCOM | Accepted ADRs 0022, 0025–0029, and 0031 for product boundary, network authority, DA, package, object/discovery, health/DA, and authoring-toolchain architecture |
-| Hyper-V Azure Monitor | ADR 0023, proposed go/defer/no-go gate |
+| Hyper-V Azure Monitor | ADR 0023 constrained go and ADR 0037 development architecture |
 
 Cross-cutting lifecycle ADRs can provide reusable patterns, but each platform and delivery lane
 must still validate its applicable topology, dependencies, artifacts, tests, and release contract.
@@ -50,7 +50,7 @@ must still validate its applicable topology, dependencies, artifacts, tests, and
 | [0020](./0020-vitepress-documentation-platform.md) | Documentation platform — VitePress with Mermaid and GitHub Pages | Accepted |
 | [0021](./0021-platform-and-delivery-track-architecture.md) | Platform-first architecture — Azure Local and Hyper-V, split by SCOM and Azure Monitor delivery surfaces | Accepted |
 | [0022](./0022-scom-management-pack-packaging-boundaries.md) | Independent SCOM packaging — no shared runtime MP dependencies | Accepted |
-| [0023](./0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) | Hyper-V Azure Monitor through Arc-enabled SCVMM — go, defer, or no-go gate | Proposed |
+| [0023](./0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) | Hyper-V Azure Monitor through Arc-enabled SCVMM — constrained go | Accepted |
 | [0024](./0024-repository-and-publishing-identity.md) | Repository and publishing identity — Hybrid Solutions Cloud and labs.hybridsolutions.cloud | Accepted |
 | [0025](./0025-hyper-v-network-management-authority.md) | Hyper-V network-management authority — prefer Network ATC when eligible; distinguish SCVMM/SDN and manual paths | Accepted |
 | [0026](./0026-platform-owned-scom-distributed-applications.md) | Platform-owned SCOM Distributed Applications — separate Azure Local and Hyper-V service roots | Accepted |
@@ -59,6 +59,13 @@ must still validate its applicable topology, dependencies, artifacts, tests, and
 | [0029](./0029-hyper-v-health-alert-and-da-rollup.md) | Hyper-V health, alert, and DA rollup — evidence-driven state, actionable alerts, and topology-aware service health | Accepted |
 | [0030](./0030-platform-first-source-tree.md) | Platform-first source tree — Azure Local and Hyper-V, each split into SCOM and Azure Monitor solution roots | Accepted |
 | [0031](./0031-hyper-v-mp-authoring-toolchain.md) | Hyper-V Management Pack authoring toolchain — canonical XML/fragments, deterministic build, Microsoft verification/sealing, and SCOM lab authority | Accepted |
+| [0032](./0032-azure-local-scom-local-runtime-boundary.md) | Azure Local SCOM local runtime boundary — no Azure dependency in the core product | Accepted |
+| [0033](./0033-azure-local-scom-management-pack-decomposition.md) | Azure Local Management Pack decomposition — five independent artifacts and customer-owned overrides | Accepted |
+| [0034](./0034-azure-local-object-discovery-and-da-architecture.md) | Azure Local object, discovery, and Distributed Application architecture | Accepted |
+| [0035](./0035-azure-local-health-alert-and-rollup-architecture.md) | Azure Local health, alert, and rollup architecture | Accepted |
+| [0036](./0036-azure-local-azure-monitor-health-model-v1.md) | Azure Local Azure Monitor Health Model v1 — preview resource graph, identity, entities, and initial signals | Accepted |
+| [0037](./0037-hyper-v-azure-monitor-health-model-architecture.md) | Hyper-V Azure Monitor Health Model — SCVMM inventory plus Arc-enabled host telemetry | Accepted |
+| [0038](./0038-scom-servicenow-connector-boundary.md) | SCOM-to-ServiceNow connector boundary — optional MID Server connector with product allow-lists | Accepted |
 
 ## When to write an ADR
 

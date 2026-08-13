@@ -16,8 +16,9 @@
   design is intentionally narrow, and accepted Azure Local ADRs are not inherited by Hyper-V
   without research and an explicit successor decision.
 - Azure Local SCOM and Azure Monitor plus Hyper-V SCOM are committed delivery surfaces. Hyper-V
-  Azure Monitor is conditional on Arc-enabled SCVMM inventory/guest-management and telemetry lab
-  spikes, followed by an accepted go/no-go ADR.
+  Azure Monitor is an accepted constrained development track: Arc-enabled SCVMM supplies inventory,
+  while Arc-enabled Server plus AMA and DCRs supply host telemetry. Unsupported fabric domains must
+  remain Unknown instead of receiving inferred health.
 - Azure Local and Hyper-V are completely independent SCOM runtime products. Accepted ADR 0022
   prohibits shared sealed libraries, classes, namespaces, Distributed Applications, packages,
   versions, or cross-product MP dependencies. Research and non-runtime engineering practices may
@@ -50,6 +51,18 @@
   source/build path. Microsoft SDK verification, MPVerify, sealing/signing, and SCOM lab import are
   authoritative release gates; Silect authoring tools are optional aids rather than source-of-truth
   or runtime dependencies.
+- Accepted ADRs 0032–0035 define the Azure Local SCOM local-runtime boundary, five-artifact package
+  decomposition, staged object discovery and platform-owned Distributed Application, and
+  evidence-driven health/alert/rollup policy. The development baseline is implemented; SDK,
+  sealing/signing, and SCOM lab gates remain.
+- Accepted ADR 0036 defines an independent Azure Local Azure Monitor Health Model. The first Bicep
+  baseline uses documented Azure Local platform metrics and leaves unproven domains Unknown.
+- Accepted ADRs 0023 and 0037 define the constrained Hyper-V Azure Monitor Health Model. Arc-enabled
+  SCVMM is not treated as a complete health plane and does not replace Arc-enabled Server guest
+  telemetry.
+- Accepted ADR 0038 defines the SCOM-to-ServiceNow boundary. The Management Packs remain
+  connector-neutral; ServiceNow consumes alerts through separate product allowlists and uses SCOM
+  AlertId as the source identity. Metrics ingestion and bidirectional updates are opt-in policies.
 - Public documentation and repository text must not expose internal work-item identifiers or direct
   board links. Use descriptive public milestones and research-gate names instead.
 - ServiceNow integration is optional and solution-owned. SCOM and Azure Monitor integrations do not
@@ -57,6 +70,5 @@
   correlation decision. New Azure Monitor work targets Secure Webhook rather than legacy ITSM actions.
 - Product source is platform first and solution second under `src/azure-local/{scom-mp,azure-monitor}`
   and `src/hyper-v/{scom-mp,azure-monitor}`. ADR 0030 is accepted and supersedes obsolete source-path
-  examples in ADRs 0013–0015 without changing their substantive decisions. Hyper-V Azure Monitor is
-  a reserved boundary only until ADR 0023 records a go decision. SquaredUp artifacts live inside
-  their owning solution.
+  examples in ADRs 0013–0015 without changing their substantive decisions. SquaredUp artifacts live
+  inside their owning solution.

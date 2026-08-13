@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "namespace": "HybridSolutionsCloud.AzureLocal",
+  "developmentVersion": "0.1.0.0",
+  "status": "Development",
+  "artifacts": [
+    {
+      "id": "HybridSolutionsCloud.AzureLocal.Library",
+      "source": "fragments/library/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.AzureLocal.Library.xml",
+      "releaseForm": "sealed-mp",
+      "required": true
+    },
+    {
+      "id": "HybridSolutionsCloud.AzureLocal.Discovery",
+      "source": "fragments/discovery/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.AzureLocal.Discovery.xml",
+      "releaseForm": "sealed-mp",
+      "required": true
+    },
+    {
+      "id": "HybridSolutionsCloud.AzureLocal.Monitoring",
+      "source": "fragments/monitoring/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.AzureLocal.Monitoring.xml",
+      "releaseForm": "sealed-mp",
+      "required": true
+    },
+    {
+      "id": "HybridSolutionsCloud.AzureLocal.Presentation",
+      "source": "fragments/presentation/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.AzureLocal.Presentation.xml",
+      "releaseForm": "sealed-mp",
+      "required": true
+    },
+    {
+      "id": "HybridSolutionsCloud.AzureLocal.Reporting",
+      "source": "fragments/reporting/ManagementPack.xml.template",
+      "output": "HybridSolutionsCloud.AzureLocal.Reporting.xml",
+      "releaseForm": "optional-sealed-mp",
+      "required": false
+    }
+  ],
+  "prohibitedReferences": [
+    "Microsoft.Windows.HyperV.2019",
+    "HybridSolutionsCloud.HyperV"
+  ]
+}

@@ -1,0 +1,6 @@
+// The Bicep module injects the expected Arc-enabled host resource IDs into its signal definition.
+Event
+| where EventLog =~ 'Microsoft-Windows-FailoverClustering/Operational'
+| where EventLevelName in~ ('Critical', 'Error')
+| summarize EventCount=count() by _ResourceId, EventID, RenderedDescription
+

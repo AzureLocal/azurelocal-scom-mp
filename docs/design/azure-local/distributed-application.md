@@ -8,8 +8,8 @@ description: Azure Local SCOM Distributed Application membership, health rollup,
 The Azure Local SCOM product ships its own Distributed Application. It does not reference the
 Hyper-V MP or any shared runtime library.
 
-The root class is **`AzureLocal.Deployment`**, as accepted in
-[ADR 0005](../decisions/0005-scom-class-hierarchy.md#distributed-application). It extends
+The root class is **`HybridSolutionsCloud.AzureLocal.Service`**, as accepted in
+[ADR 0034](../decisions/0034-azure-local-object-discovery-and-da-architecture.md). It extends
 `Microsoft.SystemCenter.Service` and represents one monitored Azure Local deployment. Its purpose
 is to answer one operator question: **Is this Azure Local deployment healthy?**
 
@@ -17,9 +17,11 @@ is to answer one operator question: **Is this Azure Local deployment healthy?**
 
 | DA branch | Membership | Rollup intent |
 |---|---|---|
-| Infrastructure | Azure Local cluster, nodes, storage pools, volumes, physical infrastructure, Network ATC intents, and lifecycle state | Infrastructure health for the deployment; worst-state default with documented exceptions |
-| Platform | Arc Resource Bridge/MOC, AKS Arc platform, DCMA/cloud agents, and registration services | Platform-service health; only deployed services participate |
-| Azure services | Azure Local ARM resource, Arc machines, Custom Location, identity, Key Vault, storage, RBAC, DCR, workspace, and related Azure dependencies | Azure-side availability and configuration health |
+| Compute | Cluster service, node membership, quorum, CPU, and memory | Compute and cluster-coordination health |
+| Storage | Health Service faults, pools, volumes/CSVs, and physical disks | Storage availability, configuration, capacity, and root-cause health |
+| Network | Network ATC intent status | Host-network intent convergence and configuration health |
+| Azure integration | Local registration state and locally installed Arc/MOC platform services | The node-side Azure integration boundary; Azure resource health remains outside this MP |
+| Lifecycle | Locally observable solution-update state | Readiness and active-update health |
 | Monitoring pipeline | SCOM agents, management-server probes, discovery freshness, and required collection paths from ADR 0018 | Independent pipeline health so stale green infrastructure cannot hide failed monitoring |
 
 The DA instance and component membership are authored in Management Pack XML and populated through
@@ -44,17 +46,17 @@ behavior must be validated rather than allowed to resolve silently to Healthy.
 
 ## Required product artifacts
 
-- DA root and component-group class XML in the Azure Local sealed library;
+- DA root and six component-group class definitions in the Azure Local Library MP;
 - dynamic relationship and membership discoveries;
 - aggregate and dependency monitors with upgrade-safe overrides where supported;
 - Health Explorer, diagram, state, alert, and task views scoped to the deployment;
-- report and service-level objective targeting for availability and selected performance rules;
+- optional report and service-level objective targeting for availability and selected performance rules;
 - optional SquaredUp Dashboard Server views that target the Azure Local DA; and
 - import, population, fault, recovery, upgrade, coexistence, and removal tests.
 
-The [Azure Local health-rollup tree](../../scom-mp/diagrams/health-tree.md) is the current visual
-reference. Authoring begins after the SCOM class, discovery, packaging, and validation contracts are
-ready.
+The [health and alert architecture](health-and-alert-architecture.md) is the current visual and
+behavioral reference. The DA, component relationships, domain aggregates, and dependency monitors
+are authored in the functional development baseline; SCOM lab validation remains outstanding.
 
 ## Boundaries
 

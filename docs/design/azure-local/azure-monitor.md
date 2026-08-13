@@ -9,6 +9,14 @@ This lane applies the accepted Azure Local platform baseline to Azure Monitor He
 cloud prerequisites and entity mappings do not apply to the conditional Hyper-V Arc-enabled SCVMM
 track.
 
+## Current status
+
+A preview-gated development baseline is implemented and compiles with Bicep. It creates the Health
+Model resource graph, managed identity authentication, deployment and domain entities,
+relationships, two documented Azure Local metric signals, state alerts, development parameters,
+research KQL, and a starter workbook. Subscription what-if/deployment, RBAC, live-signal, fault,
+cost, and teardown validation remain release gates.
+
 ## Canonical design
 
 | Concern | Design source |
@@ -21,6 +29,7 @@ track.
 | Deployment | [ADR 0013](../decisions/0013-azmon-deployment-strategy.md) |
 | Cost, scale, and retention | [ADR 0019](../decisions/0019-cost-scale-retention.md) |
 | Customization and lifecycle | [Customization](../customization.md) and supporting ADRs 0007–0008 and 0014–0018 |
+| Current implementation | [Architecture](azure-monitor-architecture.md), [research](../../azure-monitor/research.md), and [ADR 0036](../decisions/0036-azure-local-azure-monitor-health-model-v1.md) |
 
 ## Implementation section
 

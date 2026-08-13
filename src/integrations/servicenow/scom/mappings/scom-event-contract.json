@@ -1,0 +1,43 @@
+{
+  "contractVersion": "1.0.0",
+  "source": "SCOM",
+  "identity": {
+    "sourceEventId": "AlertId",
+    "messageKeyComponents": [
+      "Platform",
+      "ManagementPackElementId",
+      "MonitoringObjectStableIdentity",
+      "ConditionIdentity"
+    ],
+    "prohibitedKeyComponents": [
+      "DisplayNameOnly",
+      "AlertTextOnly",
+      "TimestampOnly"
+    ]
+  },
+  "fields": [
+    { "target": "source", "source": "Constant:SCOM", "required": true },
+    { "target": "source_instance", "source": "ManagementGroup", "required": true },
+    { "target": "source_event_id", "source": "AlertId", "required": true },
+    { "target": "node", "source": "PrincipalName", "required": true },
+    { "target": "resource", "source": "MonitoringObjectPath", "required": true },
+    { "target": "type", "source": "MonitoringRuleOrMonitorId", "required": true },
+    { "target": "severity", "source": "Severity", "required": true },
+    { "target": "description", "source": "NameAndDescription", "required": true },
+    { "target": "additional_info", "source": "StructuredContext", "required": true }
+  ],
+  "severityMap": {
+    "Critical": "Critical",
+    "Warning": "Warning",
+    "Information": "Informational"
+  },
+  "lifecycle": {
+    "new": "CreateOrUpdateByAlertId",
+    "repeat": "UpdateByAlertId",
+    "resolvedMonitorAlert": "CloseByAlertId",
+    "eventRuleAlert": "ExplicitPolicyRequired",
+    "maintenance": "SuppressAtSource",
+    "replay": "IdempotentByAlertId"
+  }
+}
+

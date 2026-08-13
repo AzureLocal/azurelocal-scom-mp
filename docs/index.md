@@ -23,7 +23,7 @@ features:
     link: /azure-local/
     linkText: Explore Azure Local
   - title: Hyper-V
-    details: A committed Hyper-V SCOM Management Pack, with Azure Monitor on the roadmap when Arc-enabled SCVMM research passes its gate.
+    details: An independent Hyper-V SCOM Management Pack plus a constrained Azure Monitor development track through Arc-enabled SCVMM and Arc-enabled hosts.
     link: /hyper-v/
     linkText: Explore Hyper-V
   - title: Shared design
@@ -48,7 +48,7 @@ graph TD
     Root --> HV["Hyper-V"]
     Root --> AzL["Azure Local"]
     HV --> HVS["SCOM MP"]
-    HV -. research gate .-> HVA["Azure Monitor via Arc-enabled SCVMM"]
+    HV --> HVA["Azure Monitor via Arc-enabled SCVMM"]
     AzL --> AzLS["SCOM MP"]
     AzL --> AzLA["Azure Monitor"]
 
@@ -60,23 +60,23 @@ graph TD
 | Platform | SCOM Management Pack | Azure Monitor Health Models |
 |---|---|---|
 | **Azure Local** | Committed | Committed |
-| **Hyper-V** | Committed | Conditional on Arc-enabled SCVMM research |
+| **Hyper-V** | Committed | Constrained development; live validation and parity gates |
 
 ## Companion tooling
 
 [SquaredUp DS](https://ds.squaredup.com) and [SquaredUp Cloud](https://squaredup.com) are optional
 visualization layers for the SCOM and Azure Monitor tracks respectively.
 
-[ServiceNow integration](integrations/servicenow.md) is a Later roadmap area with separate SCOM and
-Azure Monitor paths for Event Management, CMDB correlation, and incident workflows.
+[ServiceNow integration](integrations/servicenow.md) has a SCOM connector development baseline and
+separate SCOM and Azure Monitor paths for Event Management, CMDB correlation, and incident workflows.
 
 ## Project status
 
-::: info Independent platform products are planned
-The original Azure Local design baseline is complete. The roadmap now separates Azure Local and
-Hyper-V into their own Epics and delivery Features. Accepted ADRs require independent SCOM runtime
-products and a platform-owned Distributed Application in each. Hyper-V topology, signal, and DA
-membership research comes before authoring. See the [project roadmap](/project/roadmap) and
+::: info Independent development baselines are implemented
+Azure Local and Hyper-V have separate functional SCOM Management Pack and Distributed Application
+baselines. Azure Local and constrained Hyper-V Health Model baselines compile with Bicep. The
+SCOM-to-ServiceNow mapping/profile baseline also passes offline validation. SDK, signing, live SCOM,
+Azure, and ServiceNow certification gates remain. See the [project roadmap](/project/roadmap) and
 [implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
 :::
 
@@ -86,6 +86,6 @@ membership research comes before authoring. See the [project roadmap](/project/r
 | 1 | Documentation scaffold | Complete |
 | 2 | Azure Local health-model design baseline | Complete |
 | 3 | Platform split, delivery hierarchy, ADR and spike planning | Complete |
-| 4 | Research and architecture gates | Next |
-| 5 | Azure Local and Hyper-V delivery work | Planned |
-| 6 | Validation, documentation, and releases | Planned |
+| 4 | Research and architecture gates | Initial decisions complete; lab evidence active |
+| 5 | Azure Local and Hyper-V development baselines | Complete |
+| 6 | SDK, SCOM, Azure, ServiceNow, and release certification | Active |

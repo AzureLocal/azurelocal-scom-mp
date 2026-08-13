@@ -17,3 +17,14 @@
 - Do stable VM identity, multi-node topology contributions, DA population/rollup, maintenance,
   migration/failover, recovery, upgrade, and removal behave as designed in SCOM?
 - What release signing identity and governed sealing pipeline will produce the first signed bundle?
+- Which official sealed dependency-MP versions should the first Azure Local release support, and
+  does the Azure Local MP pass Microsoft SDK verification against each target SCOM version?
+- In the representative Azure subscription, do the preview Health Model resources deploy with the
+  documented Azure Local metrics, identities, dimensions, and state transitions used by the Bicep
+  baselines?
+- For Hyper-V Azure Monitor, which supported SCVMM/Arc/AMA matrix supplies enough inventory and
+  telemetry coverage, and how will DCR associations be governed at scale?
+- Which ServiceNow release and SCOM version pair will be used for the connector lab, and will
+  ServiceNow confirm SCOM 2025 support before that pair is claimed?
+- Should the ServiceNow SCOM Metrics connector remain disabled permanently, or is there a licensed
+  Metric Intelligence use case that justifies separate data-warehouse access and validation?

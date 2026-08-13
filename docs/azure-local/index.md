@@ -9,8 +9,8 @@ Azure Local is a first-class platform track with two committed delivery surfaces
 
 | Delivery surface | Scope | Status |
 |---|---|---|
-| **SCOM Management Pack** | Azure Local classes, discoveries, monitors, rules, health rollups, overrides, views, packaging, and operator guidance | Planned |
-| **Azure Monitor Health Models** | Service Groups, entities, signals, health objectives, alerts, workbooks, and Bicep deployment | Planned |
+| **SCOM Management Pack** | Azure Local classes, discoveries, monitors, rules, health rollups, overrides, views, packaging, and operator guidance | Functional development baseline; certification pending |
+| **Azure Monitor Health Models** | Entities, relationships, signals, health objectives, alerts, workbooks, and Bicep deployment | Preview development baseline; live validation pending |
 
 Both surfaces implement the Azure Local topology documented in the
 [Azure Local design](../design/azure-local/index.md) section. They use the same logical entities,

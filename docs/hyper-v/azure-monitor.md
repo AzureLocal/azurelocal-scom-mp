@@ -1,42 +1,46 @@
 ---
-title: Hyper-V Azure Monitor roadmap
-description: Conditional Azure Monitor health-model research for Hyper-V through Azure Arc-enabled SCVMM.
+title: Hyper-V Azure Monitor Health Model
+description: Constrained Hyper-V Azure Monitor Health Model through Arc-enabled SCVMM and Arc-enabled Servers.
 ---
 
 # Azure Monitor for Hyper-V through Arc-enabled SCVMM
 
-This is a **conditional future track**, not a committed implementation. It applies only to a
-Hyper-V environment integrated with Azure Arc-enabled SCVMM and only if the research proves a
-supportable entity, telemetry, identity, and operations model.
+This is a **constrained development track**. It applies only to a Hyper-V environment integrated
+with Azure Arc-enabled SCVMM where participating hosts are also Arc-enabled Servers with AMA and
+the solution DCR.
 
-::: warning Research gate
-Do not interpret Arc-enabled SCVMM inventory as proof that every host or VM has guest telemetry.
-The research must distinguish SCVMM inventory projected through Arc Resource Bridge from machines
-that also have Azure Arc-enabled Servers guest management, Azure Monitor Agent, and applicable
-Data Collection Rules.
+::: warning Development baseline, not parity or a release
+The source compiles and its repository contract passes. It does not yet have live deployment,
+identity/RBAC, DCR association, schema, fault/recovery, cost, scale, upgrade, or teardown evidence.
 :::
 
-## Required spikes
+## Implemented baseline
 
-| Spike | Question |
+| Area | Development content |
 |---|---|
-| Arc-enabled SCVMM inventory and guest management | Which clusters, hosts, networks, and VMs become Azure resources, and when can guest management be enabled? |
-| Telemetry and Health Models proof of concept | Can supported AMA, DCR, Resource Graph, metrics, logs, and health objectives produce a useful Hyper-V model? |
-| Go/no-go decision | Is the result supportable and valuable enough to implement, defer, or reject? |
+| Inventory | Arc-enabled SCVMM VMM server entity and explicit Arc-enabled host resource IDs |
+| Collection | Windows DCR for selected Hyper-V performance counters and critical/error event channels |
+| Signals | Host heartbeat, hypervisor CPU, Failover Clustering errors, and expected-host coverage |
+| Health | Deployment plus six domain entities with worst-of dependency rollup |
+| Alerts | Deployment Degraded and Unhealthy state transitions through customer Action Groups |
+| Operations | Lab parameters, standalone KQL, starter workbook, Bicep compile and contract test |
 
 ## Go criteria
 
-Implementation can move out of the future backlog only when all of these are true:
+Release remains blocked until all of these are true:
 
 - Microsoft-supported Arc-enabled SCVMM versions and topology are documented.
 - A minimum viable entity graph can be identified with stable Azure resource identities.
-- Supported telemetry covers meaningful host, cluster, VM, storage, and networking health.
+- Supported telemetry coverage and explicit parity gaps are accepted.
 - A lab fault changes the expected Azure Monitor health state within an acceptable window.
 - Identity, RBAC, network, preview, regional, cost, scale, and lifecycle constraints are acceptable.
-- Proposed [ADR 0023](../design/decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md)
-  is accepted with a **go** decision.
+- [ADR 0023](../design/decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md)
+  and [ADR 0037](../design/decisions/0037-hyper-v-azure-monitor-health-model-architecture.md)
+  remain valid after lab evidence.
 
-Until then, the Hyper-V SCOM Management Pack remains the committed delivery path.
+The Hyper-V SCOM Management Pack remains the comprehensive and independent delivery path.
+
+See the [research record](azure-monitor-research.md) for evidence, gaps, and next spikes.
 
 ## Microsoft foundations to validate
 

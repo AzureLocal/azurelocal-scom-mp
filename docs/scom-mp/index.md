@@ -11,38 +11,47 @@ This section covers **how the Azure Local design is implemented** as a SCOM Mana
 the [Azure Local SCOM design lane](../design/azure-local/scom-mp.md) first. Shared principles do not
 make this platform's entity model, signals, or discoveries applicable to the Hyper-V MP.
 
-::: info Authoring has not started
-The Azure Local design baseline is accepted. [ADR 0022](../design/decisions/0022-scom-management-pack-packaging-boundaries.md)
-requires an independent Azure Local runtime product; packaging validation confirms its artifact, coexistence,
-upgrade, and removal contract.
-Delivery is described in the public roadmap. See the
-[implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
+::: warning Development baseline, not a production release
+Five independent MP artifacts, the platform-owned DA, monitoring workflows, operator views,
+customer override templates, and offline tests are implemented. Microsoft SDK verification,
+sealing/signing, and SCOM lab certification are still required before release.
 :::
 
-Looking for the other SCOM product? See the planned
+Looking for the other SCOM product? See the independent
 [Hyper-V SCOM Management Pack](../hyper-v/scom-mp.md).
 
-## What lives here
+## Implemented product
 
-| Page (planned) | Content |
+| Area | Development baseline |
 |---|---|
-| Health model XML overview | The sealed Azure Local product structure selected by ADR 0022 |
-| Class hierarchy reference | Implementation of [ADR 0005](../design/decisions/0005-scom-class-hierarchy.md) |
-| Discoveries reference | PowerShell discovery scripts per [ADR 0004](../design/decisions/0004-scom-discovery-strategy.md) |
-| Monitor inventory | Unit / Aggregate / Dependency monitors mapping to the [Signal Catalog](../design/signal-catalog.md) |
-| Distributed Application | `AzureLocal.Deployment`, component groups, dynamic membership, rollup, views, reports, dashboards, and SLO targets from the [DA design](../design/azure-local/distributed-application.md) |
-| Override pack reference | Customer-facing overrides per [ADR 0008](../design/decisions/0008-customization-strategy.md) |
-| Authoring guide | VSAE + Kevin Holman fragment library workflow |
-| Lifecycle | Sealing, signing, import, update, retirement |
-| Diagrams | Health rollup tree (Mermaid) + class hierarchy (draw.io) |
+| Packaging | Library, Discovery, Monitoring, Presentation, and optional Reporting artifacts |
+| Model | 17 public classes and 28 public relationships, with stable deployment and storage identities |
+| Discovery | Lightweight Azure Local qualification followed by full local topology discovery |
+| Health | 14 unit monitors, six domain aggregates, and explicit monitoring-pipeline state |
+| DA | One deployment service, six components, and 12 dependency rollups |
+| Telemetry | 12 performance rules and four high-confidence Failover Clustering event-alert rules |
+| Operations | 14 views, a read-only diagnostic task, and operational knowledge |
+| Tuning | Separate customer-owned Discovery and Monitoring override MPs with provisional Lab, Standard, and Strict starters |
+
+## Documentation
+
+- [Architecture](../design/azure-local/architecture.md)
+- [Management Pack structure](../design/azure-local/management-pack-structure.md)
+- [Class and relationship model](../design/azure-local/class-and-relationship-model.md)
+- [Discovery and workflow architecture](../design/azure-local/discovery-and-workflow-architecture.md)
+- [Health and alert architecture](../design/azure-local/health-and-alert-architecture.md)
+- [Override and tuning architecture](../design/azure-local/override-and-tuning-architecture.md)
+- [Validation and release gates](../design/azure-local/validation-and-release.md)
+- [Monitoring research](monitoring-research.md) and [catalog](monitoring-catalog.md)
+- [Management Pack administration guide](management-pack-guide.md)
 
 ## Where to start
 
 1. [Azure Local SCOM design](../design/azure-local/scom-mp.md) — the governing design lane
-2. [SCOM class hierarchy ADR](../design/decisions/0005-scom-class-hierarchy.md)
-3. [Azure Local Distributed Application](../design/azure-local/distributed-application.md)
-4. [Discovery strategy ADR](../design/decisions/0004-scom-discovery-strategy.md)
-5. [Customization](../design/customization.md) — how operators tune the SCOM track
+2. [Architecture](../design/azure-local/architecture.md) — the product and runtime boundary
+3. [Monitoring catalog](monitoring-catalog.md) — what is monitored, collected, or deferred
+4. [Management Pack guide](management-pack-guide.md) — build, import, tune, upgrade, and remove
+5. [Validation and release](../design/azure-local/validation-and-release.md) — evidence still required
 
 ## Track-specific upstream references
 

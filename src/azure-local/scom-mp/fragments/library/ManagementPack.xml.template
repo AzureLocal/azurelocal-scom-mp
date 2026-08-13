@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <Manifest>
+    <Identity><ID>HybridSolutionsCloud.AzureLocal.Library</ID><Version>{{VERSION}}</Version></Identity>
+    <Name>Hybrid Solutions Cloud Azure Local Library</Name>
+    <References>
+      <Reference Alias="System"><ID>System.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="Windows"><ID>Microsoft.Windows.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="ServiceDesigner"><ID>Microsoft.SystemCenter.ServiceDesigner.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+    </References>
+  </Manifest>
+  <TypeDefinitions>
+    <EntityTypes>
+      <ClassTypes>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.NodeRole" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.LocalApplication" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="DeploymentId" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="ClusterName" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="ClusterId" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="NodeName" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="NodeState" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="NodeWeight" Type="int" Key="false" Required="false" />
+          <Property ID="FaultDomain" Type="string" Key="false" CaseSensitive="false" MaxLength="512" MinLength="0" Required="false" />
+          <Property ID="Manufacturer" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="Model" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="LogicalProcessorCount" Type="int" Key="false" Required="false" />
+          <Property ID="MemoryBytes" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="SolutionVersion" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="RegistrationStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="ConnectionStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="NetworkAuthority" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="DiscoveryVersion" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.Deployment" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="ClusterName" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="ClusterId" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="FunctionalLevel" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="QuorumType" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="NodeCount" Type="int" Key="false" Required="false" />
+          <Property ID="StoragePoolCount" Type="int" Key="false" Required="false" />
+          <Property ID="VolumeCount" Type="int" Key="false" Required="false" />
+          <Property ID="PhysicalDiskCount" Type="int" Key="false" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.StoragePool" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="PoolId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="FriendlyName" Type="string" Key="false" CaseSensitive="true" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="HealthStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="OperationalStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="SizeBytes" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="AllocatedBytes" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="IsReadOnly" Type="bool" Key="false" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.Volume" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="VolumeId" Type="string" Key="true" CaseSensitive="false" MaxLength="512" MinLength="1" Required="true" />
+          <Property ID="FriendlyName" Type="string" Key="false" CaseSensitive="true" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="Path" Type="string" Key="false" CaseSensitive="false" MaxLength="1024" MinLength="0" Required="false" />
+          <Property ID="HealthStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="OperationalStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="FileSystem" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="ResiliencySetting" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="SizeBytes" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="FreeBytes" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="PercentFree" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="OwnerNode" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="RedirectedAccess" Type="bool" Key="false" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.PhysicalDisk" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="DiskId" Type="string" Key="true" CaseSensitive="false" MaxLength="512" MinLength="1" Required="true" />
+          <Property ID="FriendlyName" Type="string" Key="false" CaseSensitive="true" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="SerialNumber" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="MediaType" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="BusType" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="Usage" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="HealthStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="OperationalStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="SizeBytes" Type="string" Key="false" CaseSensitive="false" MaxLength="32" MinLength="0" Required="false" />
+          <Property ID="PhysicalLocation" Type="string" Key="false" CaseSensitive="false" MaxLength="1024" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.NetworkAtcIntent" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.LocalApplication" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="IntentName" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="ConfigurationStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="ProvisioningStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="TrafficType" Type="string" Key="false" CaseSensitive="false" MaxLength="256" MinLength="0" Required="false" />
+          <Property ID="AdapterNames" Type="string" Key="false" CaseSensitive="false" MaxLength="2048" MinLength="0" Required="false" />
+          <Property ID="LastUpdated" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.UpdateState" Accessibility="Public" Abstract="false" Base="System!System.LogicalEntity" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+          <Property ID="UpdateId" Type="string" Key="true" CaseSensitive="false" MaxLength="512" MinLength="1" Required="true" />
+          <Property ID="Version" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="State" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="HealthState" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+          <Property ID="PackageType" Type="string" Key="false" CaseSensitive="false" MaxLength="128" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.ArcIntegration" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.LocalApplication" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="IntegrationId" Type="string" Key="true" CaseSensitive="false" MaxLength="64" MinLength="1" Required="true" />
+          <Property ID="RegistrationStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="ConnectionStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="LastConnected" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="ArcAgentServiceState" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.ResourceBridge" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.LocalApplication" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="BridgeId" Type="string" Key="true" CaseSensitive="false" MaxLength="64" MinLength="1" Required="true" />
+          <Property ID="ServiceState" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="MocServiceState" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="Presence" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.MonitoringPipeline" Accessibility="Public" Abstract="false" Base="Windows!Microsoft.Windows.LocalApplication" Hosted="true" Singleton="false" Extension="false">
+          <Property ID="PipelineId" Type="string" Key="true" CaseSensitive="false" MaxLength="64" MinLength="1" Required="true" />
+          <Property ID="LastDiscoveryUtc" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="DiscoveryStatus" Type="string" Key="false" CaseSensitive="false" MaxLength="64" MinLength="0" Required="false" />
+          <Property ID="ErrorSummary" Type="string" Key="false" CaseSensitive="false" MaxLength="2048" MinLength="0" Required="false" />
+          <Property ID="TopologyObjectCount" Type="int" Key="false" Required="false" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.Service" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Service" Hosted="false" Singleton="false" Extension="false">
+          <Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" />
+        </ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.ComputeComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false"><Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" /></ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.StorageComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false"><Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" /></ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.NetworkComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false"><Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" /></ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.PlatformComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false"><Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" /></ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.LifecycleComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false"><Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" /></ClassType>
+        <ClassType ID="HybridSolutionsCloud.AzureLocal.MonitoringComponent" Accessibility="Public" Abstract="false" Base="ServiceDesigner!Microsoft.SystemCenter.ServiceDesigner.Component" Hosted="false" Singleton="false" Extension="false"><Property ID="DeploymentId" Type="string" Key="true" CaseSensitive="false" MaxLength="256" MinLength="1" Required="true" /></ClassType>
+      </ClassTypes>
+      <RelationshipTypes>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.DeploymentContainsNodeRole" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Deployment" Type="HybridSolutionsCloud.AzureLocal.Deployment" MinCardinality="0" MaxCardinality="1" /><Target ID="NodeRole" Type="HybridSolutionsCloud.AzureLocal.NodeRole" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.DeploymentContainsStoragePool" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Deployment" Type="HybridSolutionsCloud.AzureLocal.Deployment" MinCardinality="0" MaxCardinality="1" /><Target ID="StoragePool" Type="HybridSolutionsCloud.AzureLocal.StoragePool" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.DeploymentContainsVolume" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Deployment" Type="HybridSolutionsCloud.AzureLocal.Deployment" MinCardinality="0" MaxCardinality="1" /><Target ID="Volume" Type="HybridSolutionsCloud.AzureLocal.Volume" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.DeploymentContainsPhysicalDisk" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Deployment" Type="HybridSolutionsCloud.AzureLocal.Deployment" MinCardinality="0" MaxCardinality="1" /><Target ID="PhysicalDisk" Type="HybridSolutionsCloud.AzureLocal.PhysicalDisk" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.DeploymentContainsUpdateState" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Deployment" Type="HybridSolutionsCloud.AzureLocal.Deployment" MinCardinality="0" MaxCardinality="1" /><Target ID="UpdateState" Type="HybridSolutionsCloud.AzureLocal.UpdateState" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.StoragePoolContainsVolume" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="StoragePool" Type="HybridSolutionsCloud.AzureLocal.StoragePool" MinCardinality="0" MaxCardinality="1" /><Target ID="Volume" Type="HybridSolutionsCloud.AzureLocal.Volume" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.StoragePoolContainsPhysicalDisk" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="StoragePool" Type="HybridSolutionsCloud.AzureLocal.StoragePool" MinCardinality="0" MaxCardinality="1" /><Target ID="PhysicalDisk" Type="HybridSolutionsCloud.AzureLocal.PhysicalDisk" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.ServiceContainsDeployment" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Service" Type="HybridSolutionsCloud.AzureLocal.Service" MinCardinality="0" MaxCardinality="1" /><Target ID="Deployment" Type="HybridSolutionsCloud.AzureLocal.Deployment" MinCardinality="0" MaxCardinality="1" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.ServiceContainsComputeComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Service" Type="HybridSolutionsCloud.AzureLocal.Service" MinCardinality="0" MaxCardinality="1" /><Target ID="Component" Type="HybridSolutionsCloud.AzureLocal.ComputeComponent" MinCardinality="0" MaxCardinality="1" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.ServiceContainsStorageComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Service" Type="HybridSolutionsCloud.AzureLocal.Service" MinCardinality="0" MaxCardinality="1" /><Target ID="Component" Type="HybridSolutionsCloud.AzureLocal.StorageComponent" MinCardinality="0" MaxCardinality="1" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.ServiceContainsNetworkComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Service" Type="HybridSolutionsCloud.AzureLocal.Service" MinCardinality="0" MaxCardinality="1" /><Target ID="Component" Type="HybridSolutionsCloud.AzureLocal.NetworkComponent" MinCardinality="0" MaxCardinality="1" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.ServiceContainsPlatformComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Service" Type="HybridSolutionsCloud.AzureLocal.Service" MinCardinality="0" MaxCardinality="1" /><Target ID="Component" Type="HybridSolutionsCloud.AzureLocal.PlatformComponent" MinCardinality="0" MaxCardinality="1" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.ServiceContainsLifecycleComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Service" Type="HybridSolutionsCloud.AzureLocal.Service" MinCardinality="0" MaxCardinality="1" /><Target ID="Component" Type="HybridSolutionsCloud.AzureLocal.LifecycleComponent" MinCardinality="0" MaxCardinality="1" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.ServiceContainsMonitoringComponent" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Service" Type="HybridSolutionsCloud.AzureLocal.Service" MinCardinality="0" MaxCardinality="1" /><Target ID="Component" Type="HybridSolutionsCloud.AzureLocal.MonitoringComponent" MinCardinality="0" MaxCardinality="1" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.ComputeComponentContainsNodeRole" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.ComputeComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="NodeRole" Type="HybridSolutionsCloud.AzureLocal.NodeRole" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.StorageComponentContainsNodeRole" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.StorageComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="NodeRole" Type="HybridSolutionsCloud.AzureLocal.NodeRole" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.StorageComponentContainsStoragePool" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.StorageComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="StoragePool" Type="HybridSolutionsCloud.AzureLocal.StoragePool" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.StorageComponentContainsVolume" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.StorageComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="Volume" Type="HybridSolutionsCloud.AzureLocal.Volume" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.StorageComponentContainsPhysicalDisk" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.StorageComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="PhysicalDisk" Type="HybridSolutionsCloud.AzureLocal.PhysicalDisk" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.NetworkComponentContainsNodeRole" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.NetworkComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="NodeRole" Type="HybridSolutionsCloud.AzureLocal.NodeRole" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.NetworkComponentContainsNetworkAtcIntent" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.NetworkComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="NetworkAtcIntent" Type="HybridSolutionsCloud.AzureLocal.NetworkAtcIntent" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.PlatformComponentContainsNodeRole" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.PlatformComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="NodeRole" Type="HybridSolutionsCloud.AzureLocal.NodeRole" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.PlatformComponentContainsArcIntegration" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.PlatformComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="ArcIntegration" Type="HybridSolutionsCloud.AzureLocal.ArcIntegration" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.PlatformComponentContainsResourceBridge" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.PlatformComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="ResourceBridge" Type="HybridSolutionsCloud.AzureLocal.ResourceBridge" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.LifecycleComponentContainsNodeRole" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.LifecycleComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="NodeRole" Type="HybridSolutionsCloud.AzureLocal.NodeRole" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.LifecycleComponentContainsUpdateState" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.LifecycleComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="UpdateState" Type="HybridSolutionsCloud.AzureLocal.UpdateState" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.MonitoringComponentContainsNodeRole" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.MonitoringComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="NodeRole" Type="HybridSolutionsCloud.AzureLocal.NodeRole" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+        <RelationshipType ID="HybridSolutionsCloud.AzureLocal.MonitoringComponentContainsPipeline" Accessibility="Public" Abstract="false" Base="System!System.Containment"><Source ID="Component" Type="HybridSolutionsCloud.AzureLocal.MonitoringComponent" MinCardinality="0" MaxCardinality="1" /><Target ID="Pipeline" Type="HybridSolutionsCloud.AzureLocal.MonitoringPipeline" MinCardinality="0" MaxCardinality="2147483647" /></RelationshipType>
+      </RelationshipTypes>
+    </EntityTypes>
+  </TypeDefinitions>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Library"><Name>Hybrid Solutions Cloud Azure Local Library</Name><Description>Independent Azure Local classes and relationships for local cluster, storage, Network ATC, platform, lifecycle, monitoring-pipeline, and service health.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.NodeRole"><Name>Azure Local Node Role</Name><Description>An Azure Local cluster node monitored by the Operations Manager agent.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Deployment"><Name>Azure Local Deployment</Name><Description>The stable cluster-scoped topology boundary.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.StoragePool"><Name>Azure Local Storage Pool</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Volume"><Name>Azure Local Volume</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.PhysicalDisk"><Name>Azure Local Physical Disk</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.NetworkAtcIntent"><Name>Azure Local Network ATC Intent</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.UpdateState"><Name>Azure Local Solution Update</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ArcIntegration"><Name>Azure Local Arc Integration</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ResourceBridge"><Name>Azure Local Resource Bridge</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.MonitoringPipeline"><Name>Azure Local Monitoring Pipeline</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Service"><Name>Azure Local Health Service</Name><Description>The Distributed Application root for one Azure Local deployment.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ComputeComponent"><Name>Compute</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.StorageComponent"><Name>Storage</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.NetworkComponent"><Name>Network</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.PlatformComponent"><Name>Azure Integration</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.LifecycleComponent"><Name>Lifecycle</Name></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.MonitoringComponent"><Name>Monitoring Pipeline</Name></DisplayString>
+        {{LIBRARY_ELEMENT_DISPLAY_STRINGS}}
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPack>
+

@@ -1,11 +1,12 @@
 # Project context
 
 This repository defines Hybrid infrastructure health monitoring for two platform tracks. Azure
-Local has committed SCOM Management Pack and Azure Monitor Health Models delivery surfaces. Hyper-V
-has a committed SCOM Management Pack and a conditional future Azure Monitor surface through
-Arc-enabled SCVMM. SquaredUp integrations are optional visualization layers. The Hyper-V
-functional development MP is authored; it is not yet a sealed, signed, or SCOM-lab-certified
-release.
+Local has independent SCOM Management Pack and Azure Monitor Health Model delivery surfaces.
+Hyper-V has an independent SCOM Management Pack and a constrained Azure Monitor Health Model that
+uses Arc-enabled SCVMM for inventory plus Arc-enabled Server, Azure Monitor Agent, and Data
+Collection Rules for host telemetry. SquaredUp integrations are optional visualization layers.
+Both SCOM MPs are functional development baselines; neither is yet a sealed, signed, or
+SCOM-lab-certified release. Both Azure Monitor baselines require representative Azure validation.
 
 The documentation is a VitePress site rooted at `docs/` and published beneath the
 `/hybrid-health-monitoring/` base path at
@@ -29,7 +30,7 @@ Monitoring override MPs. Optional Lab, Standard, and Strict templates are public
 not active product policy, and the Default Management Pack is never a customization target.
 
 The design information architecture is platform first and delivery surface second. It has explicit
-Azure Local/SCOM, Azure Local/Azure Monitor, Hyper-V/SCOM, and conditional Hyper-V/Azure Monitor
+Azure Local/SCOM, Azure Local/Azure Monitor, Hyper-V/SCOM, and constrained Hyper-V/Azure Monitor
 lanes. Shared design is deliberately small; accepted Azure Local ADRs do not silently govern
 Hyper-V. ADR 0025 establishes Network ATC as the preferred eligible Hyper-V cluster baseline while
 requiring separate handling for SCVMM/SDN and non-ATC network-management paths.
@@ -41,11 +42,14 @@ the deployment DA defined by ADR 0005/0018. Hyper-V requires a separate DA insta
 failover cluster or standalone host, refined by topology and DA validation before authoring.
 
 The source tree enforces the same hierarchy through accepted ADR 0030. Azure Local and Hyper-V are
-top-level source owners, each with `scom-mp` and `azure-monitor` solution roots. The Hyper-V Azure
-Monitor root is reserved but cannot contain deployable implementation before an ADR 0023 go decision.
+top-level source owners, each with `scom-mp` and `azure-monitor` solution roots. ADRs 0023 and 0037
+now authorize the constrained Hyper-V Azure Monitor development baseline without changing the
+independent product boundary.
 
-ServiceNow is a Later optional integration area. SCOM and Azure Monitor have separate integration
-paths and artifacts. The candidate SCOM path uses ServiceNow SCOM Events and optional Metrics
-connectors through a MID Server. The candidate Azure Monitor path uses Secure Webhook action groups
-with the common alert schema, with Logic Apps only when enrichment or orchestration is required.
-Dual-source deployments must prove authoritative-source or correlation behavior before release.
+ServiceNow is an optional integration area. The SCOM Events connector development contract now has
+an accepted ADR, separate Azure Local and Hyper-V allowlists, a normalized AlertId-based mapping,
+secret-free public profiles, and an offline validator. Live MID Server and ServiceNow validation
+remains a release gate; the Metrics connector stays disabled unless separately justified. The
+Azure Monitor path remains later work and uses Secure Webhook action groups with common alert
+schema, with Logic Apps only when enrichment or orchestration is required. Dual-source deployments
+must prove authoritative-source or correlation behavior before release.

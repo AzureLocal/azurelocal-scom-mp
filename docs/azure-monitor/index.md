@@ -17,10 +17,11 @@ The model itself collects nothing; it consumes signals from HCI Insights, Azure 
 Telemetry and Diagnostics, and Resource Health.
 :::
 
-::: info Implementation has not started
-The Azure Local design baseline is accepted. Current APIs and signal contracts will be revalidated
-before implementation begins. See the
-[implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
+::: warning Preview development baseline
+The Health Model resource graph, identity, entities, relationships, two documented Azure Local
+metric signals, parameter files, research KQL, workbook, and compile-time contract test are
+implemented. The service and APIs remain preview. Live deployment and fault evidence are required
+before release.
 :::
 
 Hyper-V has a separate, conditional [Azure Monitor roadmap track](../hyper-v/azure-monitor.md)
@@ -31,12 +32,13 @@ through Arc-enabled SCVMM. It is not covered by the Azure Local prerequisites on
 | Page | Content |
 |---|---|
 | [Prerequisites](prerequisites.md) | Cloud-side setup contract (HCI Insights, AMA, DCMA, RBAC, networking) |
-| Entities (planned) | Implementation of [ADR 0006](../design/decisions/0006-azmon-entity-model.md) — Service Group + per-entity definitions |
-| Signals (planned) | DCMA metrics + KQL queries per [Signal Catalog](../design/signal-catalog.md) |
-| Health Objectives (planned) | Per-entity Availability/Performance/Configuration/Security objectives |
-| Alerts (planned) | Alert rules + action groups per [ADR 0009](../design/decisions/0009-alert-vs-health-state.md) |
-| Bicep modules (planned) | `health-model.bicep`, `service-group.bicep`, `alerts.bicep` + tier files |
-| Workbook (planned) | Azure Monitor Workbook for visualization |
+| [Architecture](../design/azure-local/azure-monitor-architecture.md) | Current resource, entity, signal, identity, and validation architecture |
+| [Research](research.md) | Revalidated API/signal evidence and remaining spikes |
+| Entities | Deployment, six domain entities, cluster Azure-resource entity, and dependency relationships |
+| Signals | Two documented Azure Local metric definitions; KQL remains research-only until schemas are proven |
+| Alerts | Parameterized deployment-level Degraded and Unhealthy state alerts |
+| Bicep modules | Azure Monitor account, Health Model, authentication, signals, entities, and relationships |
+| Workbook | Starter Azure Local investigation workbook |
 | Diagrams | Entity graph (Mermaid + draw.io), health propagation flow |
 
 ## Where to start
@@ -47,12 +49,10 @@ through Arc-enabled SCVMM. It is not covered by the Azure Local prerequisites on
 4. [Cloud prerequisites contract ADR](../design/decisions/0010-cloud-prerequisites-contract.md)
 5. [Customization](../design/customization.md) — how operators tune the Azure Monitor track
 
-## What will be here
+## Development and release boundary
 
-- Health model concepts (entities, signals, relationships)
-- Azure Local entity hierarchy and signal inventory
-- Service Group wiring and auto-discovery
-- ARM / Bicep deployment templates
-- KQL signal queries
-- Alert rules and Action Group integration
-- Azure portal designer walkthrough
+- Bicep build and repository contract checks run without an Azure subscription.
+- Service Group discovery remains a research item; the initial model uses explicit entities.
+- Customer resource IDs and Action Groups are parameters, never committed values.
+- Live what-if, deployment, RBAC, signal evaluation, fault/recovery, cost, and teardown are mandatory
+  pre-release evidence.

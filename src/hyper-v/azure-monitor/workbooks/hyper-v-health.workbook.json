@@ -1,0 +1,15 @@
+{
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json",
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "# Hyper-V health monitoring\n\nArc-enabled SCVMM supplies management inventory. Arc-enabled Server, AMA, and the solution DCR supply participating host telemetry. This workbook is diagnostic; the Health Model owns state."
+      },
+      "name": "overview"
+    }
+  ],
+  "fallbackResourceIds": []
+}
+

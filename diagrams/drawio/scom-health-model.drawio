@@ -83,15 +83,3 @@
     </mxGraphModel>
   </diagram>
 </mxfile>
-
-          Green  (Healthy):      #107C41
-          Yellow (Warning):      #FFB900
-          Red    (Critical):     #D13438
-    -->
-    <mxCell id="0" />
-    <mxCell id="1" parent="0" />
-    <mxCell id="2" value="STUB: Build SCOM health rollup tree here.&#xa;See PLAN.md → draw.io Diagrams for design spec." style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;" vertex="1" parent="1">
-      <mxGeometry x="80" y="80" width="560" height="80" as="geometry" />
-    </mxCell>
-  </diagram>
-</mxfile>

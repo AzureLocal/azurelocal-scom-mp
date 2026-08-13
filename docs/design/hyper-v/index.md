@@ -1,11 +1,11 @@
 ---
 title: Hyper-V design
-description: Design map for the committed Hyper-V SCOM Management Pack and conditional Azure Monitor track.
+description: Design map for the Hyper-V SCOM Management Pack and constrained Azure Monitor track.
 ---
 
 # Hyper-V design
 
-Hyper-V has its own support contract and topology. Its SCOM Management Pack and conditional Azure
+Hyper-V has its own support contract and topology. Its SCOM Management Pack and constrained Azure
 Monitor Health Models are completely separate solutions: neither shares runtime components,
 deployment artifacts, health state, or release lifecycle with the other. Both may reuse validated
 Hyper-V research without creating a product dependency.
@@ -13,7 +13,7 @@ Hyper-V research without creating a product dependency.
 | Design lane | Commitment | Status |
 |---|---|---|
 | [SCOM Management Pack](scom-mp.md) | Committed | Comprehensive architecture proposed; phase-one research active |
-| [Azure Monitor through Arc-enabled SCVMM](azure-monitor.md) | Conditional | Research and go/defer/no-go ADR required |
+| [Azure Monitor through Arc-enabled SCVMM](azure-monitor.md) | Constrained development | SCVMM inventory plus Arc-enabled host telemetry; live validation and parity review required |
 
 ## SCOM Management Pack solution
 
@@ -35,7 +35,7 @@ content also belongs to the Hyper-V SCOM solution.
 
 ## Azure Monitor Health Models solution
 
-The [conditional Azure Monitor design](azure-monitor.md) is a separate future solution boundary.
+The [constrained Azure Monitor design](azure-monitor.md) is a separate solution boundary.
 It remains gated on Arc-enabled SCVMM research and ADR 0023 and does not inherit the SCOM class,
 workflow, Distributed Application, packaging, or health-state implementation.
 Optional [SquaredUp Cloud](../../hyper-v/squaredup-cloud.md) content remains inside this same

@@ -21,6 +21,27 @@
 
 ### Added
 
+* Add a preview-gated Azure Local Azure Monitor Health Model baseline with Bicep-defined identity,
+  entities, relationships, documented platform metric signals, state alerts, development
+  parameters, research KQL, a starter workbook, contract validation, research, and ADR 0036.
+* Accept a constrained Hyper-V Azure Monitor go and add an independent Bicep-compiling Health Model
+  baseline with Arc-enabled SCVMM inventory, Arc-enabled host entities, Windows DCR, heartbeat,
+  hypervisor CPU, cluster-event and telemetry-coverage signals, state alerts, research KQL,
+  workbook, contract validation, and ADR 0037.
+* Add the SCOM-to-ServiceNow development integration with separate Azure Local and Hyper-V
+  connector profiles, an event/identity/lifecycle mapping contract, offline validation against both
+  authored MPs, public administration guidance, and ADR 0038.
+* Implement the functional Azure Local SCOM MP baseline as five independent artifacts with 17
+  classes, 28 relationships, staged discovery, a six-branch Distributed Application, 14 unit
+  monitors, six domain aggregates, 12 dependency rollups, curated alerts, performance and event
+  rules, diagnostics, operational knowledge, and 14 operator views.
+* Add separate Azure Local Discovery and Monitoring override MPs, provisional Lab, Standard, and
+  Strict starter templates, deterministic contract and Pester tests, SDK verification tooling, an
+  administration guide, and release-gate documentation.
+* Add Azure Local SCOM research, monitoring catalog, architecture, package, class, workflow,
+  health, tuning, and validation documentation with editable draw.io sources and published SVGs.
+* Accept ADRs 0032–0035 for the Azure Local local-runtime boundary, MP decomposition, object and DA
+  architecture, and health/alert/rollup contract.
 * Add separate customer-owned Hyper-V Discovery and Monitoring override contracts, optional Lab,
   Standard, and Strict starter templates, and a public Management Pack administration guide.
 * Implement the functional Hyper-V MP development baseline with 13 classes, 20 relationships,

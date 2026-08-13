@@ -28,3 +28,12 @@
 - Development MP XML output is not a release artifact. Do not call it verified, signed, sealed, or
   importable until the governed Windows authoring environment has run the Microsoft SDK schema,
   MPVerify, sealing/signing, and SCOM lab import gates.
+- Azure Monitor Health Models and their child resource APIs used here are preview. A successful
+  Bicep compile is an offline contract check, not proof that the resources deploy or that the
+  selected metric dimensions behave correctly in a representative subscription.
+- Arc-enabled SCVMM projects inventory but is not a complete host, cluster, storage, or network
+  health source. Hyper-V Azure Monitor needs Arc-enabled Server plus AMA/DCR host telemetry.
+- ServiceNow documentation currently lists SCOM 2025 DLL choices while its supported-version table
+  does not clearly list SCOM 2025. Treat SCOM 2025 support as a vendor confirmation and lab gate.
+- ServiceNow SCOM Events and SCOM Metrics are separate connectors. Metrics reads the Operations
+  Manager data warehouse and does not provide event or bidirectional behavior.

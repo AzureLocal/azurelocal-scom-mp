@@ -9,17 +9,21 @@ ServiceNow integration is planned as an optional layer for organizations that wa
 events to participate in ITOM Event Management, CMDB-aware correlation, incident management, and
 operational workflows. It is not embedded in a core Management Pack or Azure Monitor health model.
 
-::: info Roadmap status
-This is a **Later** research and proof-of-concept initiative. It does not delay the committed
-Hyper-V SCOM Management Pack or Azure Local monitoring solutions.
+::: warning Development status
+The SCOM-to-ServiceNow connector boundary, mapping profiles, lifecycle policy, administration
+guidance, and offline contract validation are implemented. A real ServiceNow/SCOM/MID Server lab
+is still required. Azure Monitor-to-ServiceNow remains a later implementation.
 :::
+
+For the implemented SCOM path, continue to the
+[SCOM-to-ServiceNow integration guide](scom-servicenow.md).
 
 ## Solution boundaries
 
 | Monitoring solution | ServiceNow delivery boundary |
 |---|---|
-| Azure Local SCOM MP | Optional SCOM connector configuration, mappings, validation, and operator guidance |
-| Hyper-V SCOM MP | Separate mappings and tests targeting only Hyper-V classes and alerts |
+| Azure Local SCOM MP | Development connector profile, namespace allow-list, mappings, validation, and operator guidance |
+| Hyper-V SCOM MP | Separate development profile, allow-list, mappings, and tests targeting Hyper-V classes and alerts |
 | Azure Local Azure Monitor | Optional action-group, webhook, mapping, and deployment guidance |
 | Hyper-V Azure Monitor | Reserved until the parent Azure Monitor solution receives a go decision |
 
@@ -28,7 +32,7 @@ event-field contract may be documented and tested across solutions.
 
 ## SCOM candidate architecture
 
-The preferred candidate is the ServiceNow SCOM Events connector running through a Windows MID
+The selected architecture is the ServiceNow SCOM Events connector running through a Windows MID
 Server. It collects SCOM alerts and can synchronize supported close, reopen, acknowledgement, and
 ticket-reference behavior. The separate SCOM Metrics connector is evaluated only when ServiceNow
 Metric Intelligence is licensed and metric ingestion provides demonstrated value.
@@ -117,16 +121,18 @@ The proof must demonstrate:
 - dual-source tests producing one operational incident for one underlying condition; and
 - complete audit evidence with no credential material in logs or repository artifacts.
 
-## Planned deliverables
+## Delivery status
 
-- supported integration and licensing matrix;
-- SCOM event, alert, CI, severity, and lifecycle mapping;
+- supported integration and licensing matrix — research baseline complete; installed-release and
+  SCOM 2025 confirmation remain;
+- SCOM event, alert, CI, severity, and lifecycle mapping — development contract complete;
 - Azure Monitor common-alert-schema mapping;
 - authoritative-source and correlation decision record;
 - security and connectivity design;
-- repeatable lab fixtures and fault tests;
-- optional deployment/configuration artifacts owned by each source solution; and
-- administrator, troubleshooting, upgrade, and rollback documentation.
+- repeatable lab fixtures and fault tests — offline contract complete; live fixtures remain;
+- optional configuration profiles owned by each source solution — development baseline complete;
+- administrator, troubleshooting, upgrade, and rollback documentation — SCOM guide complete;
+- Azure Monitor integration implementation — later.
 
 ## Current references
 

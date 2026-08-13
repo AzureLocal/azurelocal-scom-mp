@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.1",
+  "profile": "Standard",
+  "status": "DevelopmentStarter",
+  "purpose": "Typical production starting point using conservative, overrideable defaults pending broader field evidence.",
+  "discoverySettings": [
+    {
+      "id": "TopologyInterval",
+      "workflowId": "HybridSolutionsCloud.AzureLocal.Topology.Discovery",
+      "contextClassId": "HybridSolutionsCloud.AzureLocal.NodeRole",
+      "module": "PowerShellDiscovery",
+      "parameter": "IntervalSeconds",
+      "value": 1800
+    }
+  ],
+  "monitoringSettings": [
+    { "id": "MonitorInterval", "workflowIds": ["ClusterService", "ClusterNode", "Quorum", "Cpu", "Memory", "HealthFault", "StoragePool", "Volume", "PhysicalDisk", "NetworkATC", "Registration", "PlatformServices", "Update", "Pipeline"], "parameter": "IntervalSeconds", "value": 300 },
+    { "id": "CpuWarning", "workflowIds": ["Cpu"], "parameter": "CpuWarningPercent", "value": 80 },
+    { "id": "CpuCritical", "workflowIds": ["Cpu"], "parameter": "CpuCriticalPercent", "value": 90 },
+    { "id": "MemoryWarning", "workflowIds": ["Memory"], "parameter": "MemoryWarningMB", "value": 4096 },
+    { "id": "MemoryCritical", "workflowIds": ["Memory"], "parameter": "MemoryCriticalMB", "value": 2048 },
+    { "id": "VolumeWarning", "workflowIds": ["Volume"], "parameter": "VolumeWarningPercentFree", "value": 15 },
+    { "id": "VolumeCritical", "workflowIds": ["Volume"], "parameter": "VolumeCriticalPercentFree", "value": 10 }
+  ],
+  "activationRule": "Review effective cluster reserve, capacity, duration, recovery, and maintenance behavior before import; customer-owned override MPs remain authoritative."
+}
+

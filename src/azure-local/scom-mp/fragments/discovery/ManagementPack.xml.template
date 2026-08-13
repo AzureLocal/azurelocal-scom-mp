@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <Manifest>
+    <Identity><ID>HybridSolutionsCloud.AzureLocal.Discovery</ID><Version>{{VERSION}}</Version></Identity>
+    <Name>Hybrid Solutions Cloud Azure Local Discovery</Name>
+    <References>
+      <Reference Alias="System"><ID>System.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="Windows"><ID>Microsoft.Windows.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="HCSAzureLocalLibrary"><ID>HybridSolutionsCloud.AzureLocal.Library</ID><Version>{{VERSION}}</Version><PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken></Reference>
+    </References>
+  </Manifest>
+  <Monitoring>
+    <Discoveries>
+      <Discovery ID="HybridSolutionsCloud.AzureLocal.NodeRole.Seed.Discovery" Enabled="true" Target="Windows!Microsoft.Windows.Server.OperatingSystem" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes><DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" /></DiscoveryTypes>
+        <DataSource ID="PowerShellSeed" TypeID="Windows!Microsoft.Windows.TimedPowerShell.DiscoveryProvider">
+          <IntervalSeconds>14400</IntervalSeconds><SyncTime /><ScriptName>HybridSolutionsCloud.AzureLocal.NodeRole.Seed.Discovery.ps1</ScriptName>
+          <ScriptBody><![CDATA[
+param($SourceId, $ManagedEntityId, $ComputerName)
+
+$ErrorActionPreference = 'Stop'
+$api = New-Object -ComObject 'MOM.ScriptAPI'
+$data = $api.CreateDiscoveryData(0, $SourceId, $ManagedEntityId)
+
+try {
+    $productName = [string](Get-ItemProperty -LiteralPath 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name ProductName -ErrorAction Stop).ProductName
+    Import-Module FailoverClusters -ErrorAction Stop
+    $cluster = Get-Cluster -ErrorAction Stop
+    $storageSystem = Get-StorageSubSystem -ErrorAction Stop | Where-Object FriendlyName -Like 'Cluster*' | Select-Object -First 1
+    $registrationCommand = Get-Command Get-AzureStackHCI -ErrorAction SilentlyContinue
+    $isAzureLocal = $productName -match 'Azure Stack HCI|Azure Local' -or $null -ne $registrationCommand
+
+    if ($isAzureLocal -and $null -ne $cluster -and $null -ne $storageSystem) {
+        $instance = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']$")
+        $instance.AddProperty("$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$", $ComputerName)
+        $instance.AddProperty("$MPElement[Name='System!System.Entity']/DisplayName$", 'Azure Local on ' + $ComputerName)
+        $data.AddInstance($instance)
+    }
+} catch {
+    $api.LogScriptEvent('HybridSolutionsCloud.AzureLocal.NodeRole.Seed.Discovery.ps1', 8301, 2, $_.Exception.Message)
+}
+
+$data
+]]></ScriptBody>
+          <Parameters>
+            <Parameter><Name>SourceId</Name><Value>$MPElement$</Value></Parameter>
+            <Parameter><Name>ManagedEntityId</Name><Value>$Target/Id$</Value></Parameter>
+            <Parameter><Name>ComputerName</Name><Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value></Parameter>
+          </Parameters>
+          <TimeoutSeconds>180</TimeoutSeconds>
+        </DataSource>
+      </Discovery>
+      <Discovery ID="HybridSolutionsCloud.AzureLocal.Topology.Discovery" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal">
+        <Category>Discovery</Category>
+        <DiscoveryTypes>
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkAtcIntent" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.UpdateState" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ArcIntegration" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ResourceBridge" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringPipeline" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ComputeComponent" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponent" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkComponent" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponent" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.LifecycleComponent" />
+          <DiscoveryClass TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringComponent" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsNodeRole" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsStoragePool" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsVolume" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsPhysicalDisk" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsUpdateState" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePoolContainsVolume" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePoolContainsPhysicalDisk" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsDeployment" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsComputeComponent" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsStorageComponent" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsNetworkComponent" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsPlatformComponent" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsLifecycleComponent" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsMonitoringComponent" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ComputeComponentContainsNodeRole" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponentContainsNodeRole" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponentContainsStoragePool" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponentContainsVolume" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponentContainsPhysicalDisk" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkComponentContainsNodeRole" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkComponentContainsNetworkAtcIntent" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponentContainsNodeRole" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponentContainsArcIntegration" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponentContainsResourceBridge" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.LifecycleComponentContainsNodeRole" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.LifecycleComponentContainsUpdateState" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringComponentContainsNodeRole" />
+          <DiscoveryRelationship TypeID="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringComponentContainsPipeline" />
+        </DiscoveryTypes>
+        <DataSource ID="PowerShellDiscovery" TypeID="Windows!Microsoft.Windows.TimedPowerShell.DiscoveryProvider">
+          <IntervalSeconds>1800</IntervalSeconds><SyncTime /><ScriptName>HybridSolutionsCloud.AzureLocal.Topology.Discovery.ps1</ScriptName>
+          <ScriptBody><![CDATA[
+param($SourceId, $ManagedEntityId, $ComputerName)
+
+$ErrorActionPreference = 'Stop'
+$api = New-Object -ComObject 'MOM.ScriptAPI'
+$data = $api.CreateDiscoveryData(0, $SourceId, $ManagedEntityId)
+
+function Add-EntityProperty {
+    param($Instance, [string]$Element, $Value)
+    if ($null -ne $Value) { $Instance.AddProperty($Element, [string]$Value) }
+}
+
+function Add-RelationshipInstance {
+    param([string]$TypeName, $Source, $Target)
+    $relationship = $data.CreateRelationshipInstance($TypeName)
+    $relationship.Source = $Source
+    $relationship.Target = $Target
+    $data.AddInstance($relationship)
+}
+
+function Get-ServiceState {
+    param([string[]]$Names)
+    $services = @(Get-Service -Name $Names -ErrorAction SilentlyContinue)
+    if ($services.Count -eq 0) { return 'NotPresent' }
+    if (@($services | Where-Object Status -ne 'Running').Count -gt 0) { return 'Stopped' }
+    return 'Running'
+}
+
+try {
+    Import-Module FailoverClusters -ErrorAction Stop
+    $cluster = Get-Cluster -ErrorAction Stop
+    $clusterId = if ($cluster.PSObject.Properties['Id'] -and $cluster.Id) { [string]$cluster.Id } else { [string]$cluster.Name }
+    $deploymentId = 'azurelocal:' + $clusterId.ToLowerInvariant()
+    $nodes = @(Get-ClusterNode -Cluster $cluster -ErrorAction Stop)
+    $localNode = $nodes | Where-Object Name -EQ $env:COMPUTERNAME | Select-Object -First 1
+    $computer = Get-CimInstance -ClassName Win32_ComputerSystem -ErrorAction Stop
+    $registration = $null
+    try { $registration = Get-AzureStackHCI -ErrorAction Stop } catch { $registration = $null }
+    $solutionVersion = ''
+    try { $solutionVersion = [string](Get-SolutionUpdateEnvironment -ErrorAction Stop).CurrentVersion } catch { $solutionVersion = '' }
+
+    $storagePools = @(Get-StoragePool -IsPrimordial $false -ErrorAction SilentlyContinue | Where-Object FriendlyName -NotLike 'Primordial*')
+    $volumes = @(Get-Volume -ErrorAction SilentlyContinue | Where-Object { $_.FileSystem -in @('CSVFS_ReFS','CSVFS_NTFS','ReFS') })
+    $physicalDisks = @(Get-PhysicalDisk -ErrorAction SilentlyContinue)
+    $csvs = @(Get-ClusterSharedVolume -Cluster $cluster -ErrorAction SilentlyContinue)
+    $networkAuthority = if (Get-Command Get-NetIntent -ErrorAction SilentlyContinue) { 'NetworkATC' } else { 'UnsupportedForAzureLocal' }
+
+    $node = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']$")
+    Add-EntityProperty $node "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/DeploymentId$" $deploymentId
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/ClusterName$" $cluster.Name
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/ClusterId$" $clusterId
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/NodeName$" $env:COMPUTERNAME
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/NodeState$" $(if ($localNode) { $localNode.State } else { 'Unknown' })
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/NodeWeight$" $(if ($localNode) { $localNode.NodeWeight } else { $null })
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/FaultDomain$" $(if ($localNode) { $localNode.FaultDomain } else { '' })
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/Manufacturer$" $computer.Manufacturer
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/Model$" $computer.Model
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/LogicalProcessorCount$" $computer.NumberOfLogicalProcessors
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/MemoryBytes$" $computer.TotalPhysicalMemory
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/SolutionVersion$" $solutionVersion
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/RegistrationStatus$" $(if ($registration) { $registration.RegistrationStatus } else { 'Unknown' })
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/ConnectionStatus$" $(if ($registration) { $registration.ConnectionStatus } else { 'Unknown' })
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/NetworkAuthority$" $networkAuthority
+    Add-EntityProperty $node "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole']/DiscoveryVersion$" '1.0'
+    Add-EntityProperty $node "$MPElement[Name='System!System.Entity']/DisplayName$" ('Azure Local on ' + $ComputerName)
+    $data.AddInstance($node)
+
+    $deployment = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']$")
+    Add-EntityProperty $deployment "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']/DeploymentId$" $deploymentId
+    Add-EntityProperty $deployment "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']/ClusterName$" $cluster.Name
+    Add-EntityProperty $deployment "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']/ClusterId$" $clusterId
+    Add-EntityProperty $deployment "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']/FunctionalLevel$" $cluster.ClusterFunctionalLevel
+    Add-EntityProperty $deployment "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']/QuorumType$" $(try { (Get-ClusterQuorum -Cluster $cluster).QuorumType } catch { 'Unknown' })
+    Add-EntityProperty $deployment "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']/NodeCount$" $nodes.Count
+    Add-EntityProperty $deployment "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']/StoragePoolCount$" $storagePools.Count
+    Add-EntityProperty $deployment "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']/VolumeCount$" $volumes.Count
+    Add-EntityProperty $deployment "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment']/PhysicalDiskCount$" $physicalDisks.Count
+    Add-EntityProperty $deployment "$MPElement[Name='System!System.Entity']/DisplayName$" $cluster.Name
+    $data.AddInstance($deployment)
+    Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsNodeRole']$" $deployment $node
+
+    $service = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service']$")
+    Add-EntityProperty $service "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service']/DeploymentId$" $deploymentId
+    Add-EntityProperty $service "$MPElement[Name='System!System.Entity']/DisplayName$" ('Azure Local Health - ' + $cluster.Name)
+    $data.AddInstance($service)
+
+    $components = @{}
+    foreach ($definition in @(
+        @('Compute', "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ComputeComponent']$", "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ComputeComponent']/DeploymentId$"),
+        @('Storage', "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponent']$", "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponent']/DeploymentId$"),
+        @('Network', "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkComponent']$", "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkComponent']/DeploymentId$"),
+        @('Azure Integration', "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponent']$", "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponent']/DeploymentId$"),
+        @('Lifecycle', "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.LifecycleComponent']$", "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.LifecycleComponent']/DeploymentId$"),
+        @('Monitoring Pipeline', "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringComponent']$", "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringComponent']/DeploymentId$")
+    )) {
+        $component = $data.CreateClassInstance($definition[1])
+        Add-EntityProperty $component $definition[2] $deploymentId
+        Add-EntityProperty $component "$MPElement[Name='System!System.Entity']/DisplayName$" $definition[0]
+        $data.AddInstance($component)
+        $components[$definition[0]] = $component
+    }
+
+    Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsDeployment']$" $service $deployment
+    foreach ($item in @(
+        @("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsComputeComponent']$", 'Compute'),
+        @("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsStorageComponent']$", 'Storage'),
+        @("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsNetworkComponent']$", 'Network'),
+        @("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsPlatformComponent']$", 'Azure Integration'),
+        @("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsLifecycleComponent']$", 'Lifecycle'),
+        @("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsMonitoringComponent']$", 'Monitoring Pipeline')
+    )) { Add-RelationshipInstance $item[0] $service $components[$item[1]] }
+
+    foreach ($relationshipType in @(
+        "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ComputeComponentContainsNodeRole']$",
+        "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponentContainsNodeRole']$",
+        "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkComponentContainsNodeRole']$",
+        "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponentContainsNodeRole']$",
+        "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.LifecycleComponentContainsNodeRole']$",
+        "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringComponentContainsNodeRole']$"
+    )) {
+        $componentKey = if ($relationshipType -match 'Compute') { 'Compute' } elseif ($relationshipType -match 'Storage') { 'Storage' } elseif ($relationshipType -match 'Network') { 'Network' } elseif ($relationshipType -match 'Platform') { 'Azure Integration' } elseif ($relationshipType -match 'Lifecycle') { 'Lifecycle' } else { 'Monitoring Pipeline' }
+        Add-RelationshipInstance $relationshipType $components[$componentKey] $node
+    }
+
+    $poolInstances = @{}
+    foreach ($pool in $storagePools) {
+        $poolId = if ($pool.UniqueId) { [string]$pool.UniqueId } else { [string]$pool.FriendlyName }
+        $instance = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool']$")
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool']/DeploymentId$" $deploymentId
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool']/PoolId$" $poolId
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool']/FriendlyName$" $pool.FriendlyName
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool']/HealthStatus$" $pool.HealthStatus
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool']/OperationalStatus$" ($pool.OperationalStatus -join '; ')
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool']/SizeBytes$" $pool.Size
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool']/AllocatedBytes$" $pool.AllocatedSize
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool']/IsReadOnly$" $pool.IsReadOnly
+        Add-EntityProperty $instance "$MPElement[Name='System!System.Entity']/DisplayName$" $pool.FriendlyName
+        $data.AddInstance($instance)
+        $poolInstances[$poolId] = $instance
+        Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsStoragePool']$" $deployment $instance
+        Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponentContainsStoragePool']$" $components['Storage'] $instance
+    }
+    $primaryPool = $poolInstances.Values | Select-Object -First 1
+
+    foreach ($volume in $volumes) {
+        $csv = $csvs | Where-Object { $_.SharedVolumeInfo.FriendlyVolumeName -eq $volume.Path } | Select-Object -First 1
+        $volumeId = if ($volume.UniqueId) { [string]$volume.UniqueId } elseif ($volume.Path) { [string]$volume.Path } else { [string]$volume.ObjectId }
+        $instance = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']$")
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/DeploymentId$" $deploymentId
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/VolumeId$" $volumeId
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/FriendlyName$" $volume.FileSystemLabel
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/Path$" $volume.Path
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/HealthStatus$" $volume.HealthStatus
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/OperationalStatus$" ($volume.OperationalStatus -join '; ')
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/FileSystem$" $volume.FileSystem
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/SizeBytes$" $volume.Size
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/FreeBytes$" $volume.SizeRemaining
+        if ($volume.Size -gt 0) { Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/PercentFree$" ([math]::Round(($volume.SizeRemaining / $volume.Size) * 100, 2)) }
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/OwnerNode$" $(if ($csv) { $csv.OwnerNode } else { '' })
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume']/RedirectedAccess$" $(if ($csv) { $csv.SharedVolumeInfo.RedirectedAccess } else { $false })
+        Add-EntityProperty $instance "$MPElement[Name='System!System.Entity']/DisplayName$" $(if ($volume.FileSystemLabel) { $volume.FileSystemLabel } else { $volumeId })
+        $data.AddInstance($instance)
+        Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsVolume']$" $deployment $instance
+        Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponentContainsVolume']$" $components['Storage'] $instance
+        if ($primaryPool) { Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePoolContainsVolume']$" $primaryPool $instance }
+    }
+
+    foreach ($disk in $physicalDisks) {
+        $diskId = if ($disk.UniqueId) { [string]$disk.UniqueId } elseif ($disk.SerialNumber) { [string]$disk.SerialNumber } else { [string]$disk.DeviceId }
+        $instance = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']$")
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/DeploymentId$" $deploymentId
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/DiskId$" $diskId
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/FriendlyName$" $disk.FriendlyName
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/SerialNumber$" $disk.SerialNumber
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/MediaType$" $disk.MediaType
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/BusType$" $disk.BusType
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/Usage$" $disk.Usage
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/HealthStatus$" $disk.HealthStatus
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/OperationalStatus$" ($disk.OperationalStatus -join '; ')
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/SizeBytes$" $disk.Size
+        Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk']/PhysicalLocation$" $disk.PhysicalLocation
+        Add-EntityProperty $instance "$MPElement[Name='System!System.Entity']/DisplayName$" ($disk.FriendlyName + ' ' + $diskId)
+        $data.AddInstance($instance)
+        Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsPhysicalDisk']$" $deployment $instance
+        Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponentContainsPhysicalDisk']$" $components['Storage'] $instance
+        if ($primaryPool) { Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePoolContainsPhysicalDisk']$" $primaryPool $instance }
+    }
+
+    if (Get-Command Get-NetIntent -ErrorAction SilentlyContinue) {
+        $statusRows = @(Get-NetIntentStatus -ComputerName $env:COMPUTERNAME -ErrorAction SilentlyContinue)
+        foreach ($intent in @(Get-NetIntent -ComputerName $env:COMPUTERNAME -ErrorAction SilentlyContinue)) {
+            $status = $statusRows | Where-Object IntentName -EQ $intent.IntentName | Select-Object -First 1
+            $instance = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkAtcIntent']$")
+            Add-EntityProperty $instance "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkAtcIntent']/IntentName$" $intent.IntentName
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkAtcIntent']/ConfigurationStatus$" $(if ($status) { $status.ConfigurationStatus } else { 'Unknown' })
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkAtcIntent']/ProvisioningStatus$" $(if ($status) { $status.ProvisioningStatus } else { 'Unknown' })
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkAtcIntent']/TrafficType$" $intent.TrafficType
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkAtcIntent']/AdapterNames$" ($intent.AdapterName -join '; ')
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkAtcIntent']/LastUpdated$" $(if ($status) { $status.LastUpdated } else { '' })
+            Add-EntityProperty $instance "$MPElement[Name='System!System.Entity']/DisplayName$" ($intent.IntentName + ' on ' + $env:COMPUTERNAME)
+            $data.AddInstance($instance)
+            Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkComponentContainsNetworkAtcIntent']$" $components['Network'] $instance
+        }
+    }
+
+    if (Get-Command Get-SolutionUpdate -ErrorAction SilentlyContinue) {
+        foreach ($update in @(Get-SolutionUpdate -ErrorAction SilentlyContinue)) {
+            $updateId = if ($update.ResourceId) { [string]$update.ResourceId } elseif ($update.Id) { [string]$update.Id } else { [string]$update.Version }
+            $instance = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.UpdateState']$")
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.UpdateState']/DeploymentId$" $deploymentId
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.UpdateState']/UpdateId$" $updateId
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.UpdateState']/Version$" $update.Version
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.UpdateState']/State$" $update.State
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.UpdateState']/HealthState$" $update.HealthState
+            Add-EntityProperty $instance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.UpdateState']/PackageType$" $update.PackageType
+            Add-EntityProperty $instance "$MPElement[Name='System!System.Entity']/DisplayName$" ('Azure Local update ' + $update.Version)
+            $data.AddInstance($instance)
+            Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.DeploymentContainsUpdateState']$" $deployment $instance
+            Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.LifecycleComponentContainsUpdateState']$" $components['Lifecycle'] $instance
+        }
+    }
+
+    $arc = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ArcIntegration']$")
+    Add-EntityProperty $arc "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
+    Add-EntityProperty $arc "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ArcIntegration']/IntegrationId$" 'Arc'
+    Add-EntityProperty $arc "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ArcIntegration']/RegistrationStatus$" $(if ($registration) { $registration.RegistrationStatus } else { 'Unknown' })
+    Add-EntityProperty $arc "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ArcIntegration']/ConnectionStatus$" $(if ($registration) { $registration.ConnectionStatus } else { 'Unknown' })
+    Add-EntityProperty $arc "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ArcIntegration']/LastConnected$" $(if ($registration) { $registration.LastConnected } else { '' })
+    Add-EntityProperty $arc "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ArcIntegration']/ArcAgentServiceState$" (Get-ServiceState @('himds','GCArcService','ExtensionService'))
+    Add-EntityProperty $arc "$MPElement[Name='System!System.Entity']/DisplayName$" ('Arc integration on ' + $env:COMPUTERNAME)
+    $data.AddInstance($arc)
+    Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponentContainsArcIntegration']$" $components['Azure Integration'] $arc
+
+    $mocServices = @(Get-Service -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'moc|wssda' })
+    if ($mocServices.Count -gt 0) {
+        $bridge = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ResourceBridge']$")
+        Add-EntityProperty $bridge "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
+        Add-EntityProperty $bridge "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ResourceBridge']/BridgeId$" 'LocalInfrastructure'
+        Add-EntityProperty $bridge "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ResourceBridge']/ServiceState$" $(if (@($mocServices | Where-Object Status -ne 'Running').Count -gt 0) { 'Degraded' } else { 'Running' })
+        Add-EntityProperty $bridge "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ResourceBridge']/MocServiceState$" (($mocServices | ForEach-Object { $_.Name + '=' + $_.Status }) -join '; ')
+        Add-EntityProperty $bridge "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ResourceBridge']/Presence$" 'Present'
+        Add-EntityProperty $bridge "$MPElement[Name='System!System.Entity']/DisplayName$" ('Azure Local VM management infrastructure on ' + $env:COMPUTERNAME)
+        $data.AddInstance($bridge)
+        Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponentContainsResourceBridge']$" $components['Azure Integration'] $bridge
+    }
+
+    $pipeline = $data.CreateClassInstance("$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringPipeline']$")
+    Add-EntityProperty $pipeline "$MPElement[Name='Windows!Microsoft.Windows.Computer']/PrincipalName$" $ComputerName
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringPipeline']/PipelineId$" 'Topology'
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringPipeline']/LastDiscoveryUtc$" ([DateTime]::UtcNow.ToString('o'))
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringPipeline']/DiscoveryStatus$" 'Healthy'
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringPipeline']/ErrorSummary$" ''
+    Add-EntityProperty $pipeline "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringPipeline']/TopologyObjectCount$" ($storagePools.Count + $volumes.Count + $physicalDisks.Count + 10)
+    Add-EntityProperty $pipeline "$MPElement[Name='System!System.Entity']/DisplayName$" ('Azure Local topology pipeline on ' + $ComputerName)
+    $data.AddInstance($pipeline)
+    Add-RelationshipInstance "$MPElement[Name='HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringComponentContainsPipeline']$" $components['Monitoring Pipeline'] $pipeline
+} catch {
+    $api.LogScriptEvent('HybridSolutionsCloud.AzureLocal.Topology.Discovery.ps1', 8302, 1, $_.Exception.ToString())
+}
+
+$data
+]]></ScriptBody>
+          <Parameters>
+            <Parameter><Name>SourceId</Name><Value>$MPElement$</Value></Parameter>
+            <Parameter><Name>ManagedEntityId</Name><Value>$Target/Id$</Value></Parameter>
+            <Parameter><Name>ComputerName</Name><Value>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/PrincipalName$</Value></Parameter>
+          </Parameters>
+          <TimeoutSeconds>300</TimeoutSeconds>
+        </DataSource>
+      </Discovery>
+    </Discoveries>
+  </Monitoring>
+  <LanguagePacks>
+    <LanguagePack ID="ENU" IsDefault="true">
+      <DisplayStrings>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Discovery"><Name>Hybrid Solutions Cloud Azure Local Discovery</Name><Description>Discovers independent Azure Local node, deployment, storage, Network ATC, lifecycle, platform, monitoring-pipeline, and Distributed Application topology from local interfaces.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.NodeRole.Seed.Discovery"><Name>Discover Azure Local node role</Name><Description>Discovers a role only when the local operating system and clustered Storage Spaces Direct topology identify Azure Local.</Description></DisplayString>
+        <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Topology.Discovery"><Name>Discover Azure Local topology and service health model</Name><Description>Discovers stable cluster-scoped objects and the platform-owned Distributed Application without requiring Azure credentials.</Description></DisplayString>
+      </DisplayStrings>
+    </LanguagePack>
+  </LanguagePacks>
+</ManagementPack>
+

@@ -1,0 +1,31 @@
+{
+  "profileVersion": "1.0.0",
+  "status": "DevelopmentBaseline",
+  "product": "AzureLocal",
+  "connectorDefinition": "SCOM",
+  "collectionDirection": "Pull",
+  "bidirectionalEnabled": false,
+  "containsCredentials": false,
+  "connectorParameters": {
+    "initialSyncDays": 7,
+    "alertBulkSize": 500,
+    "debugEnabled": false,
+    "rawPayloadLoggingEnabled": false,
+    "loginWithWindowsAuthentication": true
+  },
+  "allowList": {
+    "managementPackPrefixes": [
+      "HybridSolutionsCloud.AzureLocal"
+    ],
+    "minimumSeverity": "Warning",
+    "includeResolvedUpdates": true
+  },
+  "lifecycle": {
+    "monitorAlerts": "SourceAutoResolve",
+    "eventRuleAlerts": "ExplicitPolicyRequired",
+    "serviceNowCloseWritesBack": false,
+    "serviceNowReopenWritesBack": false,
+    "ticketIdWritesBack": false
+  }
+}
+

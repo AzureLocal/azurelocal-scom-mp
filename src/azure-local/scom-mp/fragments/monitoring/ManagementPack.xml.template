@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <Manifest>
+    <Identity><ID>HybridSolutionsCloud.AzureLocal.Monitoring</ID><Version>{{VERSION}}</Version></Identity>
+    <Name>Hybrid Solutions Cloud Azure Local Monitoring</Name>
+    <References>
+      <Reference Alias="System"><ID>System.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="Windows"><ID>Microsoft.Windows.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="Health"><ID>System.Health.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="Perf"><ID>System.Performance.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="SC"><ID>Microsoft.SystemCenter.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="MSDL"><ID>Microsoft.SystemCenter.DataWarehouse.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="HCSAzureLocalLibrary"><ID>HybridSolutionsCloud.AzureLocal.Library</ID><Version>{{VERSION}}</Version><PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken></Reference>
+    </References>
+  </Manifest>
+  <TypeDefinitions>
+    <ModuleTypes>
+      <DataSourceModuleType ID="HybridSolutionsCloud.AzureLocal.NodeHealth.DataSource" Accessibility="Internal" Batching="false">
+        <Configuration>
+          <xsd:element name="IntervalSeconds" type="xsd:integer" minOccurs="1" /><xsd:element name="SyncTime" type="xsd:string" minOccurs="0" /><xsd:element name="TimeoutSeconds" type="xsd:integer" minOccurs="1" />
+          <xsd:element name="CpuWarningPercent" type="xsd:double" minOccurs="1" /><xsd:element name="CpuCriticalPercent" type="xsd:double" minOccurs="1" />
+          <xsd:element name="MemoryWarningMB" type="xsd:double" minOccurs="1" /><xsd:element name="MemoryCriticalMB" type="xsd:double" minOccurs="1" />
+          <xsd:element name="VolumeWarningPercentFree" type="xsd:double" minOccurs="1" /><xsd:element name="VolumeCriticalPercentFree" type="xsd:double" minOccurs="1" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" /><OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" /><OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="CpuWarningPercent" Selector="$Config/CpuWarningPercent$" ParameterType="double" /><OverrideableParameter ID="CpuCriticalPercent" Selector="$Config/CpuCriticalPercent$" ParameterType="double" />
+          <OverrideableParameter ID="MemoryWarningMB" Selector="$Config/MemoryWarningMB$" ParameterType="double" /><OverrideableParameter ID="MemoryCriticalMB" Selector="$Config/MemoryCriticalMB$" ParameterType="double" />
+          <OverrideableParameter ID="VolumeWarningPercentFree" Selector="$Config/VolumeWarningPercentFree$" ParameterType="double" /><OverrideableParameter ID="VolumeCriticalPercentFree" Selector="$Config/VolumeCriticalPercentFree$" ParameterType="double" />
+        </OverrideableParameters>
+        <ModuleImplementation Isolation="Any">
+          <Composite>
+            <MemberModules>
+              <DataSource ID="Scheduler" TypeID="System!System.Scheduler"><Scheduler><SimpleReccuringSchedule><Interval Unit="Seconds">$Config/IntervalSeconds$</Interval><SyncTime>$Config/SyncTime$</SyncTime></SimpleReccuringSchedule><ExcludeDates /></Scheduler></DataSource>
+              <ProbeAction ID="Probe" TypeID="Windows!Microsoft.Windows.PowerShellPropertyBagTriggerOnlyProbe">
+                <ScriptName>HybridSolutionsCloud.AzureLocal.NodeHealth.Probe.ps1</ScriptName>
+                <ScriptBody><![CDATA[
+param($CpuWarningPercent, $CpuCriticalPercent, $MemoryWarningMB, $MemoryCriticalMB, $VolumeWarningPercentFree, $VolumeCriticalPercentFree)
+
+$ErrorActionPreference = 'Stop'
+$api = New-Object -ComObject 'MOM.ScriptAPI'
+$bag = $api.CreatePropertyBag()
+
+function Set-State {
+    param([string]$Name, [string]$State, [string]$Detail)
+    $bag.AddValue($Name, $State)
+    $bag.AddValue($Name + 'Detail', $Detail)
+}
+
+function Get-ServiceSummary {
+    param([string[]]$Names)
+    $services = @(Get-Service -Name $Names -ErrorAction SilentlyContinue)
+    if ($services.Count -eq 0) { return [pscustomobject]@{ State = 'NotApplicable'; Detail = 'No applicable services were found.' } }
+    $stopped = @($services | Where-Object Status -ne 'Running')
+    return [pscustomobject]@{
+        State = $(if ($stopped.Count -gt 0) { 'Critical' } else { 'Good' })
+        Detail = (($services | ForEach-Object { $_.Name + '=' + $_.Status }) -join '; ')
+    }
+}
+
+try {
+    Import-Module FailoverClusters -ErrorAction Stop
+    $cluster = Get-Cluster -ErrorAction Stop
+
+    $clusterService = Get-Service -Name ClusSvc -ErrorAction Stop
+    Set-State 'ClusterServiceState' $(if ($clusterService.Status -eq 'Running') { 'Good' } else { 'Critical' }) ('ClusSvc=' + $clusterService.Status)
+
+    $nodes = @(Get-ClusterNode -Cluster $cluster -ErrorAction Stop)
+    $downNodes = @($nodes | Where-Object State -ne 'Up')
+    Set-State 'ClusterNodeState' $(if ($downNodes.Count -gt 0) { 'Critical' } else { 'Good' }) ("Nodes not Up: {0}; total nodes: {1}; affected: {2}" -f $downNodes.Count, $nodes.Count, (($downNodes.Name) -join ', '))
+
+    $quorum = Get-ClusterQuorum -Cluster $cluster -ErrorAction Stop
+    $quorumResource = $null
+    if ($quorum.QuorumResource) { $quorumResource = Get-ClusterResource -Name $quorum.QuorumResource -ErrorAction SilentlyContinue }
+    $quorumState = if ($quorumResource -and $quorumResource.State -ne 'Online') { 'Critical' } else { 'Good' }
+    Set-State 'QuorumState' $quorumState ("Type: {0}; resource: {1}; resource state: {2}" -f $quorum.QuorumType, $quorum.QuorumResource, $(if ($quorumResource) { $quorumResource.State } else { 'NotApplicable' }))
+
+    $faults = @()
+    if (Get-Command Get-HealthFault -ErrorAction SilentlyContinue) { $faults = @(Get-HealthFault -ErrorAction SilentlyContinue) }
+    $criticalFaults = @($faults | Where-Object { [string]$_.Severity -match 'Critical|Major' -or [int]$_.PerceivedSeverity -ge 5 })
+    $warningFaults = @($faults | Where-Object { $_ -notin $criticalFaults })
+    $faultState = if ($criticalFaults.Count -gt 0) { 'Critical' } elseif ($warningFaults.Count -gt 0) { 'Warning' } else { 'Good' }
+    Set-State 'HealthFaultState' $faultState ("Critical/major: {0}; other active: {1}; total: {2}" -f $criticalFaults.Count, $warningFaults.Count, $faults.Count)
+    $bag.AddValue('ActiveHealthFaultCount', $faults.Count)
+
+    $pools = @(Get-StoragePool -IsPrimordial $false -ErrorAction SilentlyContinue | Where-Object FriendlyName -NotLike 'Primordial*')
+    $badPools = @($pools | Where-Object { [string]$_.HealthStatus -ne 'Healthy' -or $_.IsReadOnly })
+    Set-State 'StoragePoolState' $(if ($badPools.Count -gt 0) { 'Critical' } else { 'Good' }) ("Unhealthy/read-only pools: {0}; total pools: {1}" -f $badPools.Count, $pools.Count)
+
+    $volumes = @(Get-Volume -ErrorAction SilentlyContinue | Where-Object { $_.FileSystem -in @('CSVFS_ReFS','CSVFS_NTFS','ReFS') })
+    $criticalVolumes = 0
+    $warningVolumes = 0
+    $lowestFree = 100
+    foreach ($volume in $volumes) {
+        if ([string]$volume.HealthStatus -ne 'Healthy') { $criticalVolumes++; continue }
+        if ($volume.Size -gt 0) {
+            $percentFree = ($volume.SizeRemaining / $volume.Size) * 100
+            $lowestFree = [math]::Min($lowestFree, $percentFree)
+            if ($percentFree -le [double]$VolumeCriticalPercentFree) { $criticalVolumes++ }
+            elseif ($percentFree -le [double]$VolumeWarningPercentFree) { $warningVolumes++ }
+        }
+    }
+    $csvs = @(Get-ClusterSharedVolume -Cluster $cluster -ErrorAction SilentlyContinue)
+    $redirectedCsvs = @($csvs | Where-Object { $_.State -ne 'Online' -or $_.SharedVolumeInfo.RedirectedAccess })
+    $criticalVolumes += $redirectedCsvs.Count
+    $volumeState = if ($criticalVolumes -gt 0) { 'Critical' } elseif ($warningVolumes -gt 0) { 'Warning' } else { 'Good' }
+    Set-State 'VolumeState' $volumeState ("Critical: {0}; warning: {1}; redirected/offline CSV: {2}; lowest free: {3:N2}%" -f $criticalVolumes, $warningVolumes, $redirectedCsvs.Count, $lowestFree)
+    $bag.AddValue('VolumeLowestPercentFree', [math]::Round($lowestFree, 2))
+
+    $disks = @(Get-PhysicalDisk -ErrorAction SilentlyContinue)
+    $badDisks = @($disks | Where-Object { [string]$_.HealthStatus -ne 'Healthy' -or [string]$_.OperationalStatus -notmatch 'OK' })
+    $diskState = if ($badDisks.Count -gt 1) { 'Critical' } elseif ($badDisks.Count -eq 1) { 'Warning' } else { 'Good' }
+    Set-State 'PhysicalDiskState' $diskState ("Non-healthy disks: {0}; total disks: {1}" -f $badDisks.Count, $disks.Count)
+    $bag.AddValue('NonHealthyPhysicalDiskCount', $badDisks.Count)
+
+    if (Get-Command Get-NetIntentStatus -ErrorAction SilentlyContinue) {
+        $intentStatus = @(Get-NetIntentStatus -ComputerName $env:COMPUTERNAME -ErrorAction SilentlyContinue)
+        $failedIntent = @($intentStatus | Where-Object { [string]$_.ConfigurationStatus -notin @('Success','Completed','Provisioning') -or [string]$_.ProvisioningStatus -match 'Failed|Error' })
+        Set-State 'NetworkAtcState' $(if ($failedIntent.Count -gt 0) { 'Critical' } else { 'Good' }) ("Unsuccessful intents: {0}; total intents: {1}" -f $failedIntent.Count, $intentStatus.Count)
+    } else {
+        Set-State 'NetworkAtcState' 'Critical' 'Network ATC cmdlets are unavailable on this Azure Local node.'
+    }
+
+    $registration = $null
+    try { $registration = Get-AzureStackHCI -ErrorAction Stop } catch { $registration = $null }
+    if ($registration) {
+        $registrationState = if ([string]$registration.RegistrationStatus -ne 'Registered') { 'Critical' } elseif ([string]$registration.ConnectionStatus -ne 'Connected') { 'Warning' } else { 'Good' }
+        Set-State 'RegistrationState' $registrationState ("Registration={0}; connection={1}; last connected={2}" -f $registration.RegistrationStatus, $registration.ConnectionStatus, $registration.LastConnected)
+    } else {
+        Set-State 'RegistrationState' 'Critical' 'Get-AzureStackHCI did not return registration state.'
+    }
+
+    $arcServices = Get-ServiceSummary @('himds','GCArcService','ExtensionService')
+    $mocServices = @(Get-Service -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'moc|wssda' })
+    $mocStopped = @($mocServices | Where-Object Status -ne 'Running')
+    $platformState = if ($arcServices.State -eq 'Critical' -or $mocStopped.Count -gt 0) { 'Critical' } elseif ($arcServices.State -eq 'NotApplicable') { 'Warning' } else { 'Good' }
+    Set-State 'PlatformServicesState' $platformState ("Arc: {0}; MOC services stopped: {1}; MOC services found: {2}" -f $arcServices.Detail, $mocStopped.Count, $mocServices.Count)
+
+    $updates = @()
+    if (Get-Command Get-SolutionUpdate -ErrorAction SilentlyContinue) { $updates = @(Get-SolutionUpdate -ErrorAction SilentlyContinue) }
+    $failedUpdates = @($updates | Where-Object { [string]$_.State -match 'Failed|PreparationFailed|DownloadFailed' -or [string]$_.HealthState -match 'Error|Critical' })
+    $warningUpdates = @($updates | Where-Object { [string]$_.State -match 'AdditionalContentRequired|Ready|Warning' })
+    $updateState = if ($failedUpdates.Count -gt 0) { 'Critical' } elseif ($warningUpdates.Count -gt 0) { 'Warning' } else { 'Good' }
+    Set-State 'UpdateState' $updateState ("Failed: {0}; attention: {1}; updates found: {2}" -f $failedUpdates.Count, $warningUpdates.Count, $updates.Count)
+
+    $memory = Get-CimInstance Win32_OperatingSystem -ErrorAction Stop
+    $availableMemoryMB = [math]::Round($memory.FreePhysicalMemory / 1024, 0)
+    $bag.AddValue('AvailableMemoryMB', $availableMemoryMB)
+    $memoryState = if ($availableMemoryMB -le [double]$MemoryCriticalMB) { 'Critical' } elseif ($availableMemoryMB -le [double]$MemoryWarningMB) { 'Warning' } else { 'Good' }
+    Set-State 'MemoryState' $memoryState ("Available memory: {0} MB" -f $availableMemoryMB)
+
+    $cpuValue = [math]::Round((Get-CimInstance Win32_Processor | Measure-Object LoadPercentage -Average).Average, 2)
+    $bag.AddValue('CpuPercent', $cpuValue)
+    $cpuState = if ($cpuValue -ge [double]$CpuCriticalPercent) { 'Critical' } elseif ($cpuValue -ge [double]$CpuWarningPercent) { 'Warning' } else { 'Good' }
+    Set-State 'CpuState' $cpuState ("Processor load: {0}%" -f $cpuValue)
+
+    Set-State 'PipelineState' 'Good' ('Probe completed at ' + [DateTime]::UtcNow.ToString('o'))
+} catch {
+    foreach ($stateName in @('ClusterServiceState','ClusterNodeState','QuorumState','HealthFaultState','StoragePoolState','VolumeState','PhysicalDiskState','NetworkAtcState','RegistrationState','PlatformServicesState','UpdateState','MemoryState','CpuState','PipelineState')) {
+        Set-State $stateName 'Critical' $_.Exception.Message
+    }
+    $api.LogScriptEvent('HybridSolutionsCloud.AzureLocal.NodeHealth.Probe.ps1', 8401, 1, $_.Exception.ToString())
+}
+
+$bag
+]]></ScriptBody>
+                <Parameters>
+                  <Parameter><Name>CpuWarningPercent</Name><Value>$Config/CpuWarningPercent$</Value></Parameter><Parameter><Name>CpuCriticalPercent</Name><Value>$Config/CpuCriticalPercent$</Value></Parameter>
+                  <Parameter><Name>MemoryWarningMB</Name><Value>$Config/MemoryWarningMB$</Value></Parameter><Parameter><Name>MemoryCriticalMB</Name><Value>$Config/MemoryCriticalMB$</Value></Parameter>
+                  <Parameter><Name>VolumeWarningPercentFree</Name><Value>$Config/VolumeWarningPercentFree$</Value></Parameter><Parameter><Name>VolumeCriticalPercentFree</Name><Value>$Config/VolumeCriticalPercentFree$</Value></Parameter>
+                </Parameters>
+                <TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+              </ProbeAction>
+            </MemberModules>
+            <Composition><Node ID="Probe"><Node ID="Scheduler" /></Node></Composition>
+          </Composite>
+        </ModuleImplementation>
+        <OutputType>System!System.PropertyBagData</OutputType>
+      </DataSourceModuleType>
+      <WriteActionModuleType ID="HybridSolutionsCloud.AzureLocal.DiagnosticSummary.WriteAction" Accessibility="Internal" Batching="false">
+        <Configuration><xsd:element name="TimeoutSeconds" type="xsd:integer" minOccurs="1" /></Configuration>
+        <OverrideableParameters><OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" /></OverrideableParameters>
+        <ModuleImplementation Isolation="Any"><Composite><MemberModules><WriteAction ID="PowerShell" TypeID="Windows!Microsoft.Windows.PowerShellWriteAction">
+          <ScriptName>HybridSolutionsCloud.AzureLocal.DiagnosticSummary.Task.ps1</ScriptName>
+          <ScriptBody><![CDATA[
+$ErrorActionPreference = 'Stop'
+Import-Module FailoverClusters -ErrorAction Stop
+$cluster = Get-Cluster
+$registration = try { Get-AzureStackHCI -ErrorAction Stop } catch { $null }
+[pscustomobject]@{
+    Computer = $env:COMPUTERNAME
+    Cluster = $cluster.Name
+    ClusterNodes = @(Get-ClusterNode).Count
+    NodesNotUp = @(Get-ClusterNode | Where-Object State -ne 'Up').Count
+    ActiveHealthFaults = @(Get-HealthFault -ErrorAction SilentlyContinue).Count
+    StoragePoolsNotHealthy = @(Get-StoragePool -IsPrimordial $false | Where-Object HealthStatus -ne 'Healthy').Count
+    VolumesNotHealthy = @(Get-Volume | Where-Object HealthStatus -ne 'Healthy').Count
+    PhysicalDisksNotHealthy = @(Get-PhysicalDisk | Where-Object HealthStatus -ne 'Healthy').Count
+    RegistrationStatus = $(if ($registration) { $registration.RegistrationStatus } else { 'Unknown' })
+    ConnectionStatus = $(if ($registration) { $registration.ConnectionStatus } else { 'Unknown' })
+    NetworkIntentsNotSuccessful = @(Get-NetIntentStatus -ErrorAction SilentlyContinue | Where-Object ConfigurationStatus -notin @('Success','Completed','Provisioning')).Count
+} | Format-List | Out-String
+]]></ScriptBody><Parameters /><TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds>
+        </WriteAction></MemberModules><Composition><Node ID="PowerShell" /></Composition></Composite></ModuleImplementation>
+        <OutputType>System!System.BaseData</OutputType><InputType>System!System.BaseData</InputType>
+      </WriteActionModuleType>
+    </ModuleTypes>
+    <MonitorTypes>
+      <UnitMonitorType ID="HybridSolutionsCloud.AzureLocal.PropertyBag.ThreeState.MonitorType" Accessibility="Internal">
+        <MonitorTypeStates><MonitorTypeState ID="Good" NoDetection="false" /><MonitorTypeState ID="Warning" NoDetection="false" /><MonitorTypeState ID="Critical" NoDetection="false" /></MonitorTypeStates>
+        <Configuration>
+          <xsd:element name="PropertyName" type="xsd:string" minOccurs="1" /><xsd:element name="IntervalSeconds" type="xsd:integer" minOccurs="1" /><xsd:element name="SyncTime" type="xsd:string" minOccurs="0" /><xsd:element name="TimeoutSeconds" type="xsd:integer" minOccurs="1" />
+          <xsd:element name="CpuWarningPercent" type="xsd:double" minOccurs="1" /><xsd:element name="CpuCriticalPercent" type="xsd:double" minOccurs="1" /><xsd:element name="MemoryWarningMB" type="xsd:double" minOccurs="1" /><xsd:element name="MemoryCriticalMB" type="xsd:double" minOccurs="1" /><xsd:element name="VolumeWarningPercentFree" type="xsd:double" minOccurs="1" /><xsd:element name="VolumeCriticalPercentFree" type="xsd:double" minOccurs="1" />
+        </Configuration>
+        <OverrideableParameters>
+          <OverrideableParameter ID="IntervalSeconds" Selector="$Config/IntervalSeconds$" ParameterType="int" /><OverrideableParameter ID="SyncTime" Selector="$Config/SyncTime$" ParameterType="string" /><OverrideableParameter ID="TimeoutSeconds" Selector="$Config/TimeoutSeconds$" ParameterType="int" />
+          <OverrideableParameter ID="CpuWarningPercent" Selector="$Config/CpuWarningPercent$" ParameterType="double" /><OverrideableParameter ID="CpuCriticalPercent" Selector="$Config/CpuCriticalPercent$" ParameterType="double" /><OverrideableParameter ID="MemoryWarningMB" Selector="$Config/MemoryWarningMB$" ParameterType="double" /><OverrideableParameter ID="MemoryCriticalMB" Selector="$Config/MemoryCriticalMB$" ParameterType="double" /><OverrideableParameter ID="VolumeWarningPercentFree" Selector="$Config/VolumeWarningPercentFree$" ParameterType="double" /><OverrideableParameter ID="VolumeCriticalPercentFree" Selector="$Config/VolumeCriticalPercentFree$" ParameterType="double" />
+        </OverrideableParameters>
+        <MonitorImplementation><MemberModules>
+          <DataSource ID="DataSource" TypeID="HybridSolutionsCloud.AzureLocal.NodeHealth.DataSource"><IntervalSeconds>$Config/IntervalSeconds$</IntervalSeconds><SyncTime>$Config/SyncTime$</SyncTime><TimeoutSeconds>$Config/TimeoutSeconds$</TimeoutSeconds><CpuWarningPercent>$Config/CpuWarningPercent$</CpuWarningPercent><CpuCriticalPercent>$Config/CpuCriticalPercent$</CpuCriticalPercent><MemoryWarningMB>$Config/MemoryWarningMB$</MemoryWarningMB><MemoryCriticalMB>$Config/MemoryCriticalMB$</MemoryCriticalMB><VolumeWarningPercentFree>$Config/VolumeWarningPercentFree$</VolumeWarningPercentFree><VolumeCriticalPercentFree>$Config/VolumeCriticalPercentFree$</VolumeCriticalPercentFree></DataSource>
+          <ConditionDetection ID="GoodFilter" TypeID="System!System.ExpressionFilter"><Expression><Or><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">Property[@Name='$Config/PropertyName$']</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Good</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">Property[@Name='$Config/PropertyName$']</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">NotApplicable</Value></ValueExpression></SimpleExpression></Expression></Or></Expression></ConditionDetection>
+          <ConditionDetection ID="WarningFilter" TypeID="System!System.ExpressionFilter"><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">Property[@Name='$Config/PropertyName$']</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Warning</Value></ValueExpression></SimpleExpression></Expression></ConditionDetection>
+          <ConditionDetection ID="CriticalFilter" TypeID="System!System.ExpressionFilter"><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">Property[@Name='$Config/PropertyName$']</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Critical</Value></ValueExpression></SimpleExpression></Expression></ConditionDetection>
+        </MemberModules><RegularDetections><RegularDetection MonitorTypeStateID="Good"><Node ID="GoodFilter"><Node ID="DataSource" /></Node></RegularDetection><RegularDetection MonitorTypeStateID="Warning"><Node ID="WarningFilter"><Node ID="DataSource" /></Node></RegularDetection><RegularDetection MonitorTypeStateID="Critical"><Node ID="CriticalFilter"><Node ID="DataSource" /></Node></RegularDetection></RegularDetections></MonitorImplementation>
+      </UnitMonitorType>
+    </MonitorTypes>
+  </TypeDefinitions>
+  <Monitoring>
+    <Rules>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.Cpu.Collection.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>% Processor Time</CounterName><ObjectName>Processor</ObjectName><InstanceName>_Total</InstanceName><AllInstances>false</AllInstances><Frequency>300</Frequency><Tolerance>2</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.MemoryAvailable.Collection.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Available MBytes</CounterName><ObjectName>Memory</ObjectName><InstanceName /><AllInstances>false</AllInstances><Frequency>300</Frequency><Tolerance>256</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.NetworkBytes.Collection.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Bytes Total/sec</CounterName><ObjectName>Network Interface</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1048576</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.NetworkOutputQueue.Collection.Rule" Enabled="false" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Output Queue Length</CounterName><ObjectName>Network Interface</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskReadBytes.Collection.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Disk Read Bytes/sec</CounterName><ObjectName>PhysicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1048576</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskWriteBytes.Collection.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Disk Write Bytes/sec</CounterName><ObjectName>PhysicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1048576</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskReadLatency.Collection.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Avg. Disk sec/Read</CounterName><ObjectName>PhysicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>0.005</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskWriteLatency.Collection.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Avg. Disk sec/Write</CounterName><ObjectName>PhysicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>0.005</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.LogicalDiskFreePercent.Collection.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>% Free Space</CounterName><ObjectName>LogicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskQueue.Collection.Rule" Enabled="false" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Avg. Disk Queue Length</CounterName><ObjectName>PhysicalDisk</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.ClusterCsvReadBytes.Collection.Rule" Enabled="false" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Read Bytes/sec</CounterName><ObjectName>Cluster CSV File System</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1048576</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.Node.ClusterCsvWriteBytes.Collection.Rule" Enabled="false" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="false" Remotable="true" Priority="Normal" DiscardLevel="100"><Category>PerformanceCollection</Category><DataSources><DataSource ID="Performance" TypeID="Perf!System.Performance.OptimizedDataProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><CounterName>Write Bytes/sec</CounterName><ObjectName>Cluster CSV File System</ObjectName><InstanceName>*</InstanceName><AllInstances>true</AllInstances><Frequency>300</Frequency><Tolerance>1048576</Tolerance><ToleranceType>Absolute</ToleranceType><MaximumSampleSeparation>6</MaximumSampleSeparation></DataSource></DataSources><WriteActions><WriteAction ID="Database" TypeID="SC!Microsoft.SystemCenter.CollectPerformanceData" /><WriteAction ID="Warehouse" TypeID="MSDL!Microsoft.SystemCenter.DataWarehouse.PublishPerformanceData" /></WriteActions></Rule>
+
+      <Rule ID="HybridSolutionsCloud.AzureLocal.CsvAccessFailure.Alert.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="true" Remotable="true" Priority="High" DiscardLevel="100"><Category>Alert</Category><DataSources><DataSource ID="Event" TypeID="Windows!Microsoft.Windows.EventProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><LogName>System</LogName><Expression><And><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">5120</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">PublisherName</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Microsoft-Windows-FailoverClustering</Value></ValueExpression></SimpleExpression></Expression></And></Expression></DataSource></DataSources><WriteActions><WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert"><Priority>2</Priority><Severity>2</Severity><AlertName /><AlertDescription /><AlertOwner /><AlertMessageId>$MPElement[Name="HybridSolutionsCloud.AzureLocal.CsvAccessFailure.Alert.Rule.Message"]$</AlertMessageId><AlertParameters><AlertParameter1>$Data/EventDescription$</AlertParameter1></AlertParameters><Suppression><SuppressionValue>$Data/Params/Param[1]$</SuppressionValue></Suppression><Custom1 /><Custom2 /><Custom3 /><Custom4 /><Custom5 /><Custom6 /><Custom7 /><Custom8 /><Custom9 /><Custom10 /></WriteAction></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.ClusterNodeRemoved.Alert.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="true" Remotable="true" Priority="High" DiscardLevel="100"><Category>Alert</Category><DataSources><DataSource ID="Event" TypeID="Windows!Microsoft.Windows.EventProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><LogName>System</LogName><Expression><And><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">1135</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">PublisherName</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Microsoft-Windows-FailoverClustering</Value></ValueExpression></SimpleExpression></Expression></And></Expression></DataSource></DataSources><WriteActions><WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert"><Priority>2</Priority><Severity>2</Severity><AlertName /><AlertDescription /><AlertOwner /><AlertMessageId>$MPElement[Name="HybridSolutionsCloud.AzureLocal.ClusterNodeRemoved.Alert.Rule.Message"]$</AlertMessageId><AlertParameters><AlertParameter1>$Data/EventDescription$</AlertParameter1></AlertParameters><Suppression><SuppressionValue>$Data/Params/Param[1]$</SuppressionValue></Suppression><Custom1 /><Custom2 /><Custom3 /><Custom4 /><Custom5 /><Custom6 /><Custom7 /><Custom8 /><Custom9 /><Custom10 /></WriteAction></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.CsvNoLongerAccessible.Alert.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="true" Remotable="true" Priority="High" DiscardLevel="100"><Category>Alert</Category><DataSources><DataSource ID="Event" TypeID="Windows!Microsoft.Windows.EventProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><LogName>System</LogName><Expression><And><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">5142</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">PublisherName</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Microsoft-Windows-FailoverClustering</Value></ValueExpression></SimpleExpression></Expression></And></Expression></DataSource></DataSources><WriteActions><WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert"><Priority>2</Priority><Severity>2</Severity><AlertName /><AlertDescription /><AlertOwner /><AlertMessageId>$MPElement[Name="HybridSolutionsCloud.AzureLocal.CsvNoLongerAccessible.Alert.Rule.Message"]$</AlertMessageId><AlertParameters><AlertParameter1>$Data/EventDescription$</AlertParameter1></AlertParameters><Suppression><SuppressionValue>$Data/Params/Param[1]$</SuppressionValue></Suppression><Custom1 /><Custom2 /><Custom3 /><Custom4 /><Custom5 /><Custom6 /><Custom7 /><Custom8 /><Custom9 /><Custom10 /></WriteAction></WriteActions></Rule>
+      <Rule ID="HybridSolutionsCloud.AzureLocal.ClusterRoleFailure.Alert.Rule" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ConfirmDelivery="true" Remotable="true" Priority="High" DiscardLevel="100"><Category>Alert</Category><DataSources><DataSource ID="Event" TypeID="Windows!Microsoft.Windows.EventProvider"><ComputerName>$Target/Host/Property[Type="Windows!Microsoft.Windows.Computer"]/NetworkName$</ComputerName><LogName>System</LogName><Expression><And><Expression><Or><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">1069</Value></ValueExpression></SimpleExpression></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="UnsignedInteger">EventDisplayNumber</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="UnsignedInteger">1205</Value></ValueExpression></SimpleExpression></Expression></Or></Expression><Expression><SimpleExpression><ValueExpression><XPathQuery Type="String">PublisherName</XPathQuery></ValueExpression><Operator>Equal</Operator><ValueExpression><Value Type="String">Microsoft-Windows-FailoverClustering</Value></ValueExpression></SimpleExpression></Expression></And></Expression></DataSource></DataSources><WriteActions><WriteAction ID="Alert" TypeID="Health!System.Health.GenerateAlert"><Priority>2</Priority><Severity>2</Severity><AlertName /><AlertDescription /><AlertOwner /><AlertMessageId>$MPElement[Name="HybridSolutionsCloud.AzureLocal.ClusterRoleFailure.Alert.Rule.Message"]$</AlertMessageId><AlertParameters><AlertParameter1>$Data/EventDescription$</AlertParameter1></AlertParameters><Suppression><SuppressionValue>$Data/Params/Param[1]$</SuppressionValue></Suppression><Custom1 /><Custom2 /><Custom3 /><Custom4 /><Custom5 /><Custom6 /><Custom7 /><Custom8 /><Custom9 /><Custom10 /></WriteAction></WriteActions></Rule>
+    </Rules>
+    <Tasks><Task ID="HybridSolutionsCloud.AzureLocal.DiagnosticSummary.Task" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" Timeout="180" Remotable="true"><Category>Maintenance</Category><WriteAction ID="Diagnostic" TypeID="HybridSolutionsCloud.AzureLocal.DiagnosticSummary.WriteAction"><TimeoutSeconds>120</TimeoutSeconds></WriteAction></Task></Tasks>
+    <Monitors>
+      <AggregateMonitor ID="HybridSolutionsCloud.AzureLocal.Node.Compute.Aggregate.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm></AggregateMonitor>
+      <AggregateMonitor ID="HybridSolutionsCloud.AzureLocal.Node.Storage.Aggregate.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm></AggregateMonitor>
+      <AggregateMonitor ID="HybridSolutionsCloud.AzureLocal.Node.Network.Aggregate.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm></AggregateMonitor>
+      <AggregateMonitor ID="HybridSolutionsCloud.AzureLocal.Node.Platform.Aggregate.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm></AggregateMonitor>
+      <AggregateMonitor ID="HybridSolutionsCloud.AzureLocal.Node.Lifecycle.Aggregate.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm></AggregateMonitor>
+      <AggregateMonitor ID="HybridSolutionsCloud.AzureLocal.Node.Pipeline.Aggregate.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm></AggregateMonitor>
+      {{NODE_MONITORS}}
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Service.Compute.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsComputeComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Service.Storage.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsStorageComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Service.Network.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsNetworkComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Service.Platform.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsPlatformComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Service.Lifecycle.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsLifecycleComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Service.Monitoring.Availability.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ServiceContainsMonitoringComponent" MemberMonitor="Health!System.Health.AvailabilityState"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Compute.Nodes.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ComputeComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ComputeComponentContainsNodeRole" MemberMonitor="HybridSolutionsCloud.AzureLocal.Node.Compute.Aggregate.Monitor"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Storage.Nodes.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StorageComponentContainsNodeRole" MemberMonitor="HybridSolutionsCloud.AzureLocal.Node.Storage.Aggregate.Monitor"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Network.Nodes.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkComponentContainsNodeRole" MemberMonitor="HybridSolutionsCloud.AzureLocal.Node.Network.Aggregate.Monitor"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Platform.Nodes.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PlatformComponentContainsNodeRole" MemberMonitor="HybridSolutionsCloud.AzureLocal.Node.Platform.Aggregate.Monitor"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Lifecycle.Nodes.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.LifecycleComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.LifecycleComponentContainsNodeRole" MemberMonitor="HybridSolutionsCloud.AzureLocal.Node.Lifecycle.Aggregate.Monitor"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+      <DependencyMonitor ID="HybridSolutionsCloud.AzureLocal.Monitoring.Nodes.Dependency.Monitor" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringComponent" ParentMonitorID="Health!System.Health.AvailabilityState" Remotable="true" Priority="Normal" RelationshipType="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringComponentContainsNodeRole" MemberMonitor="HybridSolutionsCloud.AzureLocal.Node.Pipeline.Aggregate.Monitor"><Category>AvailabilityHealth</Category><Algorithm>WorstOf</Algorithm><MemberUnAvailable>Error</MemberUnAvailable></DependencyMonitor>
+    </Monitors>
+  </Monitoring>
+  <Presentation><StringResources>{{STRING_RESOURCES}}<StringResource ID="HybridSolutionsCloud.AzureLocal.CsvAccessFailure.Alert.Rule.Message" /><StringResource ID="HybridSolutionsCloud.AzureLocal.ClusterNodeRemoved.Alert.Rule.Message" /><StringResource ID="HybridSolutionsCloud.AzureLocal.CsvNoLongerAccessible.Alert.Rule.Message" /><StringResource ID="HybridSolutionsCloud.AzureLocal.ClusterRoleFailure.Alert.Rule.Message" /></StringResources></Presentation>
+  <LanguagePacks><LanguagePack ID="ENU" IsDefault="true"><DisplayStrings>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Monitoring"><Name>Hybrid Solutions Cloud Azure Local Monitoring</Name><Description>Cooked-down local health, alert, performance, diagnostic, and Distributed Application rollup workflows for Azure Local.</Description></DisplayString>
+    {{MONITOR_DISPLAY_STRINGS}}
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.Compute.Aggregate.Monitor"><Name>Azure Local node Compute health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.Storage.Aggregate.Monitor"><Name>Azure Local node Storage health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.Network.Aggregate.Monitor"><Name>Azure Local node Network health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.Platform.Aggregate.Monitor"><Name>Azure Local node Azure Integration health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.Lifecycle.Aggregate.Monitor"><Name>Azure Local node Lifecycle health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.Pipeline.Aggregate.Monitor"><Name>Azure Local node Monitoring Pipeline health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Service.Compute.Availability.Dependency.Monitor"><Name>Roll up Compute availability to the Azure Local service</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Service.Storage.Availability.Dependency.Monitor"><Name>Roll up Storage availability to the Azure Local service</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Service.Network.Availability.Dependency.Monitor"><Name>Roll up Network availability to the Azure Local service</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Service.Platform.Availability.Dependency.Monitor"><Name>Roll up Azure Integration availability to the Azure Local service</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Service.Lifecycle.Availability.Dependency.Monitor"><Name>Roll up Lifecycle availability to the Azure Local service</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Service.Monitoring.Availability.Dependency.Monitor"><Name>Roll up Monitoring Pipeline availability to the Azure Local service</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Compute.Nodes.Dependency.Monitor"><Name>Roll up node Compute health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Storage.Nodes.Dependency.Monitor"><Name>Roll up node Storage health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Network.Nodes.Dependency.Monitor"><Name>Roll up node Network health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Platform.Nodes.Dependency.Monitor"><Name>Roll up node Azure Integration health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Lifecycle.Nodes.Dependency.Monitor"><Name>Roll up node Lifecycle health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Monitoring.Nodes.Dependency.Monitor"><Name>Roll up node Monitoring Pipeline health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.DiagnosticSummary.Task"><Name>Show Azure Local diagnostic summary</Name><Description>Returns a read-only local summary of cluster, storage, Network ATC, registration, and active Health Service faults.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.CsvAccessFailure.Alert.Rule"><Name>Azure Local CSV access failure</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ClusterNodeRemoved.Alert.Rule"><Name>Azure Local cluster node removed</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.CsvNoLongerAccessible.Alert.Rule"><Name>Azure Local CSV no longer accessible</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ClusterRoleFailure.Alert.Rule"><Name>Azure Local cluster role failure</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.CsvAccessFailure.Alert.Rule.Message"><Name>Azure Local CSV access failure</Name><Description>{0}</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ClusterNodeRemoved.Alert.Rule.Message"><Name>Azure Local cluster node removed</Name><Description>{0}</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.CsvNoLongerAccessible.Alert.Rule.Message"><Name>Azure Local CSV no longer accessible</Name><Description>{0}</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ClusterRoleFailure.Alert.Rule.Message"><Name>Azure Local cluster role failure</Name><Description>{0}</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.Cpu.Collection.Rule"><Name>Collect Azure Local node processor load</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.MemoryAvailable.Collection.Rule"><Name>Collect Azure Local node available memory</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.NetworkBytes.Collection.Rule"><Name>Collect Azure Local node network throughput</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.NetworkOutputQueue.Collection.Rule"><Name>Collect Azure Local node network output queue</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskReadBytes.Collection.Rule"><Name>Collect Azure Local physical disk read throughput</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskWriteBytes.Collection.Rule"><Name>Collect Azure Local physical disk write throughput</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskReadLatency.Collection.Rule"><Name>Collect Azure Local physical disk read latency</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskWriteLatency.Collection.Rule"><Name>Collect Azure Local physical disk write latency</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.LogicalDiskFreePercent.Collection.Rule"><Name>Collect Azure Local logical disk free space</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.PhysicalDiskQueue.Collection.Rule"><Name>Collect Azure Local physical disk queue length</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.ClusterCsvReadBytes.Collection.Rule"><Name>Collect Azure Local CSV read throughput</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.ClusterCsvWriteBytes.Collection.Rule"><Name>Collect Azure Local CSV write throughput</Name></DisplayString>
+  </DisplayStrings><KnowledgeArticles>
+    {{KNOWLEDGE_ARTICLES}}
+    <KnowledgeArticle ElementID="HybridSolutionsCloud.AzureLocal.CsvAccessFailure.Alert.Rule" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Operator response</maml:title><maml:para>Correlate the event with current CSV, storage path, Health Service fault, maintenance, and update state before acting.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+    <KnowledgeArticle ElementID="HybridSolutionsCloud.AzureLocal.ClusterNodeRemoved.Alert.Rule" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Operator response</maml:title><maml:para>Confirm whether the node was intentionally paused or drained, then inspect cluster network, node, quorum, and fault-domain health.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+    <KnowledgeArticle ElementID="HybridSolutionsCloud.AzureLocal.CsvNoLongerAccessible.Alert.Rule" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Operator response</maml:title><maml:para>Review CSV ownership, redirected access, storage paths, active Health Service faults, and recent cluster events.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+    <KnowledgeArticle ElementID="HybridSolutionsCloud.AzureLocal.ClusterRoleFailure.Alert.Rule" Visible="true"><MamlContent><maml:section xmlns:maml="http://schemas.microsoft.com/maml/2004/10"><maml:title>Operator response</maml:title><maml:para>Identify the failed clustered role and correlate it with node, network, storage, update, and maintenance state.</maml:para></maml:section></MamlContent></KnowledgeArticle>
+  </KnowledgeArticles></LanguagePack></LanguagePacks>
+</ManagementPack>

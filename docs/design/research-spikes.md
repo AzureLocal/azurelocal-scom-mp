@@ -10,6 +10,7 @@ when it merely collects links.
 |---|---|---|
 | Independent SCOM packaging contract | Both SCOM products | Separate artifact/namespace ownership, no-dependency reference graphs, signing, coexistence, upgrade, and removal evidence |
 | Hyper-V SCOM monitoring catalog and DA refinement | Hyper-V / SCOM | Complete raw signal inventory, prior-MP research, SCOM workflow mapping, DA boundary/membership/rollup inputs, threshold evidence, lab validation, curated defaults, and successor ADR inputs |
+| Azure Local SCOM local monitoring catalog | Azure Local / SCOM | Local API, Health Service, cluster, storage, Network ATC, registration, lifecycle, event, and performance inventory; curation and threshold evidence |
 | Azure Local Health Models API and signal revalidation | Azure Local / Azure Monitor | Current API versions, preview limits, identity and RBAC contract, signal-source delta report |
 | Arc-enabled SCVMM inventory and guest management | Hyper-V / Azure Monitor | ARM resource map, Arc Resource Bridge behavior, guest-management distinction, support and network matrix, repeatable lab steps |
 | Hyper-V telemetry and Health Models feasibility | Hyper-V / Azure Monitor | Minimum viable entity graph, supported signals, fault-injection result, identity, latency, scale and cost findings |
@@ -56,6 +57,18 @@ Their evidence validates and refines the accepted
 | Lab validation | Lab source, fault, latency, recovery, and overhead validation |
 | Catalog curation | Final Must/Should/Could/collect-only/excluded catalog |
 | Architecture validation | Trace all architecture contracts to evidence and raise successor ADRs for any material change |
+
+## Azure Local SCOM research program
+
+The first desk-research pass and design synthesis are complete. The resulting
+[research record](../scom-mp/monitoring-research.md) separates everything observable from the
+curated [monitoring catalog](../scom-mp/monitoring-catalog.md), and ADRs 0032–0035 record the
+implemented local-runtime, packaging, topology/DA, and health/alert decisions.
+
+Lab evidence is still required for multi-node discovery reconciliation, Health Service fault and
+recovery behavior, Network ATC status variants, update-state transitions, event IDs, cookdown,
+threshold duration, scale, maintenance, upgrade, and removal. Findings that change public behavior
+must produce successor ADRs instead of silently changing accepted decisions.
 
 ## Spike completion contract
 

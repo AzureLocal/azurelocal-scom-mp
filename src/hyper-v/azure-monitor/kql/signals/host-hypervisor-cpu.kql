@@ -1,0 +1,7 @@
+// Validate the exact ObjectName, CounterName, and InstanceName emitted by the target AMA/DCR version.
+Perf
+| where ObjectName =~ 'Hyper-V Hypervisor Logical Processor'
+| where CounterName =~ '% Total Run Time'
+| where InstanceName =~ '_Total'
+| summarize Cpu=max(CounterValue) by _ResourceId
+

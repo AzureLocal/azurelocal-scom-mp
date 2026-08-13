@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ManagementPack ContentReadable="true" SchemaVersion="2.0" OriginalSchemaVersion="2.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <Manifest>
+    <Identity><ID>HybridSolutionsCloud.AzureLocal.Presentation</ID><Version>{{VERSION}}</Version></Identity>
+    <Name>Hybrid Solutions Cloud Azure Local Presentation</Name>
+    <References>
+      <Reference Alias="System"><ID>System.Library</ID><Version>7.5.8501.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="SC"><ID>Microsoft.SystemCenter.Library</ID><Version>7.0.8433.0</Version><PublicKeyToken>31bf3856ad364e35</PublicKeyToken></Reference>
+      <Reference Alias="HCSAzureLocalLibrary"><ID>HybridSolutionsCloud.AzureLocal.Library</ID><Version>{{VERSION}}</Version><PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken></Reference>
+      <Reference Alias="HCSAzureLocalMonitoring"><ID>HybridSolutionsCloud.AzureLocal.Monitoring</ID><Version>{{VERSION}}</Version><PublicKeyToken>{{PUBLIC_KEY_TOKEN}}</PublicKeyToken></Reference>
+    </References>
+  </Manifest>
+  <Presentation>
+    <Views>
+      <View ID="HybridSolutionsCloud.AzureLocal.Service.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Service" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.Node.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.Deployment.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Deployment" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.StoragePool.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.StoragePool" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.Volume.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.Volume" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.PhysicalDisk.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.PhysicalDisk" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.NetworkAtcIntent.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NetworkAtcIntent" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.UpdateState.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.UpdateState" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.ArcIntegration.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ArcIntegration" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.ResourceBridge.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.ResourceBridge" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.MonitoringPipeline.State.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.MonitoringPipeline" TypeID="SC!Microsoft.SystemCenter.StateViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.ActiveAlerts.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" TypeID="SC!Microsoft.SystemCenter.AlertViewType" Visible="true"><Category>Operations</Category><Criteria><ResolutionState><StateRange Operator="NotEquals">255</StateRange></ResolutionState></Criteria></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.Performance.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" TypeID="SC!Microsoft.SystemCenter.PerformanceViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+      <View ID="HybridSolutionsCloud.AzureLocal.Event.View" Accessibility="Public" Enabled="true" Target="HCSAzureLocalLibrary!HybridSolutionsCloud.AzureLocal.NodeRole" TypeID="SC!Microsoft.SystemCenter.EventViewType" Visible="true"><Category>Operations</Category><Criteria /></View>
+    </Views>
+    <Folders>
+      <Folder ID="HybridSolutionsCloud.AzureLocal.Root.Folder" Accessibility="Public" ParentFolder="SC!Microsoft.SystemCenter.Monitoring.ViewFolder.Root" />
+      <Folder ID="HybridSolutionsCloud.AzureLocal.Health.Folder" Accessibility="Public" ParentFolder="HybridSolutionsCloud.AzureLocal.Root.Folder" />
+      <Folder ID="HybridSolutionsCloud.AzureLocal.Inventory.Folder" Accessibility="Public" ParentFolder="HybridSolutionsCloud.AzureLocal.Root.Folder" />
+      <Folder ID="HybridSolutionsCloud.AzureLocal.Operations.Folder" Accessibility="Public" ParentFolder="HybridSolutionsCloud.AzureLocal.Root.Folder" />
+    </Folders>
+    <FolderItems>
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.Service.State.View" ID="HybridSolutionsCloud.AzureLocal.Service.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Health.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.Node.State.View" ID="HybridSolutionsCloud.AzureLocal.Node.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Health.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.Deployment.State.View" ID="HybridSolutionsCloud.AzureLocal.Deployment.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.StoragePool.State.View" ID="HybridSolutionsCloud.AzureLocal.StoragePool.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.Volume.State.View" ID="HybridSolutionsCloud.AzureLocal.Volume.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.PhysicalDisk.State.View" ID="HybridSolutionsCloud.AzureLocal.PhysicalDisk.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.NetworkAtcIntent.State.View" ID="HybridSolutionsCloud.AzureLocal.NetworkAtcIntent.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.UpdateState.State.View" ID="HybridSolutionsCloud.AzureLocal.UpdateState.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.ArcIntegration.State.View" ID="HybridSolutionsCloud.AzureLocal.ArcIntegration.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.ResourceBridge.State.View" ID="HybridSolutionsCloud.AzureLocal.ResourceBridge.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.MonitoringPipeline.State.View" ID="HybridSolutionsCloud.AzureLocal.MonitoringPipeline.State.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Inventory.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.ActiveAlerts.View" ID="HybridSolutionsCloud.AzureLocal.ActiveAlerts.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Operations.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.Performance.View" ID="HybridSolutionsCloud.AzureLocal.Performance.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Operations.Folder" />
+      <FolderItem ElementID="HybridSolutionsCloud.AzureLocal.Event.View" ID="HybridSolutionsCloud.AzureLocal.Event.View.FolderItem" Folder="HybridSolutionsCloud.AzureLocal.Operations.Folder" />
+    </FolderItems>
+  </Presentation>
+  <LanguagePacks><LanguagePack ID="ENU" IsDefault="true"><DisplayStrings>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Presentation"><Name>Hybrid Solutions Cloud Azure Local Presentation</Name><Description>Operator folders and views for Azure Local Distributed Applications, topology, alerts, events, and performance.</Description></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Root.Folder"><Name>Hybrid Solutions Cloud - Azure Local</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Health.Folder"><Name>Health services</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Inventory.Folder"><Name>Inventory</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Operations.Folder"><Name>Operations</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Service.State.View"><Name>Azure Local service health</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Node.State.View"><Name>Azure Local nodes</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Deployment.State.View"><Name>Deployments</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.StoragePool.State.View"><Name>Storage pools</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Volume.State.View"><Name>Volumes and CSVs</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.PhysicalDisk.State.View"><Name>Physical disks</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.NetworkAtcIntent.State.View"><Name>Network ATC intents</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.UpdateState.State.View"><Name>Solution updates</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ArcIntegration.State.View"><Name>Arc integrations</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ResourceBridge.State.View"><Name>VM-management infrastructure</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.MonitoringPipeline.State.View"><Name>Monitoring pipeline</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.ActiveAlerts.View"><Name>Active alerts</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Performance.View"><Name>Performance</Name></DisplayString>
+    <DisplayString ElementID="HybridSolutionsCloud.AzureLocal.Event.View"><Name>Events</Name></DisplayString>
+  </DisplayStrings></LanguagePack></LanguagePacks>
+</ManagementPack>
+
