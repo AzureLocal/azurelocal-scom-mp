@@ -53,12 +53,12 @@ The configured local URL includes the repository base path:
 
 ## Delivery hierarchy
 
-- Azure Local monitoring — Epic AB#7313
-  - Azure Local SCOM Management Pack — Feature AB#7315
-  - Azure Local Azure Monitor Health Models — Feature AB#7316
-- Hyper-V monitoring — Epic AB#7314
-  - Hyper-V SCOM Management Pack — Feature AB#7317
-  - Hyper-V Azure Monitor through Arc-enabled SCVMM — conditional Feature AB#7318
+- Azure Local monitoring
+  - Azure Local SCOM Management Pack
+  - Azure Local Azure Monitor Health Models
+- Hyper-V monitoring
+  - Hyper-V SCOM Management Pack
+  - Hyper-V Azure Monitor through Arc-enabled SCVMM — conditional
 
 Research and implementation Stories are linked in [PLAN.md](PLAN.md).
 

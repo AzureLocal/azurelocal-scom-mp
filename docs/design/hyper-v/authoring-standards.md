@@ -122,7 +122,7 @@ validation. See [Best practices for configuring overrides](https://learn.microso
 | Runtime | PowerShell engine/version and module prerequisites must be proven in the supported SCOM agent matrix |
 
 The repository's automation scripts remain PowerShell 7+. Embedded SCOM workflow scripts are not
-authored until AB#7350 proves the supported host engine. If SCOM cannot execute the governed runtime
+authored until runtime research proves the supported host engine. If SCOM cannot execute the governed runtime
 directly, ADR 0028 must select a supportable execution mechanism rather than silently introducing a
 Windows PowerShell dependency.
 

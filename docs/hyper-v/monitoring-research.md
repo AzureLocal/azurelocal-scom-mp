@@ -5,8 +5,7 @@ description: Phase-one research plan for the complete Hyper-V SCOM signal invent
 
 # Hyper-V SCOM monitoring research
 
-Phase one is active under
-[AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327).
+Phase one is the active research and evidence program.
 Its purpose is to determine, with evidence, what the Hyper-V Management Pack can observe and what
 it should monitor by default. Management Pack authoring does not begin until this research is
 synthesized and the resulting architecture decisions are accepted.
@@ -33,17 +32,17 @@ from duplicate or low-value noise.
 
 | Phase | Research spike | Required outcome |
 |---|---|---|
-| Scope | [AB#7343 — support matrix and topology](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7343) | Supported versions, topology variants, entities, relationships, DA boundary keys, candidate component membership, and exclusions |
-| Inventory | [AB#7344 — Windows Server host signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7344) | OS, services, CPU, memory, disks, volumes, NICs, time, reliability, and Windows-exposed platform data |
-| Inventory | [AB#7345 — Hyper-V, hypervisor, and VM signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7345) | Host, scheduler, VM, integration service, checkpoint, metering, and migration signals |
-| Inventory | [AB#7346 — Failover Cluster, quorum, and CSV signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7346) | Cluster, node, quorum, group, resource, network, clustered VM role, CSV, and CSV cache signals |
-| Inventory | [AB#7347 — storage, VHD, and Replica signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7347) | Host and virtual storage, VHD/VHDX, checkpoint chains, QoS, latency, errors, capacity, and Replica |
-| Inventory | [AB#7348 — network-management signals](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7348) | Network ATC intent health for eligible clusters; manual and SCVMM/SDN alternatives; physical NIC through vSwitch, port, and VM adapter; QoS, offloads, drops, errors, queues, and saturation |
-| Reference analysis | [AB#7349 — existing MP research](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7349) | Reusable monitoring ideas, topology, signals, thresholds, and operational knowledge from Microsoft MPs without taking a runtime dependency |
-| Engineering | [AB#7350 — SCOM workflow mapping](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7350) | Target, discovery/monitor/rule type, dynamic DA membership and relationships, rollup, interval, cookdown, permissions, cardinality, and estimated cost |
-| Engineering | [AB#7351 — thresholds and tuning](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7351) | Evidence-backed conditions, durations, hysteresis, recovery, missing-data behavior, and override tiers |
-| Validation | [AB#7352 — lab and fault validation](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7352) | Repeatable fixtures, captures, faults, latency, recovery, duplicate-event, overhead, and negative results |
-| Synthesis | [AB#7353 — default monitoring catalog](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7353) | Must/Should/Could/collect-only/excluded decisions and authoring-ready signal contracts |
+| Scope | support matrix and topology | Supported versions, topology variants, entities, relationships, DA boundary keys, candidate component membership, and exclusions |
+| Inventory | Windows Server host signals | OS, services, CPU, memory, disks, volumes, NICs, time, reliability, and Windows-exposed platform data |
+| Inventory | Hyper-V, hypervisor, and VM signals | Host, scheduler, VM, integration service, checkpoint, metering, and migration signals |
+| Inventory | Failover Cluster, quorum, and CSV signals | Cluster, node, quorum, group, resource, network, clustered VM role, CSV, and CSV cache signals |
+| Inventory | storage, VHD, and Replica signals | Host and virtual storage, VHD/VHDX, checkpoint chains, QoS, latency, errors, capacity, and Replica |
+| Inventory | network-management signals | Network ATC intent health for eligible clusters; manual and SCVMM/SDN alternatives; physical NIC through vSwitch, port, and VM adapter; QoS, offloads, drops, errors, queues, and saturation |
+| Reference analysis | existing MP research | Reusable monitoring ideas, topology, signals, thresholds, and operational knowledge from Microsoft MPs without taking a runtime dependency |
+| Engineering | SCOM workflow mapping | Target, discovery/monitor/rule type, dynamic DA membership and relationships, rollup, interval, cookdown, permissions, cardinality, and estimated cost |
+| Engineering | thresholds and tuning | Evidence-backed conditions, durations, hysteresis, recovery, missing-data behavior, and override tiers |
+| Validation | lab and fault validation | Repeatable fixtures, captures, faults, latency, recovery, duplicate-event, overhead, and negative results |
+| Synthesis | default monitoring catalog | Must/Should/Could/collect-only/excluded decisions and authoring-ready signal contracts |
 
 ```mermaid
 flowchart LR
@@ -95,7 +94,7 @@ initial threshold hypotheses. The complete project source register is in
 
 ## Exit gate
 
-AB#7327 can close only when:
+Phase one can close only when:
 
 - the raw inventory and curated catalog are both published;
 - every selected signal has a supported acquisition path and repeatable evidence;

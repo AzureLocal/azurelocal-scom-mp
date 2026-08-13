@@ -26,7 +26,7 @@ for the Hyper-V topology approved by the research and ADR gates.
 
 Authoring starts after these decisions are complete:
 
-1. [Research and define the Hyper-V SCOM monitoring catalog — AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327).
+1. Research and define the Hyper-V SCOM monitoring catalog.
 2. Apply the independent packaging boundary in accepted [ADR 0022](../design/decisions/0022-scom-management-pack-packaging-boundaries.md).
 3. Refine the required [Hyper-V Distributed Application](../design/hyper-v/distributed-application.md)
    membership and rollup contract through the topology and workflow spikes.
@@ -48,8 +48,8 @@ independently in this project's own Management Pack.
 
 ## Phase one — monitoring research
 
-The active first phase is not MP XML authoring. It is the exhaustive inventory and evidence gate in
-[AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327).
+The active first phase is not MP XML authoring. It is the exhaustive inventory and evidence gate
+described in the [monitoring research plan](monitoring-research.md).
 Twelve child Tasks separate topology, Windows Server, Hyper-V/VM, clustering/CSV, storage/Replica,
 networking, prior Microsoft MP research, SCOM workflow mapping, threshold engineering, lab
 validation, final catalog curation, and comprehensive architecture validation.

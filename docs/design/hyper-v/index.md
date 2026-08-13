@@ -5,15 +5,17 @@ description: Design map for the committed Hyper-V SCOM Management Pack and condi
 
 # Hyper-V design
 
-Hyper-V has its own support contract and topology. It reuses sound product principles but does not
-inherit Azure Local entities, signals, thresholds, cloud dependencies, or accepted ADRs by default.
+Hyper-V has its own support contract and topology. Its SCOM Management Pack and conditional Azure
+Monitor Health Models are completely separate solutions: neither shares runtime components,
+deployment artifacts, health state, or release lifecycle with the other. Both may reuse validated
+Hyper-V research without creating a product dependency.
 
 | Design lane | Commitment | Status |
 |---|---|---|
-| [SCOM Management Pack](scom-mp.md) | Committed | Comprehensive architecture proposed; phase-one research active under AB#7327 |
+| [SCOM Management Pack](scom-mp.md) | Committed | Comprehensive architecture proposed; phase-one research active |
 | [Azure Monitor through Arc-enabled SCVMM](azure-monitor.md) | Conditional | Research and go/defer/no-go ADR required |
 
-## Hyper-V SCOM architecture
+## SCOM Management Pack solution
 
 The SCOM lane now has implementation-grade design contracts for the
 [end-to-end architecture](architecture.md), [Management Pack structure](management-pack-structure.md),
@@ -26,6 +28,18 @@ The SCOM lane now has implementation-grade design contracts for the
 
 The diagrams on these pages are rendered by the site's Vue component so architecture, sequence,
 state, class, and decision flows remain readable in both light and dark documentation themes.
+
+The [Hyper-V Distributed Application](distributed-application.md) belongs only to this SCOM
+solution. Optional [SquaredUp Dashboard Server](../../hyper-v/squaredup-dashboard-server.md)
+content also belongs to the Hyper-V SCOM solution.
+
+## Azure Monitor Health Models solution
+
+The [conditional Azure Monitor design](azure-monitor.md) is a separate future solution boundary.
+It remains gated on Arc-enabled SCVMM research and ADR 0023 and does not inherit the SCOM class,
+workflow, Distributed Application, packaging, or health-state implementation.
+Optional [SquaredUp Cloud](../../hyper-v/squaredup-cloud.md) content remains inside this same
+conditional boundary and cannot proceed before the Azure Monitor solution receives a go decision.
 
 ## Platform design questions
 

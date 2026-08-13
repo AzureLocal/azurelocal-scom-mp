@@ -53,7 +53,8 @@ behavior must be validated rather than allowed to resolve silently to Healthy.
 - import, population, fault, recovery, upgrade, coexistence, and removal tests.
 
 The [Azure Local health-rollup tree](../../scom-mp/diagrams/health-tree.md) is the current visual
-reference. Authoring work is tracked by AB#7320–AB#7322 under the Azure Local SCOM Feature.
+reference. Authoring begins after the SCOM class, discovery, packaging, and validation contracts are
+ready.
 
 ## Boundaries
 

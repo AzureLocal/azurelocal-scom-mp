@@ -7,6 +7,14 @@
 
 ### Changed
 
+* Split the Design and platform sidebars into four solution-owned navigation groups so Azure Local
+  and Hyper-V SCOM designs are visibly separate from their Azure Monitor Health Models designs.
+* Expose solution-owned SquaredUp Dashboard Server and SquaredUp Cloud documentation in the
+  sidebars and add the missing Hyper-V placeholders.
+* Clarify that Migration means on-premises SCOM monitoring to Azure Monitor Health Models rather
+  than workload or platform migration.
+* Remove internal work-item identifiers and direct board links from public documentation and
+  repository Markdown.
 * Migrate the documentation site and deployment pipelines from MkDocs to VitePress while preserving the project logo, banner, and favicon.
 * Rename the public site to Hybrid Infrastructure Health Monitoring and organize it by Azure Local and Hyper-V platform tracks.
 * Replace the phase-only roadmap with Azure DevOps-backed platform Epics, delivery Features, research spikes, and architecture gates.
@@ -16,7 +24,7 @@
 * Add the committed Hyper-V SCOM Management Pack track and conditional Azure Monitor track through Arc-enabled SCVMM.
 * Add ADRs 0021–0023 for the platform split, SCOM packaging boundary, and Hyper-V Azure Monitor go/no-go gate.
 * Add the phase-one Hyper-V SCOM monitoring research plan, exhaustive inventory schema, threshold
-  policy, and ADO child spikes AB#7343–AB#7353.
+  policy, and bounded research spikes.
 * Treat Network ATC as the preferred baseline for eligible Windows Server 2025 Datacenter Hyper-V
   clusters, with separate manual and SCVMM/SDN-managed networking paths.
 * Define the Microsoft Hyper-V 2019 Management Pack as research evidence only, with no import,
@@ -27,7 +35,7 @@
   networking variants.
 * Accept ADR 0022 with completely independent Azure Local and Hyper-V SCOM runtime packaging.
 * Add ADR 0026 plus explicit Azure Local and Hyper-V Distributed Application design contracts,
-  implementation tasks AB#7354–AB#7357, dynamic membership, rollup, views, reports, dashboards,
+  implementation tasks, dynamic membership, rollup, views, reports, dashboards,
   SLO targets, and validation requirements.
 * Add the comprehensive Hyper-V SCOM architecture set with Vue-rendered component, class,
   sequence, state, dependency, discovery, alert, security, test, and release diagrams.

@@ -9,14 +9,14 @@ Hyper-V is a separate platform track. Its primary delivery is a SCOM Management 
 Monitor is a conditional future delivery surface for environments that use Azure Arc-enabled
 System Center Virtual Machine Manager (SCVMM) and meet the yet-to-be-approved prerequisites.
 
-| Delivery surface | Commitment | Status | ADO |
-|---|---|---|---|
-| **SCOM Management Pack** | Committed platform track | Research and design next | [Feature AB#7317](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7317) |
-| **Azure Monitor through Arc-enabled SCVMM** | Conditional roadmap track | Research gate; no implementation commitment | [Feature AB#7318](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7318) |
+| Delivery surface | Commitment | Status |
+|---|---|---|
+| **SCOM Management Pack** | Committed platform track | Research and design active |
+| **Azure Monitor through Arc-enabled SCVMM** | Conditional roadmap track | Research gate; no implementation commitment |
 
-::: info Hyper-V delivery epic
-Azure DevOps [Epic AB#7314](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7314)
-owns this platform track and its two delivery Features.
+::: info Two independent solutions
+The SCOM Management Pack and conditional Azure Monitor Health Models have separate design, source,
+deployment, testing, and release boundaries.
 :::
 
 ## Why this is separate from Azure Local

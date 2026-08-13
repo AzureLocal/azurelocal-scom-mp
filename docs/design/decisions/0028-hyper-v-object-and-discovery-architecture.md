@@ -28,7 +28,7 @@ the best supported authoritative topology source. Use shared module types and pr
 expensive multi-instance acquisition.
 
 Exact classes, base classes, keys, discovery providers, execution locations, schedules, and script
-runtime remain provisional until AB#7343–AB#7352 validate them.
+runtime remain provisional until the topology, workflow, and lab research confirms them.
 
 ## Options considered
 
@@ -76,9 +76,9 @@ provider requires one.
 
 ## Acceptance gates
 
-1. AB#7343–AB#7349 prove stable source identifiers and topology behavior.
-2. AB#7350 maps every approved candidate to a target, module, execution point, and cookdown group.
-3. AB#7352 proves rename, move, drain, failover, access-denied, stale, and recovery behavior.
+1. Topology research proves stable source identifiers and topology behavior.
+2. Workflow research maps every approved candidate to a target, module, execution point, and cookdown group.
+3. Lab validation proves rename, move, drain, failover, access-denied, stale, and recovery behavior.
 4. Maximum-scale discovery converges within the approved budget.
 
 ## Related design

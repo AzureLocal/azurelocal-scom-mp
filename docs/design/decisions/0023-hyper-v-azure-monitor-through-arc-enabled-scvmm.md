@@ -2,7 +2,7 @@
 
 **Status:** Proposed  
 **Date:** 2026-08-12  
-**Decision gate:** Research spikes [AB#7331](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7331) and [AB#7332](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7332)
+**Decision gate:** Arc-enabled SCVMM inventory and telemetry proof-of-concept research
 
 ## Context
 

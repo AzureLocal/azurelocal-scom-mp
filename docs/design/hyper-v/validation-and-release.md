@@ -71,7 +71,7 @@ flowchart LR
 | Monitoring | Agent loss, workflow timeout, access denied, stale data, bad output, and recovery |
 | Scale | Empty, typical, supported maximum, and limit-exceeded fixtures |
 
-AB#7343 defines the exact supported matrix. A topology not represented by a repeatable fixture
+Research validation defines the exact supported matrix. A topology not represented by a repeatable fixture
 cannot be listed as supported.
 
 ## Fault-to-evidence loop

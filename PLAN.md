@@ -26,38 +26,38 @@ or support lifecycles.
 Azure DevOps is the delivery system of record:
 
 ```text
-Epic AB#7313 — Deliver Azure Local health monitoring
-├── Feature AB#7315 — Deliver the Azure Local SCOM Management Pack
-│   ├── Story AB#7319 — Define independent SCOM packaging and coexistence contract
-│   ├── Story AB#7320 — Author Azure Local SCOM classes and discoveries
-│   │   └── Task AB#7354 — Author Azure Local DA classes and membership
-│   ├── Story AB#7321 — Author Azure Local SCOM monitoring and overrides
-│   │   └── Task AB#7355 — Author Azure Local DA rollups and operator surfaces
-│   └── Story AB#7322 — Validate, package, and document the release
-└── Feature AB#7316 — Deliver Azure Monitor health models for Azure Local
-    ├── Story AB#7323 — Validate APIs and signal contracts
-    ├── Story AB#7324 — Author entities and signals
-    ├── Story AB#7325 — Implement deployment, alerts, and workbooks
-    └── Story AB#7326 — Validate and document the release
+Epic — Deliver Azure Local health monitoring
+├── Feature — Deliver the Azure Local SCOM Management Pack
+│   ├── Story — Define independent SCOM packaging and coexistence contract
+│   ├── Story — Author Azure Local SCOM classes and discoveries
+│   │   └── Task — Author Azure Local DA classes and membership
+│   ├── Story — Author Azure Local SCOM monitoring and overrides
+│   │   └── Task — Author Azure Local DA rollups and operator surfaces
+│   └── Story — Validate, package, and document the release
+└── Feature — Deliver Azure Monitor health models for Azure Local
+    ├── Story — Validate APIs and signal contracts
+    ├── Story — Author entities and signals
+    ├── Story — Implement deployment, alerts, and workbooks
+    └── Story — Validate and document the release
 
-Epic AB#7314 — Deliver Hyper-V health monitoring
-├── Feature AB#7317 — Deliver the Hyper-V SCOM Management Pack
-│   ├── Story AB#7327 — Research and define the Hyper-V SCOM monitoring catalog
-│   │   ├── Tasks AB#7343–AB#7349 — Scope, raw inventories, and prior-MP research inputs
-│   │   ├── Tasks AB#7350–AB#7351 — SCOM workflow and threshold engineering
-│   │   ├── Task AB#7352 — Lab and fault validation
-│   │   ├── Task AB#7353 — Curate the authoring-ready default catalog
-│   │   └── Task AB#7359 — Validate the comprehensive MP and DA architecture
-│   ├── Story AB#7328 — Author Hyper-V SCOM classes and discoveries
-│   │   └── Task AB#7356 — Author Hyper-V DA classes and membership
-│   ├── Story AB#7329 — Author Hyper-V SCOM monitoring and overrides
-│   │   └── Task AB#7357 — Author Hyper-V DA rollups and operator surfaces
-│   └── Story AB#7330 — Validate, package, and document the release
-└── Feature AB#7318 — Evaluate Azure Monitor through Arc-enabled SCVMM
-    ├── Story AB#7331 — Research inventory and guest management
-    ├── Story AB#7332 — Prove telemetry and Health Models feasibility
-    ├── Story AB#7333 — Decide go, defer, or no-go
-    └── Story AB#7334 — Plan conditional implementation after a go decision
+Epic — Deliver Hyper-V health monitoring
+├── Feature — Deliver the Hyper-V SCOM Management Pack
+│   ├── Story — Research and define the Hyper-V SCOM monitoring catalog
+│   │   ├── Tasks — Scope, raw inventories, and prior-MP research inputs
+│   │   ├── Tasks — SCOM workflow and threshold engineering
+│   │   ├── Task — Lab and fault validation
+│   │   ├── Task — Curate the authoring-ready default catalog
+│   │   └── Task — Validate the comprehensive MP and DA architecture
+│   ├── Story — Author Hyper-V SCOM classes and discoveries
+│   │   └── Task — Author Hyper-V DA classes and membership
+│   ├── Story — Author Hyper-V SCOM monitoring and overrides
+│   │   └── Task — Author Hyper-V DA rollups and operator surfaces
+│   └── Story — Validate, package, and document the release
+└── Feature — Evaluate Azure Monitor through Arc-enabled SCVMM
+    ├── Story — Research inventory and guest management
+    ├── Story — Prove telemetry and Health Models feasibility
+    ├── Story — Decide go, defer, or no-go
+    └── Story — Plan conditional implementation after a go decision
 ```
 
 Parent-child and predecessor links in Azure DevOps enforce the research and implementation gates.
@@ -98,15 +98,15 @@ products when that is safer than coupling their public contracts.
 | ADR | Status | Purpose | Gate |
 |---|---|---|---|
 | [0021](docs/design/decisions/0021-platform-and-delivery-track-architecture.md) | Accepted | Establish platform-first planning with separate delivery surfaces | Repository-owner decision |
-| [0022](docs/design/decisions/0022-scom-management-pack-packaging-boundaries.md) | Accepted | Require independent Azure Local and Hyper-V SCOM runtime products | Repository-owner decision; AB#7319 validates the contract |
-| [0023](docs/design/decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) | Proposed | Decide whether the conditional Hyper-V Azure Monitor track proceeds | AB#7331 and AB#7332 |
-| Hyper-V scope and topology | Planned after spike | Lock supported topology, entity inventory, exclusions, and version matrix | AB#7327 |
-| Hyper-V SCOM discovery strategy | Planned after spike | Select supported discovery providers and hosting relationships | AB#7327 |
-| Hyper-V signal and rollup policy | Planned after spike | Lock signal catalog, thresholds, defaults, and exceptions | AB#7327 |
+| [0022](docs/design/decisions/0022-scom-management-pack-packaging-boundaries.md) | Accepted | Require independent Azure Local and Hyper-V SCOM runtime products | Packaging validation |
+| [0023](docs/design/decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) | Proposed | Decide whether the conditional Hyper-V Azure Monitor track proceeds | Inventory and telemetry research |
+| Hyper-V scope and topology | Planned after spike | Lock supported topology, entity inventory, exclusions, and version matrix | Support and topology research |
+| Hyper-V SCOM discovery strategy | Planned after spike | Select supported discovery providers and hosting relationships | Workflow research |
+| Hyper-V signal and rollup policy | Planned after spike | Lock signal catalog, thresholds, defaults, and exceptions | Signal, threshold, and lab research |
 | [0026](docs/design/decisions/0026-platform-owned-scom-distributed-applications.md) | Accepted | Require a separate platform-owned DA in each SCOM product | Repository-owner decision; refined through platform authoring/research |
-| [0027](docs/design/decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Proposed | Define modular sealed Hyper-V MPs and customer override boundary | AB#7319 and AB#7327 |
-| [0028](docs/design/decisions/0028-hyper-v-object-and-discovery-architecture.md) | Proposed | Define stable identities, relationships, staged discovery, execution, and cookdown | AB#7343–AB#7352 |
-| [0029](docs/design/decisions/0029-hyper-v-health-alert-and-da-rollup.md) | Proposed | Define evidence-driven health, alerting, monitoring freshness, and DA rollup | AB#7351–AB#7357 |
+| [0027](docs/design/decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Proposed | Define modular sealed Hyper-V MPs and customer override boundary | Packaging and dependency research |
+| [0028](docs/design/decisions/0028-hyper-v-object-and-discovery-architecture.md) | Proposed | Define stable identities, relationships, staged discovery, execution, and cookdown | Topology, workflow, and lab research |
+| [0029](docs/design/decisions/0029-hyper-v-health-alert-and-da-rollup.md) | Proposed | Define evidence-driven health, alerting, monitoring freshness, and DA rollup | Threshold, catalog, lab, and DA validation |
 
 Accepted ADRs 0001–0020 continue to govern the Azure Local baseline unless a successor ADR explicitly
 supersedes one. They must not be silently generalized to Hyper-V.
@@ -116,7 +116,7 @@ supersedes one. They must not be silently generalized to Hyper-V.
 All spikes follow the evidence contract in
 [`docs/design/research-spikes.md`](docs/design/research-spikes.md).
 
-### Spike A — Independent SCOM packaging contract (AB#7319)
+### Spike A — Independent SCOM packaging contract
 
 Deliver:
 
@@ -126,7 +126,7 @@ Deliver:
 - allowed non-runtime research and tooling reuse; and
 - evidence that each platform owns its Distributed Application and complete support contract.
 
-### Spike B — Hyper-V SCOM monitoring catalog (AB#7327)
+### Spike B — Hyper-V SCOM monitoring catalog
 
 Deliver:
 
@@ -140,14 +140,14 @@ Deliver:
 - stable standalone-host and cluster DA keys, component membership, and rollup inputs; and
 - proposed scope, discovery, signal/rollup, and DA-refinement ADRs.
 
-AB#7327 is now an active umbrella Story with research Tasks AB#7343–AB#7353 plus architecture
-validation Task AB#7359. The child work
+This is the active umbrella research workstream. Its bounded tasks cover source inventories,
+workflow and threshold engineering, lab validation, catalog synthesis, and architecture review. The work
 first inventories everything observable, then maps acquisition and threshold behavior, validates it
 in the lab, and finally classifies each candidate as Must monitor, Should monitor, Could monitor,
 collect only, diagnostic, or excluded. The detailed contract is published in
 [`docs/hyper-v/monitoring-research.md`](docs/hyper-v/monitoring-research.md).
 
-### Spike C — Azure Local Health Models revalidation (AB#7323)
+### Spike C — Azure Local Health Models revalidation
 
 Deliver:
 
@@ -156,7 +156,7 @@ Deliver:
 - signal availability delta against the Azure Local catalog; and
 - successor ADRs for any material change.
 
-### Spike D — Arc-enabled SCVMM inventory and guest management (AB#7331)
+### Spike D — Arc-enabled SCVMM inventory and guest management
 
 Deliver:
 
@@ -165,7 +165,7 @@ Deliver:
 - Arc Resource Bridge, agent, identity, RBAC, network, and version prerequisites; and
 - repeatable lab onboarding and inventory evidence.
 
-### Spike E — Hyper-V telemetry and Health Models feasibility (AB#7332)
+### Spike E — Hyper-V telemetry and Health Models feasibility
 
 Deliver:
 

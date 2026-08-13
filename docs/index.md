@@ -59,8 +59,8 @@ graph TD
 
 | Platform | SCOM Management Pack | Azure Monitor Health Models |
 |---|---|---|
-| **Azure Local** | Committed — [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7315) | Committed — [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7316) |
-| **Hyper-V** | Committed — [Feature AB#7317](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7317) | Conditional on Arc-enabled SCVMM research — [Feature AB#7318](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7318) |
+| **Azure Local** | Committed | Committed |
+| **Hyper-V** | Committed | Conditional on Arc-enabled SCVMM research |
 
 ## Companion tooling
 
@@ -82,7 +82,7 @@ membership research comes before authoring. See the [project roadmap](/project/r
 | 0 | Research and planning | Complete |
 | 1 | Documentation scaffold | Complete |
 | 2 | Azure Local health-model design baseline | Complete |
-| 3 | Platform split, ADO hierarchy, ADR and spike planning | Complete |
+| 3 | Platform split, delivery hierarchy, ADR and spike planning | Complete |
 | 4 | Research and architecture gates | Next |
 | 5 | Azure Local and Hyper-V delivery work | Planned |
 | 6 | Validation, documentation, and releases | Planned |

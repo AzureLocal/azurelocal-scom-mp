@@ -143,7 +143,7 @@ flowchart LR
 
 Cookdown is required where multiple workflows can use the same module configuration and provider
 call. It is not assumed merely because scripts look similar: target, configuration XML, Run As,
-schedule, and module parameters must be identical. AB#7350 records expected cookdown groups and lab
+schedule, and module parameters must be identical. Workflow research records expected cookdown groups and lab
 evidence for each multi-instance data source.
 
 ## Workflow execution placement
@@ -209,5 +209,5 @@ sequenceDiagram
 
 ## Research gates
 
-AB#7350 and AB#7352 must validate source semantics, execution placement, cookdown, timeout,
+Workflow and lab research must validate source semantics, execution placement, cookdown, timeout,
 cardinality, failure behavior, and recovery before ADR 0028 is accepted or authoring begins.

@@ -39,7 +39,7 @@ explicitly references both products. Neither platform MP will depend on that int
   and Distributed Application contract.
 - Similar runtime XML may exist in both products; avoiding cross-product coupling is more important
   than eliminating that duplication.
-- AB#7319 now validates independent artifact names, reference graphs, signing, coexistence, upgrade,
+- Packaging validation confirms independent artifact names, reference graphs, signing, coexistence, upgrade,
   and removal behavior instead of choosing a shared-library option.
 
 ## Alternatives considered
@@ -60,7 +60,6 @@ identity, ownership, and servicing ambiguity. Non-runtime templates and automati
 
 ## Related work
 
-- Packaging contract Story
-  [AB#7319](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7319)
+- Packaging contract validation
 - [ADR 0021](0021-platform-and-delivery-track-architecture.md)
 - [ADR 0026](0026-platform-owned-scom-distributed-applications.md)

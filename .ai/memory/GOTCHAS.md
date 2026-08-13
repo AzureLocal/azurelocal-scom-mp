@@ -13,8 +13,8 @@
   the guest-management, agent, Data Collection Rule, identity, and networking path.
 - Do not generalize accepted Azure Local ADRs 0001–0020 to Hyper-V. Hyper-V topology and signals
   require their own research-backed successor ADRs.
-- Microsoft ships an older Hyper-V 2019 Management Pack. Use it to research useful concepts in
-  AB#7349, but never make it an import, extension, override target, prerequisite, or runtime
+- Microsoft ships an older Hyper-V 2019 Management Pack. Use it to research useful concepts, but
+  never make it an import, extension, override target, prerequisite, or runtime
   dependency of this product.
 - Do not create a shared Azure Local/Hyper-V sealed library, base class, namespace, Distributed
   Application, package, or runtime MP reference. ADR 0022 requires independent products; only

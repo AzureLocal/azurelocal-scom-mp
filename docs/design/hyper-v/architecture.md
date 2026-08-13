@@ -189,5 +189,5 @@ sequenceDiagram
 
 This is a **proposed implementation baseline**. ADRs 0022, 0025, and 0026 are already accepted.
 The package, object/discovery, and health/DA refinements in ADRs 0027–0029 remain proposed until the
-AB#7327 research and lab gates provide supporting evidence. Proposed identifiers may be refined;
+research and lab gates provide supporting evidence. Proposed identifiers may be refined;
 the product boundaries and independent Hyper-V DA requirement may not.

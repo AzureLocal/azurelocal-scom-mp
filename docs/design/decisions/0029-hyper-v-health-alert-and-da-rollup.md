@@ -28,7 +28,7 @@ Cluster redundancy and VM expected-state/population use topology-aware rollups r
 unconditional worst-state. Each DA includes a root-impacting Monitoring pipeline branch.
 
 Exact thresholds, severity mappings, expected-state rules, population algorithms, and branch impact
-remain provisional until AB#7351–AB#7353 complete.
+remain provisional until threshold, lab, catalog, and DA validation is complete.
 
 ## Options considered
 
@@ -75,10 +75,10 @@ dependencies; it is not a universal rollup rule.
 
 ## Acceptance gates
 
-1. AB#7351 supplies threshold semantics and evidence.
-2. AB#7352 proves fault, rollup, suppression, recovery, maintenance, migration, and stale-data paths.
-3. AB#7353 approves the curated default profile and exclusions.
-4. AB#7357 validates DA rollups, views, reports, dashboards, and SLO targeting.
+1. Threshold research supplies semantics and evidence.
+2. Lab validation proves fault, rollup, suppression, recovery, maintenance, migration, and stale-data paths.
+3. Catalog review approves the curated default profile and exclusions.
+4. DA validation confirms rollups, views, reports, dashboards, and SLO targeting.
 
 ## Related design
 

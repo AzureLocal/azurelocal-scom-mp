@@ -7,19 +7,19 @@ description: Azure Local health monitoring through SCOM and Azure Monitor.
 
 Azure Local is a first-class platform track with two committed delivery surfaces:
 
-| Delivery surface | Scope | Status | ADO |
-|---|---|---|---|
-| **SCOM Management Pack** | Azure Local classes, discoveries, monitors, rules, health rollups, overrides, views, packaging, and operator guidance | Planned | [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7315) |
-| **Azure Monitor Health Models** | Service Groups, entities, signals, health objectives, alerts, workbooks, and Bicep deployment | Planned | [Feature AB#7316](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7316) |
+| Delivery surface | Scope | Status |
+|---|---|---|
+| **SCOM Management Pack** | Azure Local classes, discoveries, monitors, rules, health rollups, overrides, views, packaging, and operator guidance | Planned |
+| **Azure Monitor Health Models** | Service Groups, entities, signals, health objectives, alerts, workbooks, and Bicep deployment | Planned |
 
 Both surfaces implement the Azure Local topology documented in the
 [Azure Local design](../design/azure-local/index.md) section. They use the same logical entities,
 health dimensions, rollup rules, and signal names where the delivery surfaces expose equivalent
 data.
 
-::: info Azure Local delivery epic
-Azure DevOps [Epic AB#7313](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7313)
-owns this platform track and its two delivery Features.
+::: info Two independent solutions
+The SCOM Management Pack and Azure Monitor Health Models have separate design, source, deployment,
+testing, and release boundaries.
 :::
 
 ## Scope

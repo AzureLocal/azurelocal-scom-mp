@@ -15,6 +15,6 @@ azure-monitor/
 └── squaredup/         # Optional SquaredUp Cloud content after a go decision
 ```
 
-Do not add deployable templates, queries, workbooks, or dashboards until AB#7331 and AB#7332 provide
+Do not add deployable templates, queries, workbooks, or dashboards until the research program provides
 the evidence and ADR 0023 records a go decision. The directory exists now to make the platform-first,
 solution-second repository contract complete and stable.

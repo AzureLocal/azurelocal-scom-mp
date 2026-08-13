@@ -9,7 +9,7 @@
 The repository began as an Azure Local-specific SCOM Management Pack and was named
 `AzureLocal/azurelocal-scom-mp`. ADR 0021 expanded the product into separate Azure Local and
 Hyper-V platform tracks with SCOM and Azure Monitor delivery surfaces. The original organization,
-repository name, Azure DevOps project name, and `azurelocal.cloud` publishing address no longer
+repository name, internal project name, and `azurelocal.cloud` publishing address no longer
 represent the complete product.
 
 Hybrid Solutions Cloud already hosts independently named products as GitHub Pages project sites.
@@ -25,7 +25,6 @@ Adopt the following identity:
 | Public product | **Hybrid Infrastructure Health Monitoring** |
 | GitHub repository | `Hybrid-Solutions-Cloud/hybrid-health-monitoring` |
 | Documentation | `https://labs.hybridsolutions.cloud/hybrid-health-monitoring/` |
-| Azure DevOps project | **Hybrid Infrastructure Health Monitoring** |
 | Local repository | `D:/git/hybrid-solutions-cloud/hybrid-health-monitoring` |
 
 Keep the subtitle **SCOM and Azure Monitor health models for Hyper-V and Azure Local**. Use
@@ -42,7 +41,7 @@ the platform or delivery-track architecture established there.
 - The project becomes part of the Hybrid Solutions Cloud product portfolio alongside products such
   as Homestead Foundry.
 - Repository links, Pages configuration, local paths, automation, governance metadata, release
-  configuration, ownership references, and Azure DevOps URLs must be migrated and validated.
+  configuration, ownership references, and internal delivery links must be migrated and validated.
 - GitHub redirects the former repository location, but GitHub Pages does not redirect the former
   project-site URL; that documentation redirect must be maintained separately.
 - Historical release links and accepted ADR text remain unchanged as records of the identity in use
@@ -66,7 +65,6 @@ public product title, while `hybrid-health-monitoring` is the stable technical i
 
 ## Related work
 
-- Migration Story [AB#7340](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7340)
 - [ADR 0021](0021-platform-and-delivery-track-architecture.md)
 - [GitHub repository transfer behavior](https://docs.github.com/en/repositories/creating-and-managing-repositories/transferring-a-repository)
 - [GitHub repository rename behavior](https://docs.github.com/en/repositories/creating-and-managing-repositories/renaming-a-repository)

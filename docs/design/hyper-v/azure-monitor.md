@@ -11,11 +11,11 @@ or useful Health Model signals exist for every Hyper-V entity.
 
 ## Decision gate
 
-| Evidence | Work item |
+| Evidence | Gate |
 |---|---|
-| Arc-enabled SCVMM resource inventory and guest-management boundary | [AB#7331](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7331) |
-| Telemetry and Health Models proof | [AB#7332](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7332) |
-| Go, defer, or no-go decision | [AB#7333](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7333) and [ADR 0023](../decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) |
+| Arc-enabled SCVMM resource inventory and guest-management boundary | Required research |
+| Telemetry and Health Models proof | Required proof of concept |
+| Go, defer, or no-go decision | [ADR 0023](../decisions/0023-hyper-v-azure-monitor-through-arc-enabled-scvmm.md) |
 
 The Azure Local Azure Monitor entity graph, DCMA signals, prerequisites, and Bicep design are not
 defaults for this lane. They can be used as comparison material only where the Hyper-V spikes prove

@@ -1,12 +1,21 @@
 ---
-title: Migration — SCOM → Azure Monitor
-description: SCOM-to-Azure-Monitor migration guidance for Azure Local health monitoring.
+title: On-premises SCOM → Azure Monitor migration
+description: Monitoring migration guidance from on-premises SCOM Management Packs to Azure Monitor Health Models.
 ---
 
-# Migration — SCOM → Azure Monitor
+# On-premises SCOM → Azure Monitor migration
 
 > **Planned deliverable.** End-to-end migration guidance for operators moving from the
-> Azure Local SCOM surface to Azure Monitor (or running both side by side).
+> on-premises SCOM Management Pack solution to the corresponding Azure Monitor Health Models
+> solution—or running both side by side during transition.
+
+This is a **monitoring-platform migration**, not a VM migration, workload migration, Azure Local
+migration, or Hyper-V-to-Azure migration. The two destination scopes are deliberately separate:
+
+| Platform | Migration scope |
+|---|---|
+| Azure Local | Azure Local SCOM Management Pack → Azure Local Azure Monitor Health Models |
+| Hyper-V | Hyper-V SCOM Management Pack → Hyper-V Azure Monitor Health Models, only if ADR 0023 records a go decision |
 
 ::: info Planned after both Azure Local surfaces ship
 Migration walkthroughs land after both implementation tracks are authored and validated.

@@ -10,7 +10,7 @@ object's identity. A VM can move between cluster nodes; its SCOM identity must s
 A host adapter cannot move between computers; its identity can be hosted by the host. This distinction
 drives class keys, hosting, relationship discovery, workflow placement, and upgrade safety.
 
-The final class IDs and base classes remain gated by AB#7343 and ADR 0028. The names on this page are
+The final class IDs and base classes remain gated by topology research and ADR 0028. The names on this page are
 working design identifiers in the `HybridSolutionsCloud.HyperV` namespace.
 
 ## Conceptual object model
@@ -224,7 +224,7 @@ flowchart TB
 
 ## Research gates
 
-Before ADR 0028 is accepted, AB#7343–AB#7349 must prove:
+Before ADR 0028 is accepted, topology and lab research must prove:
 
 1. the stable key for every supported entity;
 2. the appropriate Microsoft base class and library dependency;

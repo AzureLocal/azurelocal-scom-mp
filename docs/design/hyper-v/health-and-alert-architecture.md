@@ -206,6 +206,7 @@ changes remain in their unsealed override MP.
 
 ## Decision gate
 
-ADR 0029 cannot be accepted until AB#7351–AB#7353 provide threshold evidence, lab fault/recovery
-results, noise assessment, VM expected-state policy, and final Must/Should/Could/Collect/Diagnostic
+ADR 0029 cannot be accepted until threshold and lab research provides threshold evidence,
+fault/recovery results, noise assessment, VM expected-state policy, and final
+Must/Should/Could/Collect/Diagnostic
 classification.

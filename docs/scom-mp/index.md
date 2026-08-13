@@ -13,9 +13,9 @@ make this platform's entity model, signals, or discoveries applicable to the Hyp
 
 ::: info Authoring has not started
 The Azure Local design baseline is accepted. [ADR 0022](../design/decisions/0022-scom-management-pack-packaging-boundaries.md)
-requires an independent Azure Local runtime product; AB#7319 validates its artifact, coexistence,
+requires an independent Azure Local runtime product; packaging validation confirms its artifact, coexistence,
 upgrade, and removal contract.
-Delivery is tracked by [Feature AB#7315](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7315). See the
+Delivery is described in the public roadmap. See the
 [implementation plan](https://github.com/Hybrid-Solutions-Cloud/hybrid-health-monitoring/blob/main/PLAN.md).
 :::
 

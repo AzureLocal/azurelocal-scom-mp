@@ -34,7 +34,7 @@ records the migration decision.
    Monitor deployments.
 4. **Validate before promising parity.** Use research spikes, ADRs, lab evidence, and deterministic
    tests to decide supported scope.
-5. **Publish decisions and delivery status.** Keep the web documentation, Azure DevOps hierarchy,
+5. **Publish decisions and delivery status.** Keep the web documentation, delivery hierarchy,
    roadmap, and implementation plan aligned.
 
 ## Shared foundation

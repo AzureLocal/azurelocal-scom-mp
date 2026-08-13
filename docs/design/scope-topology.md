@@ -1,8 +1,8 @@
 # Scope & Topology
 
 > **Azure Local baseline locked by [ADR 0001](decisions/0001-scope-and-topology.md).** Hyper-V
-> scope is intentionally not locked until research story AB#7327 produces a supported topology
-> and successor ADR.
+> scope is intentionally not locked until its research program produces a supported topology and
+> successor ADR.
 
 ## Platform scope
 

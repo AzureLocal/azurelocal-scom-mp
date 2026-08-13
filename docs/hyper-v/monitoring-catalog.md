@@ -94,7 +94,7 @@ Microsoft's Hyper-V guidance supplies several useful starting points:
 Current Veeam ONE documentation is retained as an external benchmark, not a Microsoft support
 contract. Its Hyper-V defaults include 15-minute CPU bands of 75%/85%, host memory-pressure bands of
 90%/100%, VM memory-pressure bands of 110%/125%, CSV or local-volume free-space bands of 10%/5%, and
-storage-latency bands of 40/80 ms. AB#7351 must reconcile those values with Microsoft semantics and
+storage-latency bands of 40/80 ms. Threshold research must reconcile those values with Microsoft semantics and
 our own lab evidence before any become defaults.
 
 ::: warning Should host memory alert at 75%?
@@ -108,7 +108,7 @@ but it is not accepted as the sole phase-one health condition.
 ## Microsoft Hyper-V 2019 MP boundary
 
 The Microsoft System Center 2019 Management Pack for Hyper-V is a research source, not part of this
-product's dependency model. AB#7349 may extract useful entity concepts, monitoring scenarios,
+product's dependency model. Reference analysis may extract useful entity concepts, monitoring scenarios,
 signals, thresholds, alert knowledge, and lessons from its guide and exported elements. Every reused
 idea must be checked against current Windows Server behavior, current Microsoft documentation, and
 our lab results.

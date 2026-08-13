@@ -197,7 +197,7 @@ flowchart BT
 
 Worst state is a starting point, not an unconditional algorithm. Redundant hosts, VM populations,
 maintenance, node drain, planned migration, intentional power states, and monitoring freshness need
-topology-aware policies validated through AB#7351–AB#7353.
+topology-aware policies validated through lab research.
 
 ## Failure examples
 

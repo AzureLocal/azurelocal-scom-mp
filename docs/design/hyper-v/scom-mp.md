@@ -49,9 +49,9 @@ flowchart TB
 
 | ADR | Decision | Status and gate |
 |---|---|---|
-| [0027](../decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Modular sealed Library, Discovery, Monitoring, Presentation, optional Reporting, and customer override MPs | Proposed; AB#7319 and AB#7327 |
-| [0028](../decisions/0028-hyper-v-object-and-discovery-architecture.md) | Stable boundary identity, mobile VM model, staged discovery, execution placement, and cookdown | Proposed; AB#7343–AB#7352 |
-| [0029](../decisions/0029-hyper-v-health-alert-and-da-rollup.md) | Evidence-driven health, actionable alerts, topology-aware rollup, and monitoring-pipeline branch | Proposed; AB#7351–AB#7357 |
+| [0027](../decisions/0027-hyper-v-scom-management-pack-decomposition.md) | Modular sealed Library, Discovery, Monitoring, Presentation, optional Reporting, and customer override MPs | Proposed; evidence required |
+| [0028](../decisions/0028-hyper-v-object-and-discovery-architecture.md) | Stable boundary identity, mobile VM model, staged discovery, execution placement, and cookdown | Proposed; evidence required |
+| [0029](../decisions/0029-hyper-v-health-alert-and-da-rollup.md) | Evidence-driven health, actionable alerts, topology-aware rollup, and monitoring-pipeline branch | Proposed; evidence required |
 
 These refine accepted ADRs [0022](../decisions/0022-scom-management-pack-packaging-boundaries.md),
 [0025](../decisions/0025-hyper-v-network-management-authority.md), and
@@ -62,16 +62,16 @@ independent product boundary.
 
 | Concern | Current authority |
 |---|---|
-| Support matrix and topology | [AB#7343](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7343) |
-| Raw Windows Server, Hyper-V, cluster, storage, and network inventories | AB#7344–AB#7348 |
-| Prior Microsoft MP research | [AB#7349](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7349), evidence only with no dependency |
-| SCOM workflow mapping | [AB#7350](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7350) |
-| Threshold and tuning policy | [AB#7351](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7351) |
-| Lab and fault validation | [AB#7352](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7352) |
-| Curated default catalog | [AB#7353](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7353) |
-| DA classes and membership | [AB#7356](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7356) |
-| DA rollups and operator surfaces | [AB#7357](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7357) |
-| Architecture validation and ADR resolution | [AB#7359](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7359) |
+| Support matrix and topology | Support and topology research |
+| Raw Windows Server, Hyper-V, cluster, storage, and network inventories | Signal inventory research |
+| Prior Microsoft MP research | Reference analysis only; no dependency |
+| SCOM workflow mapping | Workflow research |
+| Threshold and tuning policy | Threshold engineering |
+| Lab and fault validation | Lab evidence |
+| Curated default catalog | Catalog synthesis |
+| DA classes and membership | DA design validation |
+| DA rollups and operator surfaces | DA behavior validation |
+| Architecture validation and ADR resolution | Architecture evidence review |
 
 ## Authoring boundary
 

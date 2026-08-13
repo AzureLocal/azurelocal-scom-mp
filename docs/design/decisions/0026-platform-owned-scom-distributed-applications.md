@@ -30,7 +30,7 @@ namespace:
   branch defined by ADR 0018.
 - Hyper-V owns a separate DA for each supported standalone-host or failover-cluster monitoring
   boundary. Its final classes, component relationships, and membership rules are locked by the
-  Hyper-V topology and discovery ADRs produced from AB#7327.
+  Hyper-V topology and discovery ADRs produced from the research program.
 
 The DAs do not reference one another. Component membership is populated from discovered stable
 keys and typed relationships; customer use of the SCOM Distributed Application Designer is not a
@@ -84,7 +84,6 @@ upgradeable product contract.
 - [ADR 0005](0005-scom-class-hierarchy.md)
 - [ADR 0018](0018-self-observability.md)
 - [ADR 0022](0022-scom-management-pack-packaging-boundaries.md)
-- Hyper-V topology research
-  [AB#7327](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7327)
+- [Hyper-V topology research](../research-spikes.md)
 - [Microsoft Distributed Applications guidance](https://learn.microsoft.com/en-us/system-center/scom/manage-using-authoring-workspace?view=sc-om-2025)
 - [Microsoft SLO guidance](https://learn.microsoft.com/en-us/system-center/scom/manage-monitor-sla-overview?view=sc-om-2025)

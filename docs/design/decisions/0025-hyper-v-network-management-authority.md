@@ -36,7 +36,7 @@ accepted.
 - SCVMM/SDN-managed environments require their own discovery and health evidence.
 - The support matrix must state which non-ATC configurations are supported.
 - The MP must not create conflicting network-management ownership or remediate configuration.
-- AB#7343 and AB#7348 must validate supported combinations and stable monitoring sources before
+- Research must validate supported combinations and stable monitoring sources before
   successor discovery and signal ADRs are accepted.
 
 ## Alternatives considered
@@ -57,10 +57,7 @@ Rejected because overlapping assumptions can produce misleading health and confl
 ## Related work
 
 - [ADR 0021](0021-platform-and-delivery-track-architecture.md)
-- Support and topology Task
-  [AB#7343](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7343)
-- Network inventory Task
-  [AB#7348](https://dev.azure.com/hybridcloudsolutions/Hybrid%20Infrastructure%20Health%20Monitoring/_workitems/edit/7348)
+- [Research spikes](../research-spikes.md)
 - [Microsoft Network ATC overview](https://learn.microsoft.com/en-us/azure/azure-local/concepts/network-atc-overview)
 - [Microsoft Network ATC for Windows Server](https://learn.microsoft.com/en-us/windows-server/networking/network-atc/network-atc)
 - [Microsoft SCVMM SDN deployment](https://learn.microsoft.com/en-us/system-center/vmm/deploy-sdn?view=sc-vmm-2025)

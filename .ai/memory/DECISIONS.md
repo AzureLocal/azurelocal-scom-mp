@@ -42,7 +42,10 @@
   Monitoring, Presentation, optional Reporting, and customer-owned Overrides artifacts. Proposed
   ADR 0028 defines stable boundary identity, VM mobility, staged discovery, workflow placement, and
   cookdown. Proposed ADR 0029 defines evidence-driven health, alerts, monitoring freshness, and
-  topology-aware DA rollup. AB#7359 validates all three against AB#7327 evidence before acceptance.
+  topology-aware DA rollup. The research and architecture validation program must validate all three
+  before acceptance.
+- Public documentation and repository text must not expose internal work-item identifiers or direct
+  board links. Use descriptive public milestones and research-gate names instead.
 - Product source is platform first and solution second under `src/azure-local/{scom-mp,azure-monitor}`
   and `src/hyper-v/{scom-mp,azure-monitor}`. ADR 0030 is accepted and supersedes obsolete source-path
   examples in ADRs 0013–0015 without changing their substantive decisions. Hyper-V Azure Monitor is

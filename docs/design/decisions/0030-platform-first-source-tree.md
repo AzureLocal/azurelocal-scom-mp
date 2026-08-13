@@ -50,7 +50,7 @@ or pipeline decisions.
 
 ## Consequences
 
-- Source ownership matches the public platform-first documentation and Azure DevOps Epics.
+- Source ownership matches the public platform-first documentation and platform delivery boundaries.
 - Azure Local and Hyper-V artifacts cannot be confused inside one solution-first directory.
 - Both platform tracks have stable roots for both solution types.
 - The conditional Hyper-V Azure Monitor boundary is visible without implying implementation approval.

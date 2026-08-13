@@ -27,7 +27,7 @@ release may bundle sealed artifacts in an `.mpb`, but their logical dependency d
 `approved Microsoft libraries → Library → Discovery/Monitoring → Presentation/Reporting → customer overrides`.
 
 The final namespace, exact Microsoft dependencies, Reporting packaging, language resources, and
-signing identities remain open until AB#7319 and AB#7327 provide validation evidence.
+signing identities remain open until the packaging and dependency research provides evidence.
 
 ## Options considered
 
@@ -76,8 +76,8 @@ support or release boundary.
 
 ## Acceptance gates
 
-1. AB#7319 validates artifact names, reference graph, signing, coexistence, and lifecycle behavior.
-2. AB#7327 identifies required Microsoft library dependencies and versions.
+1. Packaging validation confirms artifact names, reference graph, signing, coexistence, and lifecycle behavior.
+2. Dependency research identifies required Microsoft library dependencies and versions.
 3. A pre-production import proves the proposed graph.
 4. The repository owner accepts the final namespace and artifact set.
 

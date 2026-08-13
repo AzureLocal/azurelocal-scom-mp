@@ -12,7 +12,7 @@ operational reality without modifying sealed MPs or canonical Bicep templates.
 ::: info Design-lane scope
 Customization without forking is a shared product goal. The concrete MP names, override keys,
 Bicep parameters, and tier defaults below are the Azure Local baseline. Hyper-V SCOM adopts its
-concrete surface only after AB#7327; Hyper-V Azure Monitor parameters exist only after
+concrete surface only after its research program; Hyper-V Azure Monitor parameters exist only after
 an ADR 0023 go decision.
 :::
 

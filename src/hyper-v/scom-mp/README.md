@@ -17,6 +17,6 @@ scom-mp/
 ```
 
 The folders mirror proposed ADR 0027. Their presence does not accept that ADR or authorize XML
-authoring. AB#7327 and AB#7359 must validate the architecture and resolve ADRs 0027–0029 first.
+authoring. The research program must validate the architecture and resolve ADRs 0027–0029 first.
 
 No Azure Local or Microsoft Hyper-V 2019 Management Pack runtime element or reference belongs here.
